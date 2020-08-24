@@ -3,5 +3,10 @@
         "twig/twig": "^3.0",
         "altorouter/altorouter": "1.1.0"
         
-    }
+    },
+        "autoload": {
+            "psr-4": {
+                "classified-ads\\": "application/class/classTest.php"
+            }
+        }
 }

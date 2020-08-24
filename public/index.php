@@ -8,5 +8,10 @@
 </head>
 <body>
     <h1>Hello World!</h1>
+    <pre>
+    <?php
+    print_r($_SERVER);
+    ?>
+    </pre>
 </body>
 </html>
