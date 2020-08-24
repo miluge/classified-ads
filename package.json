@@ -1,0 +1,26 @@
+{
+  "name": "classified-ads",
+  "version": "1.0.0",
+  "description": "Poster une annonce\t\r \tLister les annonces\r \tModifier une annonce\r \tSupprimer une annonce",
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^9.8.6",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "postcss public/css/tailwind.css -o public/build/tailwind.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miluge/classified-ads.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miluge/classified-ads/issues"
+  },
+  "homepage": "https://github.com/miluge/classified-ads#readme"
+}
