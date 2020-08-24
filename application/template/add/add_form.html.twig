@@ -1,0 +1,79 @@
+{% extends 'add/add.html.twig' %}
+
+{% block header %}
+
+<header class="flex items-center justify-between px-4 py-3 bg-gray-900">
+    <div>
+      <img class="h-8" src="public/assets/img/logo-inverted.svg" alt="Workcation">
+    </div>
+    <div>
+      <button type="button" class="block text-gray-500 hover:text-white focus:text-white focus:outline-none">
+        <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        </svg>
+      </button>
+    </div>
+</header>
+
+{% endblock header %}
+
+{% block form %}
+<div class="w-full max-w-2xl">
+    <form class="" id="add-form">
+        <div class="flex">
+            <div>
+                <label for="firstName">First Name</label>
+                <input type="text" value="Jane Doe">
+            </div>
+            <div>
+                <label for="firstName">First Name</label>
+                <input type="text" value="Jane Doe">
+            </div>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" value="email@example.com">
+        </div>
+        <div>
+            <label for="phone">Phone</label>
+            <input type="tel" value="0381617147">
+        </div>
+        <div class="inline-block relative w-64">
+            <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option>Really long option that will likely overlap the chevron</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+        </div>
+        <div>
+            <label for="title">Title</label>
+            <input type="text" value="Title...">
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <input type="text" value="Item description goes here...">
+        </div>
+        <div>
+            <label for="picture">Picture upload</label>
+            <input type="file" value="0381617147">
+        </div>
+        <div>
+            <button class="g-recaptcha" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>Submit</button>
+
+        </div>
+    </form>
+</div>
+{% endblock form %}
+
+{% block javascript %}
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+    function onSubmit(token) {
+      document.getElementById("add-form").submit();
+    }
+</script>
+ 
+{% endblock javascript %}
