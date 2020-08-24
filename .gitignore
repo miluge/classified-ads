@@ -1,3 +1,6 @@
 vendor/
-composer.lock
 node_modules/
+application/cache/
+artefacts/arborescence.png
+artefacts/MCD.png
+artefacts/projet_petites-annonces.txt
