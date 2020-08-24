@@ -3,7 +3,7 @@
 ## Projet - petites annonces 		
 		
 		
- ## - Il doit permettre de :		
+## Il doit permettre de :		
 	Poster une annonce	
 	Lister les annonces
 	Modifier une annonce
@@ -44,8 +44,10 @@
 	Tâche cron qui supprime les annonces qui sont publiées à n+15 jours de la date de création. Envoyer un mail à la personne de la suppression de son annonce	
 		
 		
-		
+## Stack		
 	Le formulaires seront validés par JS	
 	Technos : Composer, PHP POO, TWIG pour le rendu frontend, SASS(optionnel), GIT, JS, HTML, CSS, librairie PHP pour les PDF, AltoRouteur pour le routeur
 	Remarque :  On ne veut pas de pattern MVC, on reste en programmation objet POO simple
 	Remarque : Pensez à crypter les accès de validation et modification
+
+## TODO
