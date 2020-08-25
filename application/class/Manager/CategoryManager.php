@@ -6,12 +6,12 @@ use \Ads\Category as Category;
 class CategoryManager extends Database
 {
     /**
-     * @param id $id [id of category to fetch in classified-ads database]
+     * @param integer $id [id of category to fetch in database]
      * @return Category|array [fetched Category instance on success | ["error" => message] on fail]
      */
-    public function getCategoryById($id){
+    public static function getCategoryById($id){
         try{
-            $database = $this -> connect();
+            $database = self::connect();
             $select = "SELECT id, name FROM category WHERE id = :id";
             $request = $database -> prepare($select);
             $request -> bindValue(':id', $id);
@@ -21,7 +21,7 @@ class CategoryManager extends Database
             } else {
                 throw new \InvalidArgumentException("Category not found !");
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
         }
     }
@@ -29,9 +29,9 @@ class CategoryManager extends Database
     /**
      * @return array [array of fetched Category instances on success | ["error" => message] on fail]
      */
-    public function getAllCategories(){
+    public static function getAllCategories(){
         try{
-            $database = $this -> connect();
+            $database = self::connect();
             $select = "SELECT id, name FROM category";
             $request = $database -> prepare($select);
             $request -> execute();
@@ -42,7 +42,7 @@ class CategoryManager extends Database
             } else {
                 throw new \LengthException("No ads found !");
             }
-        } catch (\LengthException $e) {
+        } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
         }
     }

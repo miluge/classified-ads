@@ -1,7 +1,7 @@
 <?php
 namespace Ads;
 
-class Database
+abstract class Database
 {
     const HOST = "localhost";
     const USER = "root";
@@ -11,7 +11,7 @@ class Database
     /**
      * @return PDO|array [instance of PDO connection on sucess | ["error" => message] on fail]
      */
-    public function connect(){
+    public static function connect(){
         try{
             return new \PDO('mysql:host=' . self::HOST . ';dbname=' . self::NAME . ';charset=utf8', self::USER, self::PASSWORD,[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC]);
         } catch (\PDOException $e){
