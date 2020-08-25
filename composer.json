@@ -4,9 +4,10 @@
         "altorouter/altorouter": "1.1.0"
         
     },
-        "autoload": {
-            "psr-4": {
-                "classified-ads\\": "application/class/classTest.php"
-            }
+
+    "autoload": {
+        "psr-4": {
+            "Ads\\": "application/class/"
         }
+    }
 }
