@@ -10,5 +10,5 @@ $twig = new \Twig\Environment($loader, [
 
 // Load template
 
-$template = $twig->load('index.html.twig');
+$template = $twig->load('add/add_form.html.twig');
 echo $template->render();
