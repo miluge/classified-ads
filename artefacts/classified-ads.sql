@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 24 août 2020 à 13:55
+-- Généré le :  mar. 25 août 2020 à 08:11
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `ad` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
+  `title` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `creationDate` datetime NOT NULL,
   `validationDate` datetime DEFAULT NULL,
@@ -46,8 +47,8 @@ CREATE TABLE IF NOT EXISTS `ad` (
 -- Déchargement des données de la table `ad`
 --
 
-INSERT INTO `ad` (`id`, `user_id`, `category_id`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(1, 1, 4, 'Black cat, ready for peronnal or professionnal use. Price tbd.', '2020-08-24 15:00:00', NULL, 'BlackCat.jpg');
+INSERT INTO `ad` (`id`, `user_id`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
+(1, 1, 4, 'Black Cat', 'Need love. Ready for peronnal or professionnal use. Price tbd.', '2020-08-24 15:00:00', NULL, 'BlackCat.jpg');
 
 -- --------------------------------------------------------
 
