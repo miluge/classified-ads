@@ -25,4 +25,25 @@ class AdManager extends Database
             return(["error"=>$e->getMessage()]);
         }
     }
+
+    /**
+     * @return array [array of fetched Ad instances on success | ["error" => message] on fail]
+     */
+    public function getAllAds(){
+        try{
+            $database = $this -> connect();
+            $select = "SELECT id, user_id, category_id, title, description, creationDate, validationDate, picture FROM ad";
+            $request = $database -> prepare($select);
+            $request -> execute();
+            if ($ads = $request->fetchAll()) {
+                return (array_map(function($ad){
+                    return new Ad($ad);
+                }, $ads));
+            } else {
+                throw new \LengthException("No ads found !");
+            }
+        } catch (\LengthException $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
 }

@@ -25,4 +25,25 @@ class CategoryManager extends Database
             return(["error"=>$e->getMessage()]);
         }
     }
+
+    /**
+     * @return array [array of fetched Category instances on success | ["error" => message] on fail]
+     */
+    public function getAllCategories(){
+        try{
+            $database = $this -> connect();
+            $select = "SELECT id, name FROM category";
+            $request = $database -> prepare($select);
+            $request -> execute();
+            if ($categories = $request->fetchAll()) {
+                return (array_map(function($category){
+                    return new Category($category);
+                }, $categories));
+            } else {
+                throw new \LengthException("No ads found !");
+            }
+        } catch (\LengthException $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
 }
