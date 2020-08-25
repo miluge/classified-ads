@@ -9,9 +9,13 @@ class Database
     const NAME = "classified-ads";
 
     /**
-     * @return PDO instance of PDO connection
+     * @return PDO|array [instance of PDO connection on sucess | array ["error" => message] on fail]
      */
     public function connect(){
-        return new \PDO('mysql:host=' . self::HOST . ';dbname=' . self::NAME . ';charset=utf8', self::USER, self::PASSWORD);
+        try{
+            return new \PDO('mysql:host=' . self::HOST . ';dbname=' . self::NAME . ';charset=utf8', self::USER, self::PASSWORD);
+        } catch (\PDOException $e){
+            return ["error" => $e->getMessage()];
+        }
     }
 }
