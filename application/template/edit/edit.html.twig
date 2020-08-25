@@ -6,19 +6,12 @@
     <link rel="stylesheet" href="css/tailwind.css">
     <title>{% block title %}{% endblock title %}</title>
 </head>
-<body class="bg-gray-200">
+<body>
+    <!-- Header -->
     {% block header %}{% endblock header %}
-    
-    {% block hero %}{% endblock hero %}
-
-    {% block category %}{% endblock category %}
-
-    {% block content %}{% endblock content %}
-
-    {% block cards %}{% endblock cards %}
-
-    {% block footer %}{% endblock footer %}
-
+    <!-- Form -->
+    {% block form %}{% endblock form %}
+    <!-- JS -->
     {% block javascript %}{% endblock javascript %}
 </body>
 </html>
