@@ -6,8 +6,8 @@ use \Ads\Category as Category;
 class CategoryManager extends Database
 {
     /**
-     * @param id $id id of category to fetch in classified-ads database
-     * @return Category|array fetched Category instance on success | ["exception" => message] on fail 
+     * @param id $id [id of category to fetch in classified-ads database]
+     * @return Category|array [fetched Category instance on success | ["error" => message] on fail]
      */
     public function getCategoryById($id){
         try{
@@ -16,13 +16,13 @@ class CategoryManager extends Database
             $request = $database -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
-            if ($category = $request->fetch(\PDO::FETCH_ASSOC)) {
+            if ($category = $request->fetch()) {
                 return new Category($category);
             } else {
-                throw new Exception("Category not found !");
+                throw new \InvalidArgumentException("Category not found !");
             }
-        } catch (Exception $e) {
-            return(["exception"=>$e->getMessage()]);
+        } catch (\InvalidArgumentException $e) {
+            return(["error"=>$e->getMessage()]);
         }
     }
 }
