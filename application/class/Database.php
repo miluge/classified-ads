@@ -3,25 +3,15 @@ namespace Ads;
 
 class Database
 {
-    public $host;
-    public $user;
-    public $password;
-    public $name;
+    const HOST = "localhost";
+    const USER = "root";
+    const PASSWORD = "";
+    const NAME = "classified-ads";
 
-    //take array of ["attribute"=>value] and hydrate object
-    public function __construct(array $array) {
-        foreach($array as $attribute => $value){
-            $this->$attribute = $value;
-        }
-    }
-
-    //return PDO object
-    //return Exception object on fail
+    /**
+     * @return PDO instance of PDO connection
+     */
     public function connect(){
-        try {
-            return new PDO('mysql:host=' . $this->host . ';dbname=' . $this->name . ';charset=utf8', $this->user, $this->password);
-        } catch (Exception $e) {
-            return($e);
-        }
+        return new \PDO('mysql:host=' . self::HOST . ';dbname=' . self::NAME . ';charset=utf8', self::USER, self::PASSWORD);
     }
 }
