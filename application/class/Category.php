@@ -1,13 +1,10 @@
 <?php
 namespace Ads;
 
-class User
+class Category
 {
     public $id;
-    public $email;
-    public $lastName;
-    public $firstName;
-    public $phone;
+    public $name;
 
     //take array of ["attribute"=>value] and hydrate object
     public function __construct(array $array) {
