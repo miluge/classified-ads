@@ -3,14 +3,18 @@ namespace Ads;
 
 class Ad
 {
-    public $id;
-    public $user_id;
+    /** @var integer|null $id null when not inserted in database*/
+    public $id = null;
+    /** @var integer|null $user_id null when user not inserted in database*/
+    public $user_id = null;
     public $category_id;
     public $title;
     public $description;
     public $creationDate;
-    public $validationDate;
-    public $picture;
+    /** @var DateTime|null $validationDate null when ad not yet validated*/
+    public $validationDate = null;
+    /** @var string $picture contain default path if no user picture added*/
+    public $picture = "default path using category id";
 
     /**
      * @param array $array ["attribute"=>value] to hydrate attributes
