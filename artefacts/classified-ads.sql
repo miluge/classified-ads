@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 26 août 2020 à 09:06
+-- Généré le :  mer. 26 août 2020 à 10:00
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `ad` (
 --
 
 INSERT INTO `ad` (`id`, `user_email`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(2, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL);
+(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`email`, `lastName`, `firstName`, `phone`) VALUES
-('', '', '', ''),
 ('perbet.dev@gmail.com', 'Perbet', 'Guillaume', '0987654321');
 
 --
