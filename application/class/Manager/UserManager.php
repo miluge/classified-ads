@@ -27,6 +27,27 @@ class UserManager extends Database
     }
 
     /**
+     * @return User[] all User instances on success | ["error" => message] on fail
+     */
+    public static function getAllUsers(){
+        try{
+            $pdo = self::connect();
+            $select = "SELECT email, lastName, firstName, phone FROM user";
+            $request = $pdo -> prepare($select);
+            $request -> execute();
+            if ($users = $request->fetchAll()) {
+                return (array_map(function($user){
+                    return new User($user);
+                }, $users));
+            } else {
+                throw new \LengthException("No user found !");
+            }
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
+
+    /**
      * @param User $user User instance to insert in database
      * check if user already exists:
      * insert if not
