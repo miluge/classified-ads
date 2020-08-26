@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 25 août 2020 à 08:11
+-- Généré le :  mer. 26 août 2020 à 09:06
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `ad`;
 CREATE TABLE IF NOT EXISTS `ad` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `category_id` int(11) NOT NULL,
   `title` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -39,16 +39,16 @@ CREATE TABLE IF NOT EXISTS `ad` (
   `validationDate` datetime DEFAULT NULL,
   `picture` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `category_id` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `category_id` (`category_id`),
+  KEY `user_email` (`user_email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `ad`
 --
 
-INSERT INTO `ad` (`id`, `user_id`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(1, 1, 4, 'Black Cat', 'Need love. Ready for peronnal or professionnal use. Price tbd.', '2020-08-24 15:00:00', NULL, 'BlackCat.jpg');
+INSERT INTO `ad` (`id`, `user_email`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
+(2, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -85,20 +85,20 @@ INSERT INTO `category` (`id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `lastName` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `firstName` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `email`, `lastName`, `firstName`, `phone`) VALUES
-(1, 'perbet.dev@gmail.com', 'Perbet', 'Guillaume', '0667898654');
+INSERT INTO `user` (`email`, `lastName`, `firstName`, `phone`) VALUES
+('', '', '', ''),
+('perbet.dev@gmail.com', 'Perbet', 'Guillaume', '0987654321');
 
 --
 -- Contraintes pour les tables déchargées
@@ -109,7 +109,7 @@ INSERT INTO `user` (`id`, `email`, `lastName`, `firstName`, `phone`) VALUES
 --
 ALTER TABLE `ad`
   ADD CONSTRAINT `ad_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ad_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ad_ibfk_2` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
