@@ -7,8 +7,8 @@ use \Ads\Manager\UserManager as UserManager;
 class AdManager extends Database
 {
     /**
-     * @param integer $id [id of ad to be fetched in database]
-     * @return integer|array [user_id of ad on success | ["error" => message] on fail]
+     * @param integer $id id of ad to be fetched in database
+     * @return integer|array user_id of ad on success | ["error" => message] on fail
      */
     public static function getUser_id($id){
         try{
@@ -28,30 +28,25 @@ class AdManager extends Database
     }
 
     /**
-     * @param integer $user_id [user_id to filter ads fetched in database]
-     * @return boolean|array [["user_id"=>$user_id] if exists | false if not exists | ["error" => message] on fail]
+     * @param integer $user_id user_id to filter ads fetched in database
+     * @return boolean|array true if exists, false if not | ["error" => message] on fail
      */
     public static function user_idExists($user_id){
         try{
-            if(intval($user_id)){
-                $pdo = self::connect();
-                $select = "SELECT user_id FROM ad WHERE user_id=:user_id"; 
-                $request = $pdo -> prepare($select);
-                $request -> bindValue(':user_id', $user_id);
-                $request -> execute();
-                return $request->fetch();
-            } else {
-                throw new \InvalidArgumentException("Ad not found !");
-            }
-            
+            $pdo = self::connect();
+            $select = "SELECT id FROM ad WHERE user_id=:user_id"; 
+            $request = $pdo -> prepare($select);
+            $request -> bindValue(':user_id', $user_id);
+            $request -> execute();
+            return boolval($request->fetch());
         } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
         }
     }
 
     /**
-     * @param integer $id [id of ad to fetch in database]
-     * @return Ad|array [fetched Ad instance on success | ["error" => message] on fail]
+     * @param integer $id id of ad to fetch in database
+     * @return Ad|array fetched Ad instance on success | ["error" => message] on fail
      */
     public static function getAdById($id){
         try{
@@ -71,7 +66,7 @@ class AdManager extends Database
     }
 
     /**
-     * @return array [array of fetched Ad instances on success | ["error" => message] on fail]
+     * @return array array of fetched Ad instances on success | ["error" => message] on fail
      */
     public static function getAllAds(){
         try{
@@ -92,9 +87,9 @@ class AdManager extends Database
     }
 
     /**
-     * @param id $id [id of ad to be deleted in database]
+     * @param id $id id of ad to be deleted in database
      * if user have NO OTHER ADS, delete user from user table
-     * @return array [["error" => false] on success | ["error" => message] on fail]
+     * @return array ["error" => false] on success | ["error" => message] on fail
      */
     public static function deleteAdById($id){
         try{
@@ -117,8 +112,8 @@ class AdManager extends Database
     }
 
     /**
-     * @param array $ad [array ["user_id"=>value, "category_id"=>value,"title"=>value, "description"=>value,"creationDate"=>value, "picture"=>value] to be inserted in database]
-     * @return array [["error" => false] on success | ["error" => message] on fail]
+     * @param array $ad array ["user_id"=>value, "category_id"=>value,"title"=>value, "description"=>value,"creationDate"=>value, "picture"=>value] to be inserted in database
+     * @return array ["error" => false] on success | ["error" => message] on fail
      */
     public static function insertAd($ad){
         try{
