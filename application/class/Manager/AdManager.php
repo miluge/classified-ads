@@ -113,4 +113,28 @@ class AdManager extends Database
             return(["error"=>$e->getMessage()]);
         }
     }
+
+    /**
+     * @param Ad $ad Ad instance to update in database
+     * @return array ["error" => false] on success | ["error" => message] on fail
+     */
+    public static function updateAd($ad){
+        try{
+            $pdo = self::connect();
+            $update = "UPDATE ad SET category_id=:category_id, title=:title, description=:description, picture=:picture) WHERE id=:id";
+            $request = $pdo -> prepare($update);
+            $request -> bindValue(':id', $ad->id);
+            $request -> bindValue(':category_id', $ad->category_id);
+            $request -> bindValue(':title', $ad->title);
+            $request -> bindValue(':description', $ad->description);
+            $request -> bindValue(':picture', $ad->picture);
+            if ($request -> execute()){
+                return ["error" => false];
+            } else {
+                throw new \PDOException("Ad not updated !");
+            }
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
 }
