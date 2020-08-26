@@ -7,36 +7,15 @@ use \Ads\Manager\UserManager as UserManager;
 class AdManager extends Database
 {
     /**
-     * @param integer $id id of ad to select in database
-     * @return integer|array user_id of ad on success | ["error" => message] on fail
-     */
-    public static function getUser_id($id){
-        try{
-            $pdo = self::connect();
-            $select = "SELECT user_id FROM ad WHERE id=:id"; 
-            $request = $pdo -> prepare($select);
-            $request -> bindValue(':id', $id);
-            $request -> execute();
-            if ($user_id = $request->fetch()){
-                return $user_id["user_id"];
-            }else{
-                throw new \InvalidArgumentException("Incorrect id !");
-            }
-        } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
-        }
-    }
-
-    /**
-     * @param integer $user_id user_id to ckeck in database
+     * @param string $user_email user_email to ckeck in database
      * @return boolean|array true if exists, false if not | ["error" => message] on fail
      */
-    public static function user_idExists($user_id){
+    public static function user_emailExists($user_email){
         try{
             $pdo = self::connect();
-            $select = "SELECT id FROM ad WHERE user_id=:user_id"; 
+            $select = "SELECT id FROM ad WHERE user_email=:user_email"; 
             $request = $pdo -> prepare($select);
-            $request -> bindValue(':user_id', $user_id);
+            $request -> bindValue(':user_email', $user_email);
             $request -> execute();
             return boolval($request->fetch());
         } catch (\Exception $e) {
@@ -48,10 +27,10 @@ class AdManager extends Database
      * @param integer $id id of ad to select in database
      * @return Ad|array selected Ad instance on success | ["error" => message] on fail
      */
-    public static function getAdById($id){
+    public static function getAd($id){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, user_id, category_id, title, description, creationDate, validationDate, picture FROM ad WHERE id = :id";
+            $select = "SELECT id, user_email, category_id, title, description, creationDate, validationDate, picture FROM ad WHERE id = :id";
             $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
@@ -66,12 +45,12 @@ class AdManager extends Database
     }
 
     /**
-     * @return array array of all selected Ad instances on success | ["error" => message] on fail
+     * @return Ad[] array of all selected Ad instances on success | ["error" => message] on fail
      */
     public static function getAllAds(){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, user_id, category_id, title, description, creationDate, validationDate, picture FROM ad";
+            $select = "SELECT id, user_email, category_id, title, description, creationDate, validationDate, picture FROM ad";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($ads = $request->fetchAll()) {
@@ -91,16 +70,16 @@ class AdManager extends Database
      * if user have NO OTHER ADS, delete user from user table
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function deleteAdById($id){
+    public static function deleteAd($id){
         try{
             $pdo = self::connect();
-            $user_id = self::getUser_id($id);
+            $user_email = self::getAd($id)->user_email;
             $delete = "DELETE FROM ad WHERE id = :id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
-                if (! self::user_idExists($user_id)){
-                    UserManager::deleteUserById($user_id);
+                if (! self::user_emailExists($user_id)){
+                    UserManager::deleteUser($user_email);
                 }
                 return ["error" => false];
             } else {
@@ -118,9 +97,9 @@ class AdManager extends Database
     public static function insertAd($ad){
         try{
             $pdo = self::connect();
-            $insert = "INSERT INTO ad (user_id, category_id, title, description, creationDate, picture) VALUES (:user_id, :category_id, :title, :description, NOW(), :picture)";
+            $insert = "INSERT INTO ad (user_email, category_id, title, description, creationDate, picture) VALUES (:user_email, :category_id, :title, :description, NOW(), :picture)";
             $request = $pdo -> prepare($insert);
-            $request -> bindValue(':user_id', $ad->user_id);
+            $request -> bindValue(':user_email', $ad->user_email);
             $request -> bindValue(':category_id', $ad->category_id);
             $request -> bindValue(':title', $ad->title);
             $request -> bindValue(':description', $ad->description);

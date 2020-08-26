@@ -3,8 +3,6 @@ namespace Ads;
 
 class User
 {
-    /** @var integer|null $id null when not inserted in database*/
-    public $id;
     public $email;
     public $lastName;
     public $firstName;
