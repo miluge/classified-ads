@@ -9,7 +9,7 @@ abstract class Database
     const NAME = "classified-ads";
 
     /**
-     * @return PDO|array [instance of PDO connection on sucess | ["error" => message] on fail]
+     * @return PDO|array PDO instance on success | ["error" => message] on fail
      */
     public static function connect(){
         try{
