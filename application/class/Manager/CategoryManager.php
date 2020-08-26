@@ -27,7 +27,7 @@ class CategoryManager extends Database
     }
 
     /**
-     * @return Category[] array of fetched Category instances on success | ["error" => message] on fail
+     * @return Category[] all Category instances on success | ["error" => message] on fail
      */
     public static function getAllCategories(){
         try{
@@ -40,7 +40,7 @@ class CategoryManager extends Database
                     return new Category($category);
                 }, $categories));
             } else {
-                throw new \LengthException("No ads found !");
+                throw new \LengthException("No category found !");
             }
         } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
