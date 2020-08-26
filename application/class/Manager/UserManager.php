@@ -5,21 +5,43 @@ use \Ads\User as User;
 
 class UserManager extends Database
 {
+    //METHODE NON ENCORE UTILISEE
+    // /**
+    //  * @param integer $id [id of user to fetch in database]
+    //  * @return User|array [fetched User instance on success | ["error" => message] on fail]
+    //  */
+    // public static function getUserById($id){
+    //     try{
+    //         $pdo = self::connect();
+    //         $select = "SELECT id, email, lastName, firstName, phone FROM user WHERE id = :id";
+    //         $request = $pdo -> prepare($select);
+    //         $request -> bindValue(':id', $id);
+    //         $request -> execute();
+    //         if ($user = $request->fetch()) {
+    //             return new User($user);
+    //         } else {
+    //             throw new \InvalidArgumentException("User not found !");
+    //         }
+    //     } catch (\Exception $e) {
+    //         return(["error"=>$e->getMessage()]);
+    //     }
+    // }
+
     /**
-     * @param integer $id [id of user to fetch in database]
-     * @return User|array [fetched User instance on success | ["error" => message] on fail]
+     * @param string $email [email of user to fetch in database]
+     * @return integer [matching user id on success, 0 if user doesn't exist | ["error" => message] on fail]
      */
-    public static function getUserById($id){
+    public static function getUserByEmail($email){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, email, lastName, firstName, phone FROM user WHERE id = :id";
+            $select = "SELECT id FROM user WHERE email = :email";
             $request = $pdo -> prepare($select);
-            $request -> bindValue(':id', $id);
+            $request -> bindValue(':email', $email);
             $request -> execute();
             if ($user = $request->fetch()) {
-                return new User($user);
+                return $user["id"];
             } else {
-                throw new \InvalidArgumentException("User not found !");
+                return 0;
             }
         } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
