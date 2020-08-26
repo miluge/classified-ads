@@ -6,8 +6,8 @@ use \Ads\Category as Category;
 class CategoryManager extends Database
 {
     /**
-     * @param integer $id [id of category to fetch in database]
-     * @return Category|array [fetched Category instance on success | ["error" => message] on fail]
+     * @param integer $id id of category to fetch in database
+     * @return Category|array fetched Category instance on success | ["error" => message] on fail
      */
     public static function getCategoryById($id){
         try{
@@ -27,7 +27,7 @@ class CategoryManager extends Database
     }
 
     /**
-     * @return array [array of fetched Category instances on success | ["error" => message] on fail]
+     * @return Category[] array of fetched Category instances on success | ["error" => message] on fail
      */
     public static function getAllCategories(){
         try{
