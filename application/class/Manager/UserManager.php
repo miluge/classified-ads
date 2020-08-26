@@ -47,7 +47,7 @@ class UserManager extends Database
                 if ($request -> execute()){
                     return ["error"=>false];
                 }else{
-                    throw new PDOException("user not add !");
+                    throw new \PDOException("user not add !");
                 }
             } else {
                 $update = "UPDATE user SET lastName=:lastName, firstName=:firstName, phone=:phone WHERE email=:email";
@@ -59,7 +59,7 @@ class UserManager extends Database
                 if ($request -> execute()){
                     return ["error"=>false];
                 }else{
-                    throw new PDOException("user not add !");
+                    throw new \PDOException("user not add !");
                 }
             }
         } catch (\Exception $e) {
