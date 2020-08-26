@@ -11,9 +11,9 @@ class CategoryManager extends Database
      */
     public static function getCategoryById($id){
         try{
-            $database = self::connect();
+            $pdo = self::connect();
             $select = "SELECT id, name FROM category WHERE id = :id";
-            $request = $database -> prepare($select);
+            $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
             if ($category = $request->fetch()) {
@@ -31,9 +31,9 @@ class CategoryManager extends Database
      */
     public static function getAllCategories(){
         try{
-            $database = self::connect();
+            $pdo = self::connect();
             $select = "SELECT id, name FROM category";
-            $request = $database -> prepare($select);
+            $request = $pdo -> prepare($select);
             $request -> execute();
             if ($categories = $request->fetchAll()) {
                 return (array_map(function($category){

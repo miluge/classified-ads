@@ -11,9 +11,9 @@ class UserManager extends Database
      */
     public static function getUserById($id){
         try{
-            $database = self::connect();
+            $pdo = self::connect();
             $select = "SELECT id, email, lastName, firstName, phone FROM user WHERE id = :id";
-            $request = $database -> prepare($select);
+            $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
             if ($user = $request->fetch()) {
@@ -32,9 +32,9 @@ class UserManager extends Database
      */
     public static function deleteUserById($id){
         try{
-            $database = self::connect();
+            $pdo = self::connect();
             $delete = "DELETE FROM user WHERE id = :id";
-            $request = $database -> prepare($delete);
+            $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request->execute()){
                 return ["error" => false];
