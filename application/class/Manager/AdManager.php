@@ -145,7 +145,7 @@ class AdManager extends Database
     public static function validateAd($ad){
         try{
             $pdo = self::connect();
-            $update = "UPDATE ad SET validationDate=NOW()) WHERE id=:id";
+            $update = "UPDATE ad SET validationDate=NOW() WHERE id=:id";
             $request = $pdo -> prepare($update);
             $request -> bindValue(':id', $ad->id);
             if ($request -> execute()){
