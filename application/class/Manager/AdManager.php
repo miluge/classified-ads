@@ -137,4 +137,24 @@ class AdManager extends Database
             return(["error"=>$e->getMessage()]);
         }
     }
+
+    /**
+     * @param Ad $ad Ad instance to validate in database
+     * @return array ["error" => false] on success | ["error" => message] on fail
+     */
+    public static function validateAd($ad){
+        try{
+            $pdo = self::connect();
+            $update = "UPDATE ad SET validationDate=NOW()) WHERE id=:id";
+            $request = $pdo -> prepare($update);
+            $request -> bindValue(':id', $ad->id);
+            if ($request -> execute()){
+                return ["error" => false];
+            } else {
+                throw new \PDOException("Ad not validated !");
+            }
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
 }
