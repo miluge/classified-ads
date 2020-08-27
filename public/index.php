@@ -71,7 +71,7 @@ $router->map('GET','/details/[i:id]',function($id){
 // add form handling route
 $router->map('POST','/addform',function(){
     //check if picture is posted
-    if(isset($_FILE["picture"]) && not_empty($_FILE["picture"]["name"])){
+    if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
         //HANDLE FILE UPLOAD
     }else{
         //GET DEFAULT PICTURE
