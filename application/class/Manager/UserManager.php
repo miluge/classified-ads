@@ -54,7 +54,7 @@ class UserManager extends Database
      * update if so
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function InsertUser($user){
+    public static function insertUser($user){
         try{
             $pdo = self::connect();
             $previousUser = self::getUser($user->email);
