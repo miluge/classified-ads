@@ -31,11 +31,6 @@ $router->map('GET','/',function(){
     echo $template->render(["ads"=>$ads,"categories"=>$categories,"users"=>$users,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
 });
 
-// {% for ad of ads %}
-// {{ ad.category_id }}
-// {% for cat of cats %}
-// {if} cat.id==ad.category_id {{cat.name}}
-
 // Match url
 $match = $router->match();
 
