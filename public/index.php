@@ -33,7 +33,7 @@ $router->setBasePath(BASE_PATH);
 // index template route
 $router->map('GET','/',function(){
     //load index template passing all Ad, all Category objects
-    $ads = AdManager::getAllAds();
+    $ads = AdManager::getAllValidatedAds();
     $categories = CategoryManager::getAllCategories();
     $twig = loadTwig();
     $template = $twig->load('index.html.twig');
@@ -83,12 +83,8 @@ $router->map('GET','/addform',function(){
     //insert Ad
     $ad = new Ad(["user_email"=>$_GET["email"], "category_id"=>$_GET["category_id"], "title"=>$_GET["title"], "description"=>$_GET["description"], "picture"=>$_GET["picture"]]);
     AdManager::insertAd($ad);
-    //load index template passing all Ad, all Category objects
-    $ads = AdManager::getAllAds();
-    $categories = CategoryManager::getAllCategories();
-    $twig = loadTwig();
-    $template = $twig->load('index.html.twig');
-    echo $template->render(["ads"=>$ads,"categories"=>$categories,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    // redirect to index template
+    header("Location:/");
 });
 
 // match url
