@@ -7,7 +7,7 @@
 <header class="h-32 sm:h-64 flex items-center justify-around px-6 py-3 bg-current">
   <div class="w-9/12 flex items-center justify-between md:px-16 md:py-3">
     <div>
-      <img class="h-8 mr-8 sm:h-12 md:h-24 lg:w-64" src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080/{{ BASE_PATH }}/assets/img/logo-inverted.svg" alt="Workcation">
+      <img class="h-8 mr-8 sm:h-12 md:h-24 lg:w-64" src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080//{{ BASE_PATH }}/assets/img/logo-inverted.svg" alt="Workcation">
     </div>
     <div>
       <button type="button" class="bg-white hover:border-white hover:border-4 hover:bg-gray-500 hover:text-white text-black font-bold py-2 px-2 sm:py-4 sm:px-4 rounded-lg">
@@ -94,6 +94,7 @@
       <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 
           <!-- Article -->
+          {% for ad in ads %}
           <div class="overflow-hidden rounded-lg shadow-lg">
 
               <a href="#">
@@ -103,11 +104,11 @@
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
                   <h1 class="text-lg">
                       <a class="no-underline hover:underline text-black" href="#">
-                          Article Title
+                        {{ ad.title }}
                       </a>
                   </h1>
                   <p class="text-grey-darker text-sm">
-                      14/4/19
+                      {{ ad.creationDate }}
                   </p>
               </header>
 
@@ -115,143 +116,17 @@
                   <a class="flex items-center no-underline hover:underline text-black" href="#">
                       <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random" onerror="this.onerror=null; this.src='Default_character.jpg'">
                       <p class="ml-2 text-sm">
-                          zob
+                          {{ ad.user_firstName }}
                       </p>
                   </a>
-                  <!-- <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                      <span class="hidden">Like</span>
-                      <i class="fa fa-heart"></i>
-                  </a> -->
               </footer>
 
           </div>
+          {% endfor %}
           <!-- END Article -->
 
       </div>
       <!-- END Column -->
-      <!-- Column -->
-      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-        <!-- Article -->
-        <div class="overflow-hidden rounded-lg shadow-lg">
-
-            <a href="#">
-                <img alt="Placeholder" class="block h-auto w-full" src="https://picsum.photos/600/400/?random" onerror="this.onerror=null; this.src='Default.jpg'">
-            </a>
-
-            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                <h1 class="text-lg">
-                    <a class="no-underline hover:underline text-black" href="#">
-                        Article Title
-                    </a>
-                </h1>
-                <p class="text-grey-darker text-sm">
-                    14/4/19
-                </p>
-            </header>
-
-            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                <a class="flex items-center no-underline hover:underline text-black" href="#">
-                    <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random">
-                    <p class="ml-2 text-sm">
-                        zob
-                    </p>
-                </a>
-                <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                    <span class="hidden">Like</span>
-                    <i class="fa fa-heart"></i>
-                </a>
-            </footer>
-
-        </div>
-        <!-- END Article -->
-
-    </div>
-    <!-- END Column -->
-    <!-- Column -->
-    <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-      <!-- Article -->
-      <div class="overflow-hidden rounded-lg shadow-lg">
-
-          <a href="#">
-              <img alt="Placeholder" class="block h-auto w-full" src="https://picsum.photos/600/400/?random">
-          </a>
-
-          <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-              <h1 class="text-lg">
-                  <a class="no-underline hover:underline text-black" href="#">
-                      Article Title
-                  </a>
-              </h1>
-              <p class="text-grey-darker text-sm">
-                  14/4/19
-              </p>
-          </header>
-
-          <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-              <a class="flex items-center no-underline hover:underline text-black" href="#">
-                  <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random">
-                  <p class="ml-2 text-sm">
-                      zob
-                  </p>
-              </a>
-              <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                  <span class="hidden">Like</span>
-                  <i class="fa fa-heart"></i>
-              </a>
-          </footer>
-
-      </div>
-      <!-- END Article -->
-
-  </div>
-  <!-- END Column -->
-  <!-- Column -->
-  <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-
-    <!-- Article -->
-    <div class="overflow-hidden rounded-lg shadow-lg">
-
-        <a href="#">
-            <img alt="Placeholder" class="block h-auto w-full" src="https://picsum.photos/600/400/?random">
-        </a>
-
-        <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-            <h1 class="text-lg">
-                <a class="no-underline hover:underline text-black" href="#">
-                    Article Title
-                </a>
-            </h1>
-            <p class="text-grey-darker text-sm">
-                14/4/19
-            </p>
-        </header>
-
-        <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-            <a class="flex items-center no-underline hover:underline text-black" href="#">
-                <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random">
-                <p class="ml-2 text-sm">
-                    zob
-                </p>
-            </a>
-            <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
-                <span class="hidden">Like</span>
-                <i class="fa fa-heart"></i>
-            </a>
-        </footer>
-
-    </div>
-    <!-- END Article -->
-
-</div>
-<!-- END Column -->
-
-
-
-
-     
-
   </div>
 </div>
 {% endblock cards %}
