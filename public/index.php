@@ -69,23 +69,19 @@ $router->map('GET','/details/[i:id]',function($id){
 });
 
 // add form handling route
-$router->map('POST','/addform',function(){
+$router->map('GET','/addform',function(){
     //check if picture is posted
     if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
         //HANDLE FILE UPLOAD
     }else{
         //GET DEFAULT PICTURE
-        $_POST["picture"] = "cat-auto.png";
+        $_GET["picture"] = "cat-auto.png";
     }
     //insert User
-    $user = new User($_POST);
+    $user = new User(["email"=>$_GET["email"], "lastName"=>$_GET["lastName"], "firstName"=>$_GET["firstName"], "phone"=>$_GET["phone"]]);
     UserManager::insertUser($user);
     //insert Ad
-    $_POST["user_email"] = $_POST["email"];
-    $_POST["user_lastName"] = $_POST["lastName"];
-    $_POST["user_firstName"] = $_POST["firstName"];
-    $_POST["user_phone"] = $_POST["phone"];
-    $ad = new Ad($_POST);
+    $ad = new Ad(["user_email"=>$_GET["email"], "category_id"=>$_GET["category_id"], "title"=>$_GET["title"], "description"=>$_GET["description"], "picture"=>$_GET["picture"]]);
     AdManager::insertAd($ad);
     //load index template passing all Ad, all Category objects
     $ads = AdManager::getAllAds();
