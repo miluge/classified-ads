@@ -12,7 +12,8 @@ define("REQUEST_SCHEME",$_SERVER["REQUEST_SCHEME"]);
 function loadTwig(){
     $loader = new \Twig\Loader\FilesystemLoader('../application/template');
     return new \Twig\Environment($loader, [
-        'cache' => '../application/cache',
+        'cache' => false,  
+        // '../application/cache'
     ]);
 }
 
