@@ -4,9 +4,9 @@ require_once '../vendor/autoload.php';
 
 //define application parameters
 define("BASE_PATH","");
-//passer BASE_PATH dans render pour l'ajouter au début des liens
 define("SERVER_NAME",$_SERVER["SERVER_NAME"]);
-//REQUEST_SCHEME SERVER_NAME BASE_PATH pour reconstruire les chemins
+define("REQUEST_SCHEME",$_SERVER["REQUEST_SCHEME"]);
+//REQUEST_SCHEME SERVER_NAME BASE_PATH pour reconstruire les chemins des liens
 
 //load twig function
 function loadTwig(){
@@ -28,8 +28,13 @@ $router->map('GET','/',function(){
     $twig = loadTwig();
     //load index template passing all Ad, Category, User objects
     $template = $twig->load('index.html.twig');
-    echo $template->render(["ads"=>$ads,"categories"=>$categories,"users"=>$users]);
+    echo $template->render(["ads"=>$ads,"categories"=>$categories,"users"=>$users,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
 });
+
+// {% for ad of ads %}
+// {{ ad.category_id }}
+// {% for cat of cats %}
+// {if} cat.id==ad.category_id {{cat.name}}
 
 // Match url
 $match = $router->match();
