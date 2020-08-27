@@ -13,8 +13,8 @@ class User
      * @return User newly created instance
      */
     public function __construct($array) {
-        foreach($array as $attribute => $value){
-            $this->$attribute = $value;
+        foreach($array as $property => $value){
+            $this->$property = $value;
         }
         return $this;
     }

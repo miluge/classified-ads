@@ -48,10 +48,10 @@ class AdManager extends Database
     /**
      * @return Ad[] array of all selected Ad instances on success | ["error" => message] on fail
      */
-    public static function getAllAds(){
+    public static function getAllValidatedAds(){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id";
+            $select = "SELECT id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad WHERE validationDate!=null INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($ads = $request->fetchAll()) {

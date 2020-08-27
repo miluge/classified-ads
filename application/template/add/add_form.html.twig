@@ -28,11 +28,11 @@
 </div>
 
 <div class="bg-gray-100 mx-auto mt-6 max-w-4xl rounded-lg px-4">
-    <form class="" id="add-form" data-parsley-validate="">
+    <form class="" id="add-form" method="GET" action="/addform" data-parsley-validate="">
         <div class="flex">
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
-                <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Jane" required="">
+                <input name="firstName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Jane" required="">
                 <div class="bs-callout bs-callout-warning hidden">
                     <h4>Oh snap!</h4>
                     <p>This form seems to be invalid :(</p>
@@ -40,23 +40,23 @@
             </div>
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="lastName">Last Name</label>
-                <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required="">
+                <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required="">
             </div>
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="email">Email</label>
-            <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required="">
+            <input name="email" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required="">
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="phone">Phone</label>
-            <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="0381617147" required="">
+            <input name="phone" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="0381617147" required="">
         </div>
         <div class=" min-w-fullinline-block relative px-4 py-4">
-            <label class="block text-gray-700 text-lg font-bold mb-2" for="category">Category</label>
-            <select class="min-w-full block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+            <label class="block text-gray-700 text-lg font-bold mb-2" for="category_id">Category</label>
+            <select name="category_id" class="min-w-full block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+              <option value="2">Car - Motorcycle</option>
               <option>Really long option that will likely overlap the chevron</option>
               <option>Option 2</option>
-              <option>Option 3</option>
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
               <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
@@ -64,15 +64,15 @@
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="title">Title</label>
-            <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Title...">
+            <input name="title" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Title...">
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="description">Description</label>
-            <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Item description goes here..." data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment..">
+            <input name="description" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Item description goes here..." data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment..">
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
-            <input class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="file" value="0381617147">
+            <input name="picture" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="file" value="0381617147">
         </div>
         <div class="px-4 py-4">
             <input type="submit" class="g-recaptcha bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full" value="SUBMIT" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>
