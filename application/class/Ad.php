@@ -3,11 +3,19 @@ namespace Ads;
 
 class Ad
 {
-    /** @var integer|null $id null when not yet inserted in database*/
+    /** @var integer|null $id null when ad not yet inserted in database*/
     public $id = null;
-    /** @var integer|null $user_id null when user not yet inserted in database*/
-    public $user_id = null;
+    /** @var integer|null $user_email null when user not yet inserted in database*/
+    public $user_email = null;
+    /** @var integer|null $user_lastName null when user not yet inserted in database*/
+    public $user_lastName = null;
+    /** @var integer|null $user_firstName null when user not yet inserted in database*/
+    public $user_firstName = null;
+    /** @var integer|null $user_phone null when user not yet inserted in database*/
+    public $user_phone = null;
     public $category_id;
+    /** @var integer|null $category_name null when ad not yet inserted in database*/
+    public $category_name = null;
     public $title;
     public $description;
     /** @var DateTime|null $creationDate null when ad not yet inserted in database*/
