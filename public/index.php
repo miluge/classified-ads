@@ -26,11 +26,10 @@ $router->setBasePath(BASE_PATH);
 $router->map('GET','/',function(){
     $ads = \Ads\Manager\AdManager::getAllAds();
     $categories = \Ads\Manager\CategoryManager::getAllCategories();
-    $users = \Ads\Manager\UserManager::getAllUsers();
     $twig = loadTwig();
     //load index template passing all Ad, all Category, all User objects
     $template = $twig->load('index.html.twig');
-    echo $template->render(["ads"=>$ads,"categories"=>$categories,"users"=>$users,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["ads"=>$ads,"categories"=>$categories,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
 });
 
 // add route
@@ -55,12 +54,10 @@ $router->map('GET','/edit/[i:id]',function($id){
 // details route
 $router->map('GET','/details/[i:id]',function($id){
     $ad = \Ads\Manager\AdManager::getAd($id);
-    $categories = \Ads\Manager\CategoryManager::getAllCategories();
-    $users = \Ads\Manager\UserManager::getAllUsers();
     $twig = loadTwig();
     //load details template passing Ad(id), all Category, all User objects
     $template = $twig->load('details.html.twig');
-    echo $template->render(["ad"=>$ad,"categories"=>$categories,"users"=>$users,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["ad"=>$ad,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
 });
 
 // match url
