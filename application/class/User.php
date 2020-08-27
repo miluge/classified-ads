@@ -14,9 +14,7 @@ class User
      */
     public function __construct($array) {
         foreach($array as $property => $value){
-            if (property_exists($property)){
-                $this->$property = $value;
-            }
+            $this->$property = $value;
         }
         return $this;
     }
