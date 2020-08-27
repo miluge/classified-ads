@@ -5,25 +5,28 @@ class Ad
 {
     /** @var integer|null $id null when ad not yet inserted in database*/
     public $id = null;
-    /** @var integer|null $user_email null when user not yet inserted in database*/
-    public $user_email = null;
-    /** @var integer|null $user_lastName null when user not yet inserted in database*/
+    /** @var string $user_email*/
+    public $user_email;
+    /** @var string|null $user_lastName null when ad not yet inserted in database*/
     public $user_lastName = null;
-    /** @var integer|null $user_firstName null when user not yet inserted in database*/
+    /** @var string|null $user_firstName null when ad not yet inserted in database*/
     public $user_firstName = null;
-    /** @var integer|null $user_phone null when user not yet inserted in database*/
+    /** @var string|null $user_phone null when ad not yet inserted in database*/
     public $user_phone = null;
+    /** @var integer $category_id*/
     public $category_id;
-    /** @var integer|null $category_name null when ad not yet inserted in database*/
+    /** @var string|null $category_name null when ad not yet inserted in database*/
     public $category_name = null;
+    /** @var string $title*/
     public $title;
+    /** @var string $description*/
     public $description;
     /** @var DateTime|null $creationDate null when ad not yet inserted in database*/
     public $creationDate = null;
     /** @var DateTime|null $validationDate null when ad not yet validated*/
     public $validationDate = null;
-    /** @var string $picture contain default path if no user picture added*/
-    public $picture = "default path using category id";
+    /** @var string $picture contain default picture name if no user picture added*/
+    public $picture;
 
     /**
      * @param array $array ["attribute"=>value] to hydrate attributes
