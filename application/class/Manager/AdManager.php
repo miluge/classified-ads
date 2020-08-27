@@ -2,6 +2,7 @@
 namespace Ads\Manager;
 use \Ads\Database as Database;
 use \Ads\Ad as Ad;
+use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
 
 class AdManager extends Database
@@ -30,7 +31,7 @@ class AdManager extends Database
     public static function getAd($id){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, user_email, category_id, title, description, creationDate, validationDate, picture FROM ad WHERE id = :id";
+            $select = "SELECT id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad WHERE id = :id INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id";
             $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
@@ -50,7 +51,7 @@ class AdManager extends Database
     public static function getAllAds(){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, user_email, category_id, title, description, creationDate, validationDate, picture FROM ad";
+            $select = "SELECT id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($ads = $request->fetchAll()) {
