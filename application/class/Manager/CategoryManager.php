@@ -12,7 +12,7 @@ class CategoryManager extends Database
     public static function getCategory($id){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, name FROM category WHERE id = :id";
+            $select = "SELECT id, name, color, image FROM category WHERE id = :id";
             $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
@@ -32,7 +32,7 @@ class CategoryManager extends Database
     public static function getAllCategories(){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, name FROM category";
+            $select = "SELECT id, name, color, image FROM category";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($categories = $request->fetchAll()) {
