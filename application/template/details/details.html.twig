@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block details %}
+
+<div class="flex p-8 content-center justify-center">
+  <div class="shadow-xl rounded-lg sm:w-3/5">
+    <div class="h-auto bg-gray-200 bg-cover bg-center rounded-t-lg flex items-center justify-center"> 
+      <img class="rounded-t-lg"src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/pictures/1-BlackCat.jpg" onerror="this.onerror=null; this.src='{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/img/default.png'">
+    </div>
+    <div class="bg-white rounded-b-lg px-8">
+      <div class="relative">
+            <img class="right-0 w-16 h-16 rounded-full mr-4 shadow-lg absolute -mt-8" src="http://tailwindtemplates.io/wp-content/uploads/2019/03/link.jpg" alt="Avatar of Jonathan Reinink">
+      </div>
+      <div class="pt-8 pb-8">
+        <h1 class="text-2xl font-bold text-gray-700">{{ ad.title}}</h1>
+        <p class="text-sm text-gray-600">Created the {{ ad.validationDate|date("m/d/Y") }} by {{ ad.user_firstName }} {{ ad.user_lastName }}</p>
+        <p class="my-4">{{ ad.description }}</p>
+        <div class="mt-4">
+          <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4">{{ ad.category_name }}</p>
+        </div>
+        <div class="flex justify-around mt-8">
+          <a href="mailto:{{ ad.user_email }}">Mail</a>
+          <a href="tel:{{ ad.user_phone }}">Phone</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock details %}
