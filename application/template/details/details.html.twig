@@ -1,11 +1,11 @@
-{% extends "base.html.twig" %}
+{% extends "details/base.html.twig" %}
 
 {% block details %}
 
 <div class="flex p-8 content-center justify-center">
   <div class="shadow-xl rounded-lg sm:w-3/5">
     <div class="h-auto bg-gray-200 bg-cover bg-center rounded-t-lg flex items-center justify-center"> 
-      <img class="rounded-t-lg"src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/pictures/1-BlackCat.jpg" onerror="this.onerror=null; this.src='{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/img/default.png'">
+      <img class="rounded-t-lg" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}">
     </div>
     <div class="bg-white rounded-b-lg px-8">
       <div class="relative">
