@@ -98,7 +98,7 @@
           <div class="overflow-hidden rounded-lg shadow-lg bg-white">
 
               <a href="#">
-                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/pictures/{{ ad.picture }}" onerror="this.onerror=null; this.src='{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/img/default.png'">
+                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ REQUEST_URI}}/assets/pictures/{{ ad.picture }}">
               </a>
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
