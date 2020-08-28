@@ -9,7 +9,7 @@ class UserManager extends Database
      * @param string $email email of user to select in database
      * @return User|array selected User instance on success | ["error" => message] on fail
      */
-    public static function getUser($email){
+    public static function get($email){
         try{
             $pdo = self::connect();
             $select = "SELECT email, lastName, firstName, phone FROM user WHERE email = :email";
@@ -29,7 +29,7 @@ class UserManager extends Database
     /**
      * @return User[] all User instances on success | ["error" => message] on fail
      */
-    public static function getAllUsers(){
+    public static function getAll(){
         try{
             $pdo = self::connect();
             $select = "SELECT email, lastName, firstName, phone FROM user";
@@ -54,10 +54,10 @@ class UserManager extends Database
      * update if so
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function insertUser($user){
+    public static function insert($user){
         try{
             $pdo = self::connect();
-            $previousUser = self::getUser($user->email);
+            $previousUser = self::get($user->email);
             if (is_array($previousUser)) {
                 $insert = "INSERT INTO user (email, lastName, firstName, phone) VALUES (:email, :lastName, :firstName, :phone)";
                 $request = $pdo -> prepare($insert);
@@ -92,7 +92,7 @@ class UserManager extends Database
      * @param string $email email of user to delete in database
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function deleteUser($email){
+    public static function delete($email){
         try{
             $pdo = self::connect();
             $delete = "DELETE FROM user WHERE email = :email";
