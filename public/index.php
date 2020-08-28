@@ -62,7 +62,7 @@ $router->map('GET','/details/[i:id]',function($id){
         //load details template passing Ad(id)
         $ad = AdManager::get($id);
         $twig = loadTwig();
-        $template = $twig->load('details.html.twig');
+        $template = $twig->load('details/details.html.twig');
         echo $template->render(["ad"=>$ad,"SERVER_URI"=>SERVER_URI]);
     }else{
         // redirect to index
