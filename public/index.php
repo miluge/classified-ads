@@ -88,6 +88,21 @@ $router->map('GET','/addform',function(){
     header("Location:/");
 });
 
+// edit ad form handling route
+$router->map('GET','/editform/[i:id]',function($id){
+    //check if picture is posted
+    if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
+        //HANDLE FILE UPLOAD
+    }else{
+        $_GET["picture"] = "default.png";
+    }
+    //update Ad
+    $ad = new Ad(["id"=> $id,"category_id"=>$_GET["category_id"], "title"=>$_GET["title"], "description"=>$_GET["description"], "picture"=>$_GET["picture"]]);
+    AdManager::update($ad);
+    // redirect to ad details
+    header("Location:/details/".$id);
+});
+
 // validate ad route
 $router->map('GET','/validate/[i:id]',function($id){
     //check if picture is validated
