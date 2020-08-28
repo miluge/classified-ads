@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 26 août 2020 à 10:00
+-- Généré le :  ven. 28 août 2020 à 07:22
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -41,14 +41,17 @@ CREATE TABLE IF NOT EXISTS `ad` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   KEY `user_email` (`user_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `ad`
 --
 
 INSERT INTO `ad` (`id`, `user_email`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL);
+(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL),
+(4, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 15:54:44', NULL, 'cat-auto.png'),
+(5, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:03:04', NULL, 'cat-auto.png'),
+(6, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:13:18', NULL, 'cat-auto.png');
 
 -- --------------------------------------------------------
 
@@ -97,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`email`, `lastName`, `firstName`, `phone`) VALUES
+('email@example.com', 'Doe', 'Jane', '0381617147'),
 ('perbet.dev@gmail.com', 'Perbet', 'Guillaume', '0987654321');
 
 --
