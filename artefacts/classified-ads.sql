@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 28 août 2020 à 07:22
+-- Généré le :  ven. 28 août 2020 à 08:28
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS `ad` (
 --
 
 INSERT INTO `ad` (`id`, `user_email`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL),
+(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', '2020-08-19 00:00:00', NULL),
 (4, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 15:54:44', NULL, 'cat-auto.png'),
-(5, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:03:04', NULL, 'cat-auto.png'),
+(5, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:03:04', '2020-08-18 00:00:00', 'cat-auto.png'),
 (6, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:13:18', NULL, 'cat-auto.png');
 
 -- --------------------------------------------------------
