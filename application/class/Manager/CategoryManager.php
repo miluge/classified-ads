@@ -9,10 +9,10 @@ class CategoryManager extends Database
      * @param integer $id id of category to fetch in database
      * @return Category|array fetched Category instance on success | ["error" => message] on fail
      */
-    public static function getCategory($id){
+    public static function get($id){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, name FROM category WHERE id = :id";
+            $select = "SELECT id, name, color, image FROM category WHERE id = :id";
             $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
@@ -29,10 +29,10 @@ class CategoryManager extends Database
     /**
      * @return Category[] all Category instances on success | ["error" => message] on fail
      */
-    public static function getAllCategories(){
+    public static function getAll(){
         try{
             $pdo = self::connect();
-            $select = "SELECT id, name FROM category";
+            $select = "SELECT id, name, color, image FROM category";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($categories = $request->fetchAll()) {

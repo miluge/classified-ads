@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 28 août 2020 à 07:22
+-- Généré le :  ven. 28 août 2020 à 11:46
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.4.0
 
@@ -41,17 +41,18 @@ CREATE TABLE IF NOT EXISTS `ad` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   KEY `user_email` (`user_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Déchargement des données de la table `ad`
 --
 
 INSERT INTO `ad` (`id`, `user_email`, `category_id`, `title`, `description`, `creationDate`, `validationDate`, `picture`) VALUES
-(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', NULL, NULL),
+(1, 'perbet.dev@gmail.com', 4, 'Black cat', 'sweet young black cat to adopt', '2020-08-26 00:00:00', '2020-08-19 00:00:00', NULL),
 (4, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 15:54:44', NULL, 'cat-auto.png'),
-(5, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:03:04', NULL, 'cat-auto.png'),
-(6, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:13:18', NULL, 'cat-auto.png');
+(5, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:03:04', '2020-08-18 00:00:00', 'cat-auto.png'),
+(6, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-27 16:13:18', NULL, 'cat-auto.png'),
+(7, 'email@example.com', 2, 'Title...', 'Item description goes here...', '2020-08-28 13:33:03', NULL, 'default.png');
 
 -- --------------------------------------------------------
 
@@ -63,6 +64,8 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `color` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -70,15 +73,15 @@ CREATE TABLE IF NOT EXISTS `category` (
 -- Déchargement des données de la table `category`
 --
 
-INSERT INTO `category` (`id`, `name`) VALUES
-(1, 'Housing'),
-(2, 'Car - Motorcycle'),
-(3, 'Job'),
-(4, 'Pet'),
-(5, 'Service'),
-(6, 'Holiday'),
-(7, 'Business'),
-(8, 'Other');
+INSERT INTO `category` (`id`, `name`, `color`, `image`) VALUES
+(1, 'Real estate', 'yellow', 'cat-real-estate.png'),
+(2, 'Auto', 'green', 'cat-auto.png'),
+(3, 'Work', 'red', 'cat-work.png'),
+(4, 'Animals', 'purple', 'cat-animals.png'),
+(5, 'Services', 'teal', 'cat-services.png'),
+(6, 'Holiday', 'indigo', 'cat-holyday.png'),
+(7, 'Business', 'orange', 'cat-buisiness.png'),
+(8, 'Other', 'gray', 'cat-other.png');
 
 -- --------------------------------------------------------
 

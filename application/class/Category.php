@@ -5,6 +5,8 @@ class Category
 {
     public $id;
     public $name;
+    public $color;
+    public $image;
 
     /**
      * @param array $array ["attribute"=>value] to hydrate attributes
