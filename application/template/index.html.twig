@@ -95,10 +95,10 @@
 
           <!-- Article -->
           
-          <div class="overflow-hidden rounded-lg shadow-lg">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white">
 
               <a href="#">
-                  <img alt="Placeholder" class="block h-auto w-full" src="https://picsum.photos/600/400/?random" onerror="this.onerror=null; this.src='Default.jpg'">
+                  <img alt="Placeholder" class="object-none block h-auto w-full shadow-xs" src="{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/picture/{{ ad.picture }}" onerror="this.onerror=null; this.src='{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/img/default.png'">
               </a>
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
@@ -111,10 +111,12 @@
                       {{ ad.validationDate|date("m/d/Y") }}
                   </p>
               </header>
-
+              <div class="p-4">
+                <p class="inline-block border border-blue rounded py-1 px-3 bg-blue-200 text-black p-4">{{ ad.category_name }}</p>
+              </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex items-center no-underline hover:underline text-black" href="#">
-                      <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random" onerror="this.onerror=null; this.src='Default_character.jpg'">
+                      <img alt="Placeholder" class="block rounded-full" src="https://picsum.photos/32/32/?random" onerror="this.onerror=null; this.src='default.png'">
                       <p class="ml-2 text-sm">
                           {{ ad.user_firstName }} {{ ad.user_lastName}}
                       </p>
