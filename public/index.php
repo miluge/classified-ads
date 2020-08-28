@@ -1,14 +1,11 @@
 <?php
 
 //define application parameters
-define("DOCUMENT_ROOT",$_SERVER["DOCUMENT_ROOT"]);
 define("BASE_PATH","");
-define("SERVER_NAME",$_SERVER["SERVER_NAME"]);
-define("REQUEST_SCHEME",$_SERVER["REQUEST_SCHEME"]);
-//REQUEST_SCHEME SERVER_NAME BASE_PATH pour reconstruire les chemins des liens
+define("SERVER_URI",$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].BASE_PATH);
 
 // autoload
-require_once dirname(DOCUMENT_ROOT)."/vendor/autoload.php";
+require_once dirname(dirname(__FILE__))."/vendor/autoload.php";
 
 // namespace
 use \Ads\Ad as Ad;
@@ -19,10 +16,10 @@ use \Ads\Manager\UserManager as UserManager;
 
 //load twig function
 function loadTwig(){
-    $loader = new \Twig\Loader\FilesystemLoader(dirname(DOCUMENT_ROOT)."/application/template");
+    $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__FILE__))."/application/template");
     return new \Twig\Environment($loader, [
         'cache' => false,
-        // 'cache' => dirname(DOCUMENT_ROOT)."/application/cache",
+        // 'cache' => dirname(__FILE__)."/application/cache",
     ]);
 }
 
@@ -37,7 +34,7 @@ $router->map('GET','/',function(){
     $categories = CategoryManager::getAllCategories();
     $twig = loadTwig();
     $template = $twig->load('index.html.twig');
-    echo $template->render(["ads"=>$ads,"categories"=>$categories,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["ads"=>$ads,"categories"=>$categories,"SERVER_URI"=>SERVER_URI]);
 });
 
 // add template route
@@ -46,7 +43,7 @@ $router->map('GET','/add',function(){
     $categories = CategoryManager::getAllCategories();
     $twig = loadTwig();
     $template = $twig->load('add/add_form.html.twig');
-    echo $template->render(["categories"=>$categories, "BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["categories"=>$categories,"SERVER_URI"=>SERVER_URI]);
 });
 
 // edit template route
@@ -56,7 +53,7 @@ $router->map('GET','/edit/[i:id]',function($id){
     $categories = CategoryManager::getAllCategories();
     $twig = loadTwig();
     $template = $twig->load('edit/edit_form.html.twig');
-    echo $template->render(["ad"=>$ad,"categories"=>$categories,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["ad"=>$ad,"categories"=>$categories,"SERVER_URI"=>SERVER_URI]);
 });
 
 // details template route
@@ -65,7 +62,7 @@ $router->map('GET','/details/[i:id]',function($id){
     $ad = AdManager::getAd($id);
     $twig = loadTwig();
     $template = $twig->load('details.html.twig');
-    echo $template->render(["ad"=>$ad,"BASE_PATH"=>BASE_PATH,"SERVER_NAME"=>SERVER_NAME,"REQUEST_SCHEME"=>REQUEST_SCHEME]);
+    echo $template->render(["ad"=>$ad,"SERVER_URI"=>SERVER_URI]);
 });
 
 // add form handling route
@@ -74,8 +71,7 @@ $router->map('GET','/addform',function(){
     if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
         //HANDLE FILE UPLOAD
     }else{
-        //GET DEFAULT PICTURE
-        $_GET["picture"] = "cat-auto.png";
+        $_GET["picture"] = "default.png";
     }
     //insert User
     $user = new User(["email"=>$_GET["email"], "lastName"=>$_GET["lastName"], "firstName"=>$_GET["firstName"], "phone"=>$_GET["phone"]]);
