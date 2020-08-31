@@ -26,7 +26,7 @@ class Ad
     /** @var DateTime|null $validationDate null when ad not yet validated*/
     public $validationDate = null;
     /** @var string $picture contain default picture name if no user picture added*/
-    public $picture;
+    public $picture = "default.png";
 
     /**
      * @param array $array ["attribute"=>value] to hydrate attributes
