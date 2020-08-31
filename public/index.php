@@ -129,6 +129,13 @@ $router->map('GET','/validate/[i:id]',function($id){
     header("Location:/details/".$id);
 });
 
+// delete ad route
+$router->map('GET','/delete/[i:id]',function($id){
+    AdManager::delete($id);
+    // redirect to index
+    // header("Location:/");
+});
+
 // match url
 $match = $router->match();
 

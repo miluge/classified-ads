@@ -97,6 +97,7 @@ class AdManager extends Database
 
     /**
      * @param id $id id of ad to delete in database
+     * delete corresponding uploaded file
      * if user have NO OTHER ADS, delete user from user table
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
@@ -104,12 +105,20 @@ class AdManager extends Database
         try{
             $pdo = self::connect();
             $user_email = self::get($id)->user_email;
-            $delete = "DELETE FROM ad WHERE id = :id";
+            $picture = self::get($id)->picture;
+            $delete = "DELETE FROM ad WHERE id=:id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
-                if (! self::user_emailExists($user_id)){
-                    UserManager::deleteUser($user_email);
+                //delete user if they have no other ad
+                if (! self::user_emailExists($user_email)){
+                    UserManager::delete($user_email);
+                }
+                //delete picture
+                $picture = $id."-".$picture;
+                if (file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture)){
+                    echo "file exists";
+                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture);
                 }
                 return ["error" => false];
             } else {
