@@ -90,9 +90,9 @@ $router->map('POST','/addform',function(){
         if ($file->check()===true){
             //get new Ad, update picture name, upload file
             $newAd = AdManager::get($newId);
-            $newAd->picture = $file->name;
+            $newAd->picture = $newId."-".$file->name;
             AdManager::update($newAd);
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newId."-".$file->name);
+            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newAd->picture);
         }
     }
     // redirect to index
@@ -111,8 +111,8 @@ $router->map('POST','/editform/[i:id]',function($id){
         $error = $_FILES["picture"]["error"];
         $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
         if ($file->check()===true){
-            $ad->picture = $file->name;
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$id."-".$file->name);
+            $ad->picture = $id."-".$file->name;
+            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$ad->picture);
         }
     }
     AdManager::update($ad);
