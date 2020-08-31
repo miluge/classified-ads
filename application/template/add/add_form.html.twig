@@ -4,7 +4,7 @@
 
 <header class="flex items-center justify-around px-4 py-3 bg-gray-900">
     <div>
-      <img class="h-8" src="public/assets/img/logo-inverted.svg" alt="Workcation">
+      <img class="h-8" src="{{ REQUEST_URI }}/assets/img/logo-inverted.svg" alt="Workcation">
     </div>
     <div>
       <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
@@ -16,40 +16,25 @@
 {% endblock header %}
 
 {% block form %}
-
-<div class="bs-callout bs-callout-warning hidden">
-    <h4>Oh snap!</h4>
-    <p>This form seems to be invalid :(</p>
-</div>
-  
-<div class="bs-callout bs-callout-info hidden">
-    <h4>Yay!</h4>
-    <p>Everything seems to be ok :)</p>
-</div>
-
 <div class="bg-gray-100 mx-auto mt-6 max-w-4xl rounded-lg px-4">
-    <form class="" id="add-form" method="GET" action="/addform" data-parsley-validate="">
+    <form class="" name="add-form" id="add-form" method="GET" action="/addform">
         <div class="flex">
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
-                <input name="firstName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Jane" required="">
-                <div class="bs-callout bs-callout-warning hidden">
-                    <h4>Oh snap!</h4>
-                    <p>This form seems to be invalid :(</p>
-                </div>
+                <input name="firstName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Jane" required>
             </div>
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="lastName">Last Name</label>
-                <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required="">
+                <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required>
             </div>
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="email">Email</label>
-            <input name="email" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required="">
+            <input name="email" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required>
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="phone">Phone</label>
-            <input name="phone" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="0381617147" required="">
+            <input name="phone" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="0381617147" required>
         </div>
         <div class=" min-w-fullinline-block relative px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="category_id">Category</label>
@@ -70,7 +55,7 @@
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="description">Description</label>
-            <input name="description" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Item description goes here..." data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 character comment..">
+            <input name="description" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Item description goes here...">
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
@@ -87,20 +72,9 @@
 {% block javascript %}
 
 <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
-<script type="text/javascript" src="public/assets/js/jquery.js"></script>
-<script type="text/javascript" src="public/assets/js/parsley.min.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('#add-form').parsley().on('field:validated', function() {
-          var ok = $('.parsley-error').length === 0;
-          $('.bs-callout-info').toggleClass('hidden', !ok);
-          $('.bs-callout-warning').toggleClass('hidden', ok);
-        })
-      });
-
-    function onSubmit(token) {
-      document.getElementById("add-form").submit();
-    }
-</script>
+<script type="text/javascript" src="{{ REQUEST_URI }}/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script type="text/javascript" src="{{ REQUEST_URI }}/js/form-validation.js"></script>
 
 {% endblock javascript %}
