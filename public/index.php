@@ -72,12 +72,12 @@ $router->map('GET','/details/[i:id]',function($id){
 });
 
 // add ad form handling route
-$router->map('GET','/addform',function(){
+$router->map('POST','/addform',function(){
     //insert User
-    $user = new User([ "email"=>$_GET["email"] , "lastName"=>$_GET["lastName"] , "firstName"=>$_GET["firstName"] , "phone"=>$_GET["phone"] ]);
+    $user = new User([ "email"=>$_POST["email"] , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
     //insert Ad
-    $ad = new Ad([ "user_email"=>$_GET["email"] , "category_id"=>$_GET["category_id"] , "title"=>$_GET["title"] , "description"=>$_GET["description"]]);
+    $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     AdManager::insert($ad);
     //check if picture is posted
     if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
@@ -96,19 +96,25 @@ $router->map('GET','/addform',function(){
         }
     }
     // redirect to index
-    header("Location:/");
+    // header("Location:/");
 });
 
 // edit ad form handling route
-$router->map('GET','/editform/[i:id]',function($id){
+$router->map('POST','/editform/[i:id]',function($id){
+    //initialize Ad
+    $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     //check if picture is posted
     if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
-        //HANDLE FILE UPLOAD
-    }else{
-        $_GET["picture"] = "default.png";
+        $name = basename($_FILES["picture"]["name"]);
+        $tmpName = $_FILES["picture"]["tmp_name"];
+        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+        $error = $_FILES["picture"]["error"];
+        $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
+        if ($file->check()===true){
+            $ad->picture = $file->name;
+            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$id."-".$file->name);
+        }
     }
-    //update Ad
-    $ad = new Ad([ "id"=> $id , "category_id"=>$_GET["category_id"] , "title"=>$_GET["title"] , "description"=>$_GET["description"] , "picture"=>$_GET["picture"] ]);
     AdManager::update($ad);
     // redirect to ad details
     header("Location:/details/".$id);
