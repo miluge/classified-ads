@@ -88,7 +88,7 @@
 
 {% block cards %}
 <div class="container my-12 mx-auto px-4  sm:w-3/5" data-infinite-scroll='{ "path": ".pagination__next", "append": ".post", "history": false }'>
-  <div class="flex flex-wrap -mx-1 lg:-mx-4">
+  <div id="infinite-list"class="flex flex-wrap -mx-1 lg:-mx-4">
     {% for ad in ads %}
       <!-- Column -->
       <div class="post my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
@@ -116,7 +116,7 @@
               </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex items-center font-semibold no-underline hover:font-bold text-black" href="#">
-                      <img alt="Placeholder" class="block rounded-full object-contain" src="" onerror="this.onerror=null; this.src='{{ REQUEST_SCHEME }}://{{SERVER_NAME}}:8080{{ BASE_PATH }}/assets/img/default.png'">
+                      <img alt="Placeholder" class="block rounded-full object-contain" src="" onerror="this.onerror=null; this.src='{{ SERVER_URI }}/assets/img/default_user.png'">
                       <p class="ml-2 text-sm">
                           {{ ad.user_firstName }} {{ ad.user_lastName}}
                       </p>
@@ -146,7 +146,5 @@
 {% endblock footer %}
 
 {% block javascript %}
-
-  <script type="text/javascript" src="js/script.js"></script>
 
 {% endblock javascript %}
