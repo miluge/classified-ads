@@ -28,7 +28,7 @@
 </div>
 
 <div class="bg-gray-100 mx-auto mt-6 max-w-4xl rounded-lg px-4">
-    <form class="" id="add-form" method="GET" action="/addform" data-parsley-validate="">
+    <form class="" id="add-form" method="POST" action="/addform" data-parsley-validate="" enctype="multipart/form-data">
         <div class="flex">
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
@@ -72,7 +72,7 @@
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
-            <input name="picture" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="file" value="0381617147">
+            <input type="file"  name="picture" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal">
         </div>
         <div class="px-4 py-4">
             <input type="submit" class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full" value="SUBMIT" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>
