@@ -134,7 +134,7 @@ $router->map('GET','/validate/[i:id]',function($id){
 $router->map('GET','/delete/[i:id]',function($id){
     AdManager::delete($id);
     // redirect to index
-    // header("Location:/");
+    header("Location:/");
 });
 
 // match url
