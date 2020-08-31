@@ -7,6 +7,18 @@ use \Ads\Manager\UserManager as UserManager;
 
 class AdManager extends Database
 {
+/**
+     * @return integer|array last inserted id on success | ["error" => message] on fail
+     */
+    public static function getLastId(){
+        try{
+            $pdo = self::connect();
+            return $pdo->lastInsertId();
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
+
     /**
      * @param string $user_email user_email to ckeck in database
      * @return boolean|array true if exists, false if not | ["error" => message] on fail
@@ -110,7 +122,7 @@ class AdManager extends Database
 
     /**
      * @param Ad $ad Ad instance to insert in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return integer|array new Ad id on success | ["error" => message] on fail
      */
     public static function insert($ad){
         try{
@@ -123,7 +135,7 @@ class AdManager extends Database
             $request -> bindValue(':description', $ad->description);
             $request -> bindValue(':picture', $ad->picture);
             if ($request -> execute()){
-                return ["error" => false];
+                return $pdo->lastInsertId();
             } else {
                 throw new \PDOException("Ad not inserted !");
             }
@@ -139,7 +151,7 @@ class AdManager extends Database
     public static function update($ad){
         try{
             $pdo = self::connect();
-            $update = "UPDATE ad SET category_id=:category_id, title=:title, description=:description, picture=:picture) WHERE id=:id";
+            $update = "UPDATE ad SET category_id=:category_id, title=:title, description=:description, picture=:picture WHERE id=:id";
             $request = $pdo -> prepare($update);
             $request -> bindValue(':id', $ad->id);
             $request -> bindValue(':category_id', $ad->category_id);

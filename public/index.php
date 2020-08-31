@@ -78,9 +78,9 @@ $router->map('POST','/addform',function(){
     UserManager::insert($user);
     //insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    AdManager::insert($ad);
+    $newId = AdManager::insert($ad);
     //check if picture is posted
-    if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
+    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $name = basename($_FILES["picture"]["name"]);
         $tmpName = $_FILES["picture"]["tmp_name"];
         $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
@@ -88,7 +88,6 @@ $router->map('POST','/addform',function(){
         $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
         if ($file->check()===true){
             //get new Ad, update picture name, upload file
-            $newId = AdManager::lastInsertId();
             $newAd = AdManager::get($newId);
             $newAd->picture = $file->name;
             AdManager::update($newAd);
@@ -96,7 +95,7 @@ $router->map('POST','/addform',function(){
         }
     }
     // redirect to index
-    // header("Location:/");
+    header("Location:/");
 });
 
 // edit ad form handling route
@@ -104,7 +103,7 @@ $router->map('POST','/editform/[i:id]',function($id){
     //initialize Ad
     $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     //check if picture is posted
-    if(isset($_FILES["picture"]) && not_empty($_FILES["picture"]["name"])){
+    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $name = basename($_FILES["picture"]["name"]);
         $tmpName = $_FILES["picture"]["tmp_name"];
         $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
