@@ -7,7 +7,7 @@
 <header class="h-32 sm:h-64 flex items-center justify-around px-6 py-3 bg-current">
   <div class="w-9/12 flex items-center justify-between md:px-16 md:py-3">
     <div>
-      <img class="h-8 mr-8 sm:h-12 md:h-24 lg:w-64" src="{{ REQUEST_URI }}/assets/img/logo-inverted.svg" alt="Workcation">
+      <img class="h-8 mr-8 sm:h-12 md:h-24 lg:w-64" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation">
     </div>
     <div>
       <button type="button" class="bg-white hover:border-white hover:border-4 hover:bg-gray-500 hover:text-white text-black font-bold py-2 px-2 sm:py-4 sm:px-4 rounded-lg">
@@ -98,7 +98,7 @@
           <div class="overflow-hidden rounded-lg shadow-lg bg-white">
 
               <a href="#">
-                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ REQUEST_URI }}/assets/pictures/{{ ad.picture }}">
+                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.id }}-{{ ad.picture }}">
               </a>
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
