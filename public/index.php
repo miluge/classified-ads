@@ -95,6 +95,15 @@ $router->map('POST','/addform',function(){
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newAd->picture);
         }
     }
+    // send validation mail
+    $newAd = AdManager::get($newId);
+    $twig = loadTwig();
+    $template = $twig->load('mail/validate.mjml.twig');
+    $message = new \Swift_Message();
+    $message->setSubject('Please validate your ad !');
+    $message->setFrom(['server@classified-ads.com' => 'Classified Ads']);
+    $message->setTo([$user->email]);
+    $message->setBody($template->render([ "ad"=>$newAd ]));
     // redirect to index
     header("Location:/");
 });
