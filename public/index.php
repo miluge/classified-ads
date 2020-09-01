@@ -15,12 +15,19 @@ use \Ads\Manager\AdManager as AdManager;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
 
+// mjml render function
+use \Qferrer\Mjml\Renderer\BinaryRenderer as BinaryRenderer;
+function mjmlRender($mjml){
+    $renderer = new BinaryRenderer(dirname(dirname(__FILE__)).'/node_modules/.bin/mjml');
+    return $renderer->render($mjml);
+}
+
 //load twig function
 function loadTwig(){
     $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__FILE__))."/application/template");
     return new \Twig\Environment($loader, [
         'cache' => false,
-        // 'cache' => dirname(__FILE__)."/application/cache",
+        // 'cache' => dirname(dirname(__FILE__))."/application/cache",
     ]);
 }
 
@@ -94,16 +101,18 @@ $router->map('POST','/addform',function(){
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newAd->picture);
         }
     }
-    // send validation mail
+    //send validation mail
     $newAd = AdManager::get($newId);
     $message = new \Swift_Message();
     $message->setSubject('Please validate your ad !');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$user->email]);
-    //get body template
+    //set body template
     $twig = loadTwig();
     $template = $twig->load('mail/validate.mjml.twig');
-    $message->setBody($template->render([ "ad"=>$newAd ]));
+    $mjml = $template->render([ "ad"=>$newAd ]);
+    $html = mjmlRender($mjml);
+    $message->setBody($html, 'text/html');
     //set connection parameters
     $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
     $transport->setUsername(apache_getenv("GMAIL_USER"));
@@ -137,7 +146,7 @@ $router->map('POST','/editform/[i:id]',function($id){
 
 // validate ad route
 $router->map('GET','/validate/[i:id]',function($id){
-    //check if picture is validated
+    //check if Ad is validated
     if (! AdManager::isValidated($id)){
         AdManager::validate($id);
     }
