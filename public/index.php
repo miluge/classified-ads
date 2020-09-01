@@ -1,5 +1,4 @@
 <?php
-
 //define application parameters
 define("BASE_PATH","");
 define("SERVER_URI",$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].BASE_PATH);
@@ -101,9 +100,12 @@ $router->map('POST','/addform',function(){
     $template = $twig->load('mail/validate.mjml.twig');
     $message = new \Swift_Message();
     $message->setSubject('Please validate your ad !');
-    $message->setFrom(['server@classified-ads.com' => 'Classified Ads']);
+    $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$user->email]);
     $message->setBody($template->render([ "ad"=>$newAd ]));
+    $transport = \Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')->setUsername($_ENV["GMAIL_USER"])->setPassword($_ENV["GMAIL_PASSWORD"]);
+    $mailer = new \Swift_Mailer($transport);
+    $mailer->send($message);
     // redirect to index
     header("Location:/");
 });
