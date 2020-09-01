@@ -155,7 +155,7 @@ class AdManager extends Database
 
     /**
      * @param Ad $ad Ad instance to update in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return string|array user_email on success | ["error" => message] on fail
      */
     public static function update($ad){
         try{
@@ -168,7 +168,7 @@ class AdManager extends Database
             $request -> bindValue(':description', $ad->description);
             $request -> bindValue(':picture', $ad->picture);
             if ($request -> execute()){
-                return ["error" => false];
+                return self::get($ad->id)->user_email;
             } else {
                 throw new \PDOException("Ad not updated !");
             }
