@@ -18,7 +18,7 @@
 {% block form %}
 
 <div class="bg-gray-100 mx-auto mt-6 max-w-4xl rounded-lg px-4">
-    <form class="" name="form" id="edit-form" method="POST" action="/editform" enctype="multipart/form-data">
+    <form class="" name="form" id="edit-form" method="POST" action="/editform/{{ ad.id }}" enctype="multipart/form-data">
         <div class="flex">
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
