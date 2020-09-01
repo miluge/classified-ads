@@ -2,3 +2,35 @@ form .error {
     color: red;
     margin-top: 0.25rem;
 }
+
+p[data-category-id="1"] {
+    background-color: #F6E05E;
+}
+
+p[data-category-id="2"] {
+    background-color: #68D391;
+}
+
+p[data-category-id="3"] {
+    background-color: #FC8181;
+}
+
+p[data-category-id="4"] {
+    background-color: #B794F4;
+}
+
+p[data-category-id="5"] {
+    background-color: #4FD1C5;
+}
+
+p[data-category-id="6"] {
+    background-color: #7F9CF5;
+}
+
+p[data-category-id="7"] {
+    background-color: #F6AD55;
+}
+
+p[data-category-id="8"] {
+    background-color: #CBD5E0;
+}

@@ -63,7 +63,7 @@
           <div class="overflow-hidden rounded-lg shadow-lg bg-white" data-category-id="{{ ad.category_id }}">
 
               <a href="#">
-                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}">
+                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
               </a>
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
@@ -77,7 +77,7 @@
                   </p>
               </header>
               <div class="p-4">
-                <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4">{{ ad.category_name }}</p>
+                <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-white p-4" data-category-id="{{ ad.category_id }}" >{{ ad.category_name }}</p>
               </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
@@ -105,7 +105,7 @@
 
 
 {% block footer %}
-<footer class="h-32 bg-current">
+<footer class="h-32 bg-gray-900">
 
 </footer>
 {% endblock footer %}
