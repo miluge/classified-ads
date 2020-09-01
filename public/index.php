@@ -125,7 +125,7 @@ $router->map('POST','/addform',function(){
 
 // edit ad form handling route
 $router->map('POST','/editform/[i:id]',function($id){
-    //initialize Ad
+    //update Ad
     $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     //check if picture is posted
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
@@ -139,7 +139,10 @@ $router->map('POST','/editform/[i:id]',function($id){
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$ad->picture);
         }
     }
-    AdManager::update($ad);
+    $user_email = AdManager::update($ad);
+    //update User
+    $user = new User([ "email"=>$user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+    UserManager::insert($user);
     //send validation mail
     $newAd = AdManager::get($id);
     $message = new \Swift_Message();
