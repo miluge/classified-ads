@@ -4,16 +4,14 @@
 
 {% block header %}
 
-<header class="h-32 sm:h-64 flex items-center justify-around px-6 py-3 bg-current">
-  <div class="w-9/12 flex items-center justify-between md:px-16 md:py-3">
-    <div>
-      <img class="h-8 mr-8 sm:h-12 md:h-24 lg:w-64" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation">
-    </div>
-    <div>
-      <button type="button" class="bg-white hover:border-white hover:border-4 hover:bg-gray-500 hover:text-white text-black font-bold py-2 px-2 sm:py-4 sm:px-4 rounded-lg">
-          <a href="add">SUBMIT AD</a>
-      </button>
-    </div>
+<header class="flex items-center justify-around px-4 py-3 bg-gray-900">
+  <div>
+      <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ REQUEST_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
+  </div>
+  <div>
+    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
+        <a href="add">SUBMIT AD</a>
+    </button>
   </div>
 </header>
 
@@ -23,7 +21,7 @@
 {% block hero %}
 
 <div class="bg-gray-200 h-64 flex items-center justify-center">
-    <div class="w-3/5 h-24 pl-4 pr-4 bg-white border rounded-lg flex justify-between items-center relative">
+    <div class="w-9/12 sm:w-3/5 h-24 pl-4 pr-4 bg-white border rounded-lg flex justify-between items-center relative">
       <input type="search" name="search" id="search" placeholder="Search"
              class="appearance-none w-full outline-none text-2xl  focus:outline-none active:outline-none"/>
       <button type="submit" class="-ml-8 sm:ml-1 outline-none focus:outline-none active:outline-none">
@@ -39,66 +37,33 @@
 
 {% block category %}
 
-<div class="flex bg-white h-64 flex items-center justify-around">
-  <div class="flex items-center justify-around w-full sm:w-3/5 ">
+<div class="bg-white h-64 flex items-center justify-around sm:overflow-hidden overflow-x-auto">
+  <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5">
+    {% for category in categories %}
     <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-yellow-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto  hover:font-bold">Emploi</span>
+      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/{{ category.image}})" data-category-id="{{ category.id }}">
+        <span class="pt-24 mx-auto  hover:font-bold">{{ category.name }}</span>
       </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-green-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-red-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-purple-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-teal-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-indigo-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-orange-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
-    <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-gray-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/cat-auto.png)">
-        <span class="pt-24 mx-auto hover:underline hover:font-bold">Emploi</span>
-      </a>
-    </div>
+    </div>            
+    {% endfor %}
   </div>
 </div>
 
 {% endblock category %}
 
 {% block cards %}
-<div class="container my-12 mx-auto px-4  sm:w-3/5" data-infinite-scroll='{ "path": ".pagination__next", "append": ".post", "history": false }'>
-  <div id="infinite-list"class="flex flex-wrap -mx-1 lg:-mx-4">
+<div class="container my-12 mx-auto px-4  sm:w-3/5">
+  <div class="flex flex-wrap -mx-1 lg:-mx-4">
     {% for ad in ads %}
       <!-- Column -->
       <div class="post my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 
           <!-- Article -->
           
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white" data-category-id="{{ ad.category_id }}">
 
               <a href="#">
-                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}">
+                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
               </a>
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
@@ -112,7 +77,7 @@
                   </p>
               </header>
               <div class="p-4">
-                <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4">{{ ad.category_name }}</p>
+                <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-white p-4" data-category-id="{{ ad.category_id }}" >{{ ad.category_name }}</p>
               </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
@@ -140,7 +105,7 @@
 
 
 {% block footer %}
-<footer class="h-32 bg-current">
+<footer class="h-32 bg-gray-900">
 
 </footer>
 {% endblock footer %}

@@ -52,7 +52,6 @@ $router->map('GET','/edit/[i:id]',function($id){
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
     $twig = loadTwig();
-    var_dump($categories);
     $template = $twig->load('edit/edit_form.html.twig');
     echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });

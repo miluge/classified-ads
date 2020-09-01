@@ -12,7 +12,9 @@
     "postcss-cli": "^7.1.1",
     "tailwindcss": "^1.7.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@tailwindcss/custom-forms": "^0.2.1"
+  },
   "scripts": {
     "build": "postcss application/build/css/tailwind.css -o public/css/tailwind.css"
   },
