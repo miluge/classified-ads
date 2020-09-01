@@ -35,7 +35,7 @@ function loadTwig(){
 $router = new AltoRouter();
 $router->setBasePath(BASE_PATH);
 
-// index template route
+// index page route
 $router->map('GET','/',function(){
     //load index template passing all Ad, all Category objects
     $ads = AdManager::getAllValidated();
@@ -45,7 +45,7 @@ $router->map('GET','/',function(){
     echo $template->render([ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// add template route
+// add page route
 $router->map('GET','/add',function(){
     //load add template passing all Category objects
     $categories = CategoryManager::getAll();
@@ -54,7 +54,7 @@ $router->map('GET','/add',function(){
     echo $template->render([ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// edit template route
+// edit page route
 $router->map('GET','/edit/[i:id]',function($id){
     //load edit template passing Ad(id), all Category objects
     $ad = AdManager::get($id);
@@ -64,7 +64,7 @@ $router->map('GET','/edit/[i:id]',function($id){
     echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// details template route
+// details page route
 $router->map('GET','/details/[i:id]',function($id){
     // if (AdManager::isValidated($id)){
         //load details template passing Ad(id)
@@ -73,7 +73,7 @@ $router->map('GET','/details/[i:id]',function($id){
         $template = $twig->load('details/details.html.twig');
         echo $template->render([ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
     // }else{
-    //     // redirect to index
+    //     // redirect to index page
     //     header("Location:/");
     // }
 });
@@ -106,11 +106,11 @@ $router->map('POST','/addform',function(){
     $message = new \Swift_Message();
     $message->setSubject('Please validate your ad !');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
-    $message->setTo([$user->email]);
+    $message->setTo([$newAd->user_email]);
     //set body template
     $twig = loadTwig();
     $template = $twig->load('mail/validate.mjml.twig');
-    $mjml = $template->render([ "ad"=>$newAd ]);
+    $mjml = $template->render([ "ad"=>$newAd, "SERVER_URI"=>SERVER_URI ]);
     $html = mjmlRender($mjml);
     $message->setBody($html, 'text/html');
     //set connection parameters
@@ -119,7 +119,7 @@ $router->map('POST','/addform',function(){
     $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
     $mailer = new \Swift_Mailer($transport);
     $mailer->send($message);
-    // redirect to index
+    // redirect to ad details page
     header("Location:/details/".$newAd->id);
 });
 
@@ -140,8 +140,26 @@ $router->map('POST','/editform/[i:id]',function($id){
         }
     }
     AdManager::update($ad);
-    // redirect to ad details
-    header("Location:/details/".$ad->id);
+    //send validation mail
+    $newAd = AdManager::get($id);
+    $message = new \Swift_Message();
+    $message->setSubject('Please validate your ad !');
+    $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
+    $message->setTo([$newAd->user_email]);
+    //set body template
+    $twig = loadTwig();
+    $template = $twig->load('mail/validate.mjml.twig');
+    $mjml = $template->render([ "ad"=>$newAd, "SERVER_URI"=>SERVER_URI ]);
+    $html = mjmlRender($mjml);
+    $message->setBody($html, 'text/html');
+    //set connection parameters
+    $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
+    $transport->setUsername(apache_getenv("GMAIL_USER"));
+    $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
+    $mailer = new \Swift_Mailer($transport);
+    $mailer->send($message);
+    // redirect to ad details page
+    header("Location:/details/".$newAd->id);
 });
 
 // validate ad route
@@ -149,15 +167,33 @@ $router->map('GET','/validate/[i:id]',function($id){
     //check if Ad is validated
     if (! AdManager::isValidated($id)){
         AdManager::validate($id);
+        //send delete mail
+        $ad = AdManager::get($id);
+        $message = new \Swift_Message();
+        $message->setSubject('Your ad has been validated !');
+        $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
+        $message->setTo([$ad->user_email]);
+        //set body template
+        $twig = loadTwig();
+        $template = $twig->load('mail/delete.mjml.twig');
+        $mjml = $template->render([ "ad"=>$ad, "SERVER_URI"=>SERVER_URI ]);
+        $html = mjmlRender($mjml);
+        $message->setBody($html, 'text/html');
+        //set connection parameters
+        $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
+        $transport->setUsername(apache_getenv("GMAIL_USER"));
+        $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
+        $mailer = new \Swift_Mailer($transport);
+        $mailer->send($message);
     }
-    // redirect to details template
-    header("Location:/details/".$id);
+    // redirect to index page
+    header("Location:/");
 });
 
 // delete ad route
 $router->map('GET','/delete/[i:id]',function($id){
     AdManager::delete($id);
-    // redirect to index
+    // redirect to index page
     header("Location:/");
 });
 
