@@ -1,4 +1,5 @@
 <?php
+
 //define application parameters
 define("BASE_PATH","");
 define("SERVER_URI",$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].BASE_PATH);
@@ -95,14 +96,18 @@ $router->map('POST','/addform',function(){
     }
     // send validation mail
     $newAd = AdManager::get($newId);
-    $twig = loadTwig();
-    $template = $twig->load('mail/validate.mjml.twig');
     $message = new \Swift_Message();
     $message->setSubject('Please validate your ad !');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$user->email]);
+    //get body template
+    $twig = loadTwig();
+    $template = $twig->load('mail/validate.mjml.twig');
     $message->setBody($template->render([ "ad"=>$newAd ]));
-    $transport = \Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')->setUsername($_ENV["GMAIL_USER"])->setPassword($_ENV["GMAIL_PASSWORD"]);
+    //set connection parameters
+    $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
+    $transport->setUsername(apache_getenv("GMAIL_USER"));
+    $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
     $mailer = new \Swift_Mailer($transport);
     $mailer->send($message);
     // redirect to index
