@@ -120,7 +120,7 @@ $router->map('POST','/addform',function(){
     $mailer = new \Swift_Mailer($transport);
     $mailer->send($message);
     // redirect to index
-    header("Location:/");
+    header("Location:/details/".$newAd->id);
 });
 
 // edit ad form handling route
@@ -141,7 +141,7 @@ $router->map('POST','/editform/[i:id]',function($id){
     }
     AdManager::update($ad);
     // redirect to ad details
-    header("Location:/details/".$id);
+    header("Location:/details/".$ad->id);
 });
 
 // validate ad route
