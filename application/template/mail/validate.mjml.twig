@@ -4,12 +4,12 @@
     
 <mj-section background-color="#edf2f7;" padding-bottom="20px" padding-top="20px">
     <mj-column vertical-align="middle" width="100%">
-      <mj-text align="left" font-size="22px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span>Dear [[]] ad.firstName }} {{ ad.lastName }}</span></mj-text>
+      <mj-text align="left" font-size="22px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span>Dear {{ ad.user_firstName }} {{ ad.user_lastName }}</span></mj-text>
       <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">We&apos;re really excited you&apos;ve decided to give us a try. In case you have any questions, feel free to reach out to us.</mj-text>
       <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To modify your ad before validation 👇</mj-text>
-      <mj-button align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Modify</mj-button>
+      <mj-button href="{{ SERVER_URI }}/edit/{{ ad.id }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Modify</mj-button>
       <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To validate your ad click 👇</mj-text>
-      <mj-button align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Validate</mj-button>
+      <mj-button href="{{ SERVER_URI }}/validate/{{ ad.id }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Validate</mj-button>
       <mj-text align="left" color="black" font-size="15px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">Thanks, <br /> The Classified Ads Team</mj-text>
     </mj-column>
 </mj-section>

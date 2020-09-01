@@ -18,7 +18,7 @@
 {% block form %}
 
 <div class="bg-gray-100 mx-auto mt-6 max-w-4xl rounded-lg px-4">
-    <form class="" name="form" id="edit-form" method="POST" action="/editform" enctype="multipart/form-data">
+    <form class="" name="form" id="edit-form" method="POST" action="/editform/{{ ad.id }}" enctype="multipart/form-data">
         <div class="flex">
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
@@ -52,14 +52,14 @@
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="description">Description</label>
-            <textarea name="description" class="form-textarea bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="{{ ad.description }}" required></textarea>
+            <textarea name="description" class="form-textarea bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" required>{{ ad.description }}</textarea>
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
             <input name="picture" class="form-input cursor-pointer bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="file" @change="fileName" value="{{ ad.picture }}" required>
         </div>
         <div class="px-4 py-4">
-            <button type="submit" class="g-recaptcha bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>Submit</button>
         </div>
     </form>
 </div>

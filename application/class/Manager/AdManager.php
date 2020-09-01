@@ -80,7 +80,7 @@ class AdManager extends Database
     public static function getAllValidated(){
         try{
             $pdo = self::connect();
-            $select = "SELECT ad.id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id WHERE validationDate IS NOT NULL";
+            $select = "SELECT ad.id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id WHERE validationDate IS NOT NULL ORDER BY validationDate DESC";
             $request = $pdo -> prepare($select);
             $request -> execute();
             if ($ads = $request->fetchAll()) {
@@ -155,7 +155,7 @@ class AdManager extends Database
 
     /**
      * @param Ad $ad Ad instance to update in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return string|array user_email on success | ["error" => message] on fail
      */
     public static function update($ad){
         try{
@@ -168,7 +168,7 @@ class AdManager extends Database
             $request -> bindValue(':description', $ad->description);
             $request -> bindValue(':picture', $ad->picture);
             if ($request -> execute()){
-                return ["error" => false];
+                return self::get($ad->id)->user_email;
             } else {
                 throw new \PDOException("Ad not updated !");
             }
