@@ -104,7 +104,7 @@ $router->map('POST','/addform',function(){
     //send validation mail
     $newAd = AdManager::get($newId);
     $message = new \Swift_Message();
-    $message->setSubject('Please validate your ad !');
+    $message->setSubject('Please review your ad '.$newAd->title.'!');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$newAd->user_email]);
     //set body template
@@ -146,7 +146,7 @@ $router->map('POST','/editform/[i:id]',function($id){
     //send validation mail
     $newAd = AdManager::get($id);
     $message = new \Swift_Message();
-    $message->setSubject('Please validate your ad !');
+    $message->setSubject('Please review your ad '.$newAd->title.'!');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$newAd->user_email]);
     //set body template
@@ -173,7 +173,7 @@ $router->map('GET','/validate/[i:id]',function($id){
         //send delete mail
         $ad = AdManager::get($id);
         $message = new \Swift_Message();
-        $message->setSubject('Your ad has been validated !');
+        $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
         $message->setTo([$ad->user_email]);
         //set body template
