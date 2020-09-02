@@ -42,12 +42,27 @@ $router->map('GET','/add',function(){
     Twig::echoRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
+// add Ad error page route
+$router->map('GET','/add/error/[a:errorType]/[a:errorMessage]',function($errorType, $errorMessage){
+    // echo add page passing all Category, SERVER_URI and error type=>message
+    $categories = CategoryManager::getAll();
+    Twig::echoRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
+});
+
 // edit Ad page route
 $router->map('GET','/edit/[i:id]',function($id){
     // echo edit page passing Ad matching $id, all Category and SERVER_URI
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
     Twig::echoRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+});
+
+// edit Ad error page route
+$router->map('GET','/edit/[i:id]/error/[a:errorType]/[a:errorMessage]',function($id, $errorType, $errorMessage){
+    // echo edit page passing all Category SERVER_URI and error type=>message
+    $ad = AdManager::get($id);
+    $categories = CategoryManager::getAll();
+    Twig::echoRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
 });
 
 // Ad details page route
@@ -70,20 +85,23 @@ $router->map('POST','/addform',function(){
     UserManager::insert($user);
     // insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    $newId = AdManager::insert($ad);
-    // check if picture is posted
-    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
-        $name = basename($_FILES["picture"]["name"]);
-        $tmpName = $_FILES["picture"]["tmp_name"];
-        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        $error = $_FILES["picture"]["error"];
-        $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
-        if ($file->check()===true){
-            // get new Ad, update picture name, upload file
-            $newAd = AdManager::get($newId);
-            $newAd->picture = $newId."-".$file->name;
-            AdManager::update($newAd);
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newAd->picture);
+    $ad = AdManager::insert($ad);
+    // handle picture file if posted
+    if(isset($_FILES["picture"])){
+        $file = new File($_FILES["picture"]);
+        $fileCheck = $file->check();
+        if ($fileCheck===true){
+            // update new Ad picture with id in picture name
+            $picture = $ad->id."-".$file->name;
+            $ad->picture = $picture;
+            $ad = AdManager::update($ad);
+            // upload file
+            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
+        }else{
+            // remove Ad
+            AdManager::delete($ad->id);
+            // redirect to add page with picture error message
+            header("Location:/add/error/picture/".$fileCheck);
         }
     }
     // send validation mail
@@ -111,23 +129,27 @@ $router->map('POST','/addform',function(){
 
 // edit Ad form handling route
 $router->map('POST','/editform/[i:id]',function($id){
-    // update Ad
+    // initialize Ad
     $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    // check if picture is posted
-    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
-        $name = basename($_FILES["picture"]["name"]);
-        $tmpName = $_FILES["picture"]["tmp_name"];
-        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        $error = $_FILES["picture"]["error"];
-        $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
-        if ($file->check()===true){
-            $ad->picture = $id."-".$file->name;
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$ad->picture);
+   // handle picture file if posted
+   if(isset($_FILES["picture"])){
+        $file = new File($_FILES["picture"]);
+        $fileCheck = $file->check();
+        if ($fileCheck===true){
+            // update Ad picture with id in picture name
+            $picture = $ad->id."-".$file->name;
+            $ad->picture = $picture;
+            // upload file
+            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
+        }else{
+            // redirect to edit page with picture error message
+            header("Location:/edit/[i:id]/error/picture/".$fileCheck);
         }
     }
-    $user_email = AdManager::update($ad);
+    // update Ad
+    $ad = AdManager::update($ad);
     // update User
-    $user = new User([ "email"=>$user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
     // send validation mail
     $newAd = AdManager::get($id);
