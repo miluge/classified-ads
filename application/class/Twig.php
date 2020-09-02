@@ -1,7 +1,7 @@
 <?php
 namespace Ads;
 
-class Twig
+abstract class Twig
 {
     /**
      * @param string $template template to load in render
