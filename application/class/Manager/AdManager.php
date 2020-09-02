@@ -196,4 +196,24 @@ class AdManager extends Database
             return(["error"=>$e->getMessage()]);
         }
     }
+
+    /**
+     * @param integer $id of ad to unvalidate in database
+     * @return Ad|array unValidated Ad object on success | ["error" => message] on fail
+     */
+    public static function unValidate($id){
+        try{
+            $pdo = self::connect();
+            $update = "UPDATE ad SET validationDate=NULL WHERE id=:id";
+            $request = $pdo -> prepare($update);
+            $request -> bindValue(':id', $id);
+            if ($request -> execute()){
+                return self::get($id);
+            } else {
+                throw new \PDOException("Ad not unValidated !");
+            }
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
 }
