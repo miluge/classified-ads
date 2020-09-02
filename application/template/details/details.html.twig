@@ -37,8 +37,12 @@
           <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4" data-category-id="{{ ad.category_id }}">{{ ad.category_name }}</p>
         </div>
         <div class="flex justify-around mt-8">
-          <a href="mailto:{{ ad.user_email }}">Mail</a>
-          <a href="tel:{{ ad.user_phone }}">Phone</a>
+          <div>
+            <a href="mailto:{{ ad.user_email }}"><i class="far fa-paper-plane fa-2x"></i></a>
+          </div>
+          <div>
+          <a href="tel:{{ ad.user_phone }}"><i class="fas fa-mobile-alt fa-2x"></i></a>
+        </div>
         </div>
       </div>
     </div>
