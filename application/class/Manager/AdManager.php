@@ -114,7 +114,7 @@ class AdManager extends Database
                     UserManager::delete($ad->user_email);
                 }
                 //delete picture
-                if (file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
+                if ($ad->picture!=="default.png" && file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
                     unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture);
                 }
                 return ["error" => false];
