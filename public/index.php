@@ -192,9 +192,11 @@ $router->map('GET','/validate/[i:id]',function($id){
 
 // delete ad route
 $router->map('GET','/delete/[i:id]',function($id){
-    AdManager::delete($id);
-    // redirect to index page
-    header("Location:/");
+    $ad = AdManager::get($id);
+    $categories = CategoryManager::getAll();
+    $twig = loadTwig();
+    $template = $twig->load('delete/delete.html.twig');
+    echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
 // match url
