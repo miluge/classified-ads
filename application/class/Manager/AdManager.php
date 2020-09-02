@@ -7,7 +7,7 @@ use \Ads\Manager\UserManager as UserManager;
 
 class AdManager extends Database
 {
-/**
+    /**
      * @return integer|array last inserted id on success | ["error" => message] on fail
      */
     public static function getLastId(){
@@ -179,7 +179,7 @@ class AdManager extends Database
 
     /**
      * @param integer $id of ad to validate in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return Ad|array validated Ad object on success | ["error" => message] on fail
      */
     public static function validate($id){
         try{
@@ -188,7 +188,7 @@ class AdManager extends Database
             $request = $pdo -> prepare($update);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
-                return ["error" => false];
+                return self::get($id);
             } else {
                 throw new \PDOException("Ad not validated !");
             }
