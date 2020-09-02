@@ -12,8 +12,8 @@ class Ad
     public ?string $category_name = null;
     public string $title;
     public string $description;
-    public ?Datetime $creationDate = null;
-    public ?DateTime $validationDate = null;
+    public ?string $creationDate = null;
+    public ?string $validationDate = null;
     public string $picture = "default.png";
 
     /**
