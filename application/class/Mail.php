@@ -35,7 +35,7 @@ abstract class Mail
         $message = new \Swift_Message();
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
-        $message->setTo([$ad->user_email]);
+        $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // set body template
         $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri]);
         $html = MJML::getRender($mjml);
