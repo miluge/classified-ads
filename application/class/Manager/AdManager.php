@@ -7,7 +7,7 @@ use \Ads\Manager\UserManager as UserManager;
 
 class AdManager extends Database
 {
-/**
+    /**
      * @return integer|array last inserted id on success | ["error" => message] on fail
      */
     public static function getLastId(){
@@ -104,21 +104,18 @@ class AdManager extends Database
     public static function delete($id){
         try{
             $pdo = self::connect();
-            $user_email = self::get($id)->user_email;
-            $picture = self::get($id)->picture;
+            $ad = self::get($id);
             $delete = "DELETE FROM ad WHERE id=:id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
                 //delete user if they have no other ad
-                if (! self::user_emailExists($user_email)){
-                    UserManager::delete($user_email);
+                if (! self::user_emailExists($ad->user_email)){
+                    UserManager::delete($ad->user_email);
                 }
                 //delete picture
-                $picture = $id."-".$picture;
-                if (file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture)){
-                    echo "file exists";
-                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture);
+                if ($ad->picture!=="default.png" && file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
+                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture);
                 }
                 return ["error" => false];
             } else {
@@ -131,7 +128,7 @@ class AdManager extends Database
 
     /**
      * @param Ad $ad Ad instance to insert in database
-     * @return integer|array new Ad id on success | ["error" => message] on fail
+     * @return Ad|array new Ad on success | ["error" => message] on fail
      */
     public static function insert($ad){
         try{
@@ -144,7 +141,7 @@ class AdManager extends Database
             $request -> bindValue(':description', $ad->description);
             $request -> bindValue(':picture', $ad->picture);
             if ($request -> execute()){
-                return $pdo->lastInsertId();
+                return self::get($pdo->lastInsertId());
             } else {
                 throw new \PDOException("Ad not inserted !");
             }
@@ -155,7 +152,7 @@ class AdManager extends Database
 
     /**
      * @param Ad $ad Ad instance to update in database
-     * @return string|array user_email on success | ["error" => message] on fail
+     * @return Ad|array updated Ad on success | ["error" => message] on fail
      */
     public static function update($ad){
         try{
@@ -168,7 +165,7 @@ class AdManager extends Database
             $request -> bindValue(':description', $ad->description);
             $request -> bindValue(':picture', $ad->picture);
             if ($request -> execute()){
-                return self::get($ad->id)->user_email;
+                return self::get($ad->id);
             } else {
                 throw new \PDOException("Ad not updated !");
             }
@@ -179,7 +176,7 @@ class AdManager extends Database
 
     /**
      * @param integer $id of ad to validate in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return Ad|array validated Ad object on success | ["error" => message] on fail
      */
     public static function validate($id){
         try{
@@ -188,9 +185,29 @@ class AdManager extends Database
             $request = $pdo -> prepare($update);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
-                return ["error" => false];
+                return self::get($id);
             } else {
                 throw new \PDOException("Ad not validated !");
+            }
+        } catch (\Exception $e) {
+            return(["error"=>$e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param integer $id of ad to unvalidate in database
+     * @return Ad|array unValidated Ad object on success | ["error" => message] on fail
+     */
+    public static function unValidate($id){
+        try{
+            $pdo = self::connect();
+            $update = "UPDATE ad SET validationDate=NULL WHERE id=:id";
+            $request = $pdo -> prepare($update);
+            $request -> bindValue(':id', $id);
+            if ($request -> execute()){
+                return self::get($id);
+            } else {
+                throw new \PDOException("Ad not unValidated !");
             }
         } catch (\Exception $e) {
             return(["error"=>$e->getMessage()]);
