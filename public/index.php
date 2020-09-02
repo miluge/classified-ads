@@ -72,6 +72,20 @@ $router->map('GET','/details/[i:id]',function($id){
     }
 });
 
+// Ad details error page route
+$router->map('GET','/details/[i:id]/error/[a:errorType]/[a:errorMessage]',function($id, $errorType, $errorMessage){
+    // allow details error view only for validated Ad
+    if (AdManager::isValidated($id)){
+        // unvalidate Ad
+        $ad = AdManager::unValidate($id);
+        // echo details page of Ad passing Ad matching $id, SERVER_URI and error type=>message
+        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
+    }else{
+        //redirect to index page if Ad is not validated
+        header("Location:/");
+    }
+});
+
 // add Ad form handling route
 $router->map('POST','/addform',function(){
     // insert User
@@ -81,7 +95,7 @@ $router->map('POST','/addform',function(){
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     $ad = AdManager::insert($ad);
     // handle picture file if posted
-    if(isset($_FILES["picture"])){
+    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $file = new File($_FILES["picture"]);
         $fileCheck = $file->check();
         if ($fileCheck===true){
@@ -99,7 +113,13 @@ $router->map('POST','/addform',function(){
         }
     }
     // send validation mail
-    Mail::sendValidate($ad);
+    if (Mail::sendValidate($ad, SERVER_URI)===0){
+        $email = $ad->user_email;
+        // remove Ad
+        AdManager::delete($ad->id);
+        // redirect to add page with email error message
+        header("Location:/add/error/email/email_could_not_be_sent_to".$email);
+    }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
     header("Location:/");
@@ -109,8 +129,8 @@ $router->map('POST','/addform',function(){
 $router->map('POST','/editform/[i:id]',function($id){
     // initialize Ad
     $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-   // handle picture file if posted
-   if(isset($_FILES["picture"])){
+    // handle picture file if posted
+    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $file = new File($_FILES["picture"]);
         $fileCheck = $file->check();
         if ($fileCheck===true){
@@ -121,7 +141,7 @@ $router->map('POST','/editform/[i:id]',function($id){
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
         }else{
             // redirect to edit page with picture error message
-            header("Location:/edit/[i:id]/error/picture/".$fileCheck);
+            header("Location:/edit/".$ad->id."/error/picture/".$fileCheck);
         }
     }
     // update Ad
@@ -130,7 +150,10 @@ $router->map('POST','/editform/[i:id]',function($id){
     $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
     // send validation mail
-    Mail::sendValidate($ad);
+    if (Mail::sendValidate($ad, SERVER_URI)===0){
+        // redirect to edit page with email error message
+        header("Location:/edit/".$ad->id."/error/email/email_could_not_be_sent_to".$ad->user_email);
+    }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
     header("Location:/");
@@ -142,14 +165,13 @@ $router->map('GET','/validate/[i:id]',function($id){
     if (! AdManager::isValidated($id)){
         $ad = AdManager::validate($id);
         // send delete mail
-        Mail::sendDelete($ad);
-        // ADD CONFIRMATION MESSAGE
-        // redirect to details page
-        header("Location:/details/".$ad->id);
+        if (Mail::sendDelete($ad, SERVER_URI)===0){
+            // redirect to details page with email error message
+            header("Location:/details/".$ad->id."/error/email/email_could_not_be_sent_to".$ad->user_email);
+        }
     }
-    // ADD ALREADY VALIDATED MESSAGE
-    // redirect to index page
-    header("Location:/");
+    // redirect to Ad details page
+    header("Location:/details/".$ad->id);
 });
 
 // delete Ad route
