@@ -4,12 +4,12 @@
 
 {% block header %}
 
-<header class="flex items-center justify-around px-4 py-3 bg-gray-900">
+<header class="flex h-32 items-center justify-around px-4 py-3 bg-gray-900">
   <div>
       <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ REQUEST_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
   </div>
   <div>
-    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
+    <button type="button" class=" bg-blue-500 ml-4 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible">
         <a href="add">SUBMIT AD</a>
     </button>
   </div>
@@ -96,9 +96,6 @@
       <!-- END Column -->
       {% endfor %}  
     </div>
-    <button id="scroll" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible -mt-32">
-      <i class="fas fa-arrow-up"></i>
-    </button>
 </div>
 
 {% endblock cards %}
