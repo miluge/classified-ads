@@ -56,11 +56,11 @@
   <div class="container flex flex-wrap -mx-1 lg:-mx-4 some-element justify-center">
     {% for ad in ads %}
       <!-- Column -->
-      <div class="my-1 px-1 w-full  md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3" id="{{ ad.title }}">
+      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}">
 
           <!-- Article -->
           
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white element-item" data-category-id="{{ ad.category_id }}">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white " data-category-id="{{ ad.category_id }}">
 
               <a href="#">
                   <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
@@ -83,7 +83,7 @@
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
                       <i class="far fa-user fa-2x"></i>
                       <p class="ml-2 text-lg mt-2">
-                          {{ ad.user_firstName }} {{ ad.user_lastName}}
+                          {{ ad.user_firstName }} {{ ad.user_lastName|first}}
                       </p>
                   </a>
               </footer>
