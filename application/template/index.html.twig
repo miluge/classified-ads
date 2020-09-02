@@ -23,7 +23,7 @@
 <div class="bg-gray-200 h-64 flex items-center justify-center">
     <div class="w-9/12 sm:w-3/5 h-24 pl-4 pr-4 bg-white border rounded-lg flex justify-between items-center relative">
       <input type="search" name="search" id="search" placeholder="Search"
-             class="appearance-none w-full outline-none text-2xl  focus:outline-none active:outline-none"/>
+             class="appearance-none w-full outline-none text-2xl  focus:outline-none active:outline-none" onkeyup="mySearch()"/>
       <button type="submit" class="-ml-8 sm:ml-1 outline-none focus:outline-none active:outline-none">
         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
              viewBox="0 0 24 24" class="w-10 h-10">
@@ -52,15 +52,15 @@
 {% endblock category %}
 
 {% block cards %}
-<div class="container my-12 mx-auto px-4  sm:w-3/5">
-  <div class="flex flex-wrap -mx-1 lg:-mx-4">
+<div class="my-12 mx-auto px-4  sm:w-3/5">
+  <div class="container flex flex-wrap -mx-1 lg:-mx-4 some-element justify-center">
     {% for ad in ads %}
       <!-- Column -->
-      <div class="post my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+      <div class="my-1 px-1 w-full  md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3" id="{{ ad.title }}">
 
           <!-- Article -->
           
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white" data-category-id="{{ ad.category_id }}">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white element-item" data-category-id="{{ ad.category_id }}">
 
               <a href="#">
                   <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
@@ -81,8 +81,8 @@
               </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
-                      <i class="far fa-user"></i>
-                      <p class="ml-2 text-sm">
+                      <i class="far fa-user fa-2x"></i>
+                      <p class="ml-2 text-lg mt-2">
                           {{ ad.user_firstName }} {{ ad.user_lastName}}
                       </p>
                   </a>
@@ -94,10 +94,12 @@
 
       </div>
       <!-- END Column -->
-      {% endfor %}
-  </div>
+      {% endfor %}  
+    </div>
+    <button id="scroll" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible -mt-32">
+      <i class="fas fa-arrow-up"></i>
+    </button>
 </div>
-
 
 {% endblock cards %}
 
@@ -110,4 +112,11 @@
 </footer>
 {% endblock footer %}
 
-{% block javascript %}{% endblock javascript %}
+{% block javascript %}
+
+<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script type="text/javascript" src="{{ REQUEST_URI }}/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="{{ REQUEST_URI }}/js/jquery.simpleLoadMore.min.js"></script>
+<script type="text/javascript" src="{{ REQUEST_URI }}/js/script.js"></script>
+
+{% endblock javascript %}

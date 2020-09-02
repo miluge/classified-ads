@@ -86,6 +86,13 @@ $router->map('GET','/details/[i:id]/error/[a:errorType]/[a:errorMessage]',functi
     }
 });
 
+// delete Ad page route
+$router->map('GET','/delete/[i:id]',function($id){
+    // echo delete page passing Ad and SERVER_URI
+    $ad = AdManager::get($id);
+    echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI ]);
+});
+
 // add Ad form handling route
 $router->map('POST','/addform',function(){
     // insert User
@@ -174,8 +181,8 @@ $router->map('GET','/validate/[i:id]',function($id){
     header("Location:/details/".$ad->id);
 });
 
-// delete Ad route
-$router->map('GET','/delete/[i:id]',function($id){
+// confirm delete Ad route
+$router->map('GET','/confirmDelete/[i:id]',function($id){
     AdManager::delete($id);
     // ADD DELETE CONFIRMATION MESSAGE
     // redirect to index page
