@@ -9,7 +9,7 @@ class UserManager extends Database
      * @param string $email email of user to select in database
      * @return User|array selected User instance on success | ["error" => message] on fail
      */
-    public static function get($email){
+    public static function get(string $email){
         try{
             $pdo = self::connect();
             $select = "SELECT email, lastName, firstName, phone FROM user WHERE email = :email";
@@ -54,7 +54,7 @@ class UserManager extends Database
      * update if so
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function insert($user){
+    public static function insert(User $user){
         try{
             $pdo = self::connect();
             $previousUser = self::get($user->email);
@@ -92,7 +92,7 @@ class UserManager extends Database
      * @param string $email email of user to delete in database
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function delete($email){
+    public static function delete(string $email){
         try{
             $pdo = self::connect();
             $delete = "DELETE FROM user WHERE email = :email";

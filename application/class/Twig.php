@@ -9,7 +9,7 @@ abstract class Twig
      * load Twig and echo $template render passing $params
      * @return string generated template render
      */
-    public static function getRender($template, $params){
+    public static function getRender(string $template, array $params){
         $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."template");
         $twig = new \Twig\Environment($loader, [
             'cache' => false,
