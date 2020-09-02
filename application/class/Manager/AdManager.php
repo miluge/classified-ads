@@ -104,21 +104,18 @@ class AdManager extends Database
     public static function delete($id){
         try{
             $pdo = self::connect();
-            $user_email = self::get($id)->user_email;
-            $picture = self::get($id)->picture;
+            $ad = self::get($id);
             $delete = "DELETE FROM ad WHERE id=:id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
                 //delete user if they have no other ad
-                if (! self::user_emailExists($user_email)){
-                    UserManager::delete($user_email);
+                if (! self::user_emailExists($ad->user_email)){
+                    UserManager::delete($ad->user_email);
                 }
                 //delete picture
-                $picture = $id."-".$picture;
-                if (file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture)){
-                    echo "file exists";
-                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$picture);
+                if (file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
+                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture);
                 }
                 return ["error" => false];
             } else {
