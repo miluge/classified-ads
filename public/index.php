@@ -64,19 +64,16 @@ $router->map('GET','/edit/[i:id]',function($id){
     echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// details page route
+// edit page route
 $router->map('GET','/details/[i:id]',function($id){
-    // if (AdManager::isValidated($id)){
-        //load details template passing Ad(id)
-        $ad = AdManager::get($id);
-        $twig = loadTwig();
-        $template = $twig->load('details/details.html.twig');
-        echo $template->render([ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
-    // }else{
-    //     // redirect to index page
-    //     header("Location:/");
-    // }
+    //load edit template passing Ad(id), all Category objects
+    $ad = AdManager::get($id);
+    $categories = CategoryManager::getAll();
+    $twig = loadTwig();
+    $template = $twig->load('details/details.html.twig');
+    echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
+
 
 // add ad form handling route
 $router->map('POST','/addform',function(){
