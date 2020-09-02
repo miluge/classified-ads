@@ -1,6 +1,6 @@
 <?php
 
-//define application parameters
+// define application parameters
 define("BASE_PATH","");
 define("SERVER_URI",$_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"].BASE_PATH);
 
@@ -14,6 +14,7 @@ use \Ads\File as File;
 use \Ads\Manager\AdManager as AdManager;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
+use \Ads\Twig as Twig;
 
 // mjml render function
 use \Qferrer\Mjml\Renderer\BinaryRenderer as BinaryRenderer;
@@ -22,71 +23,55 @@ function mjmlRender($mjml){
     return $renderer->render($mjml);
 }
 
-//load twig function
-function loadTwig(){
-    $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__FILE__))."/application/template");
-    return new \Twig\Environment($loader, [
-        'cache' => false,
-        // 'cache' => dirname(dirname(__FILE__))."/application/cache",
-    ]);
-}
-
 // ALTOROUTER
 $router = new AltoRouter();
 $router->setBasePath(BASE_PATH);
 
 // index page route
 $router->map('GET','/',function(){
-    //load index template passing all Ad, all Category objects
+    // echo index page passing all validated Ad, all Category and SERVER_URI
     $ads = AdManager::getAllValidated();
     $categories = CategoryManager::getAll();
-    $twig = loadTwig();
-    $template = $twig->load('index.html.twig');
-    echo $template->render([ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    Twig::echoRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// add page route
+// add Ad page route
 $router->map('GET','/add',function(){
-    //load add template passing all Category objects
+    // echo add page passing all Category and SERVER_URI
     $categories = CategoryManager::getAll();
-    $twig = loadTwig();
-    $template = $twig->load('add/add_form.html.twig');
-    echo $template->render([ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    Twig::echoRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// edit page route
+// edit Ad page route
 $router->map('GET','/edit/[i:id]',function($id){
-    //load edit template passing Ad(id), all Category objects
+    // echo edit page passing Ad matching $id, all Category and SERVER_URI
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
-    $twig = loadTwig();
-    $template = $twig->load('edit/edit_form.html.twig');
-    echo $template->render([ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    Twig::echoRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// details page route
+// Ad details page route
 $router->map('GET','/details/[i:id]',function($id){
-    // if (AdManager::isValidated($id)){
-        //load details template passing Ad(id)
+    // allow details view only for validated Ad
+    if (AdManager::isValidated($id)){
+        // echo details page of Ad passing Ad matching $id and SERVER_URI
         $ad = AdManager::get($id);
-        $twig = loadTwig();
-        $template = $twig->load('details/details.html.twig');
-        echo $template->render([ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
-    // }else{
-    //     // redirect to index page
-    //     header("Location:/");
-    // }
+        Twig::echoRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
+    }else{
+        //redirect to index page if Ad is not validated
+        header("Location:/");
+    }
 });
 
-// add ad form handling route
+// add Ad form handling route
 $router->map('POST','/addform',function(){
-    //insert User
+    // insert User
     $user = new User([ "email"=>$_POST["email"] , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
-    //insert Ad
+    // insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     $newId = AdManager::insert($ad);
-    //check if picture is posted
+    // check if picture is posted
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $name = basename($_FILES["picture"]["name"]);
         $tmpName = $_FILES["picture"]["tmp_name"];
@@ -94,40 +79,41 @@ $router->map('POST','/addform',function(){
         $error = $_FILES["picture"]["error"];
         $file = new File([ "name"=>$name , "tmpName"=>$tmpName , "extension"=>$extension , "error"=>$error ]);
         if ($file->check()===true){
-            //get new Ad, update picture name, upload file
+            // get new Ad, update picture name, upload file
             $newAd = AdManager::get($newId);
             $newAd->picture = $newId."-".$file->name;
             AdManager::update($newAd);
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$newAd->picture);
         }
     }
-    //send validation mail
+    // send validation mail
     $newAd = AdManager::get($newId);
     $message = new \Swift_Message();
     $message->setSubject('Please review your ad '.$newAd->title.'!');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$newAd->user_email]);
-    //set body template
+    // set body template
     $twig = loadTwig();
     $template = $twig->load('mail/validate.mjml.twig');
     $mjml = $template->render([ "ad"=>$newAd, "SERVER_URI"=>SERVER_URI ]);
     $html = mjmlRender($mjml);
     $message->setBody($html, 'text/html');
-    //set connection parameters
+    // set connection parameters
     $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
     $transport->setUsername(apache_getenv("GMAIL_USER"));
     $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
     $mailer = new \Swift_Mailer($transport);
     $mailer->send($message);
-    // redirect to ad details page
-    header("Location:/details/".$newAd->id);
+    // ADD CONFIRMATION MESSAGE
+    // redirect to index page
+    header("Location:/");
 });
 
-// edit ad form handling route
+// edit Ad form handling route
 $router->map('POST','/editform/[i:id]',function($id){
-    //update Ad
+    // update Ad
     $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    //check if picture is posted
+    // check if picture is posted
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $name = basename($_FILES["picture"]["name"]);
         $tmpName = $_FILES["picture"]["tmp_name"];
@@ -140,62 +126,67 @@ $router->map('POST','/editform/[i:id]',function($id){
         }
     }
     $user_email = AdManager::update($ad);
-    //update User
+    // update User
     $user = new User([ "email"=>$user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
-    //send validation mail
+    // send validation mail
     $newAd = AdManager::get($id);
     $message = new \Swift_Message();
     $message->setSubject('Please review your ad '.$newAd->title.'!');
     $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
     $message->setTo([$newAd->user_email]);
-    //set body template
+    // set body template
     $twig = loadTwig();
     $template = $twig->load('mail/validate.mjml.twig');
     $mjml = $template->render([ "ad"=>$newAd, "SERVER_URI"=>SERVER_URI ]);
     $html = mjmlRender($mjml);
     $message->setBody($html, 'text/html');
-    //set connection parameters
+    // set connection parameters
     $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
     $transport->setUsername(apache_getenv("GMAIL_USER"));
     $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
     $mailer = new \Swift_Mailer($transport);
     $mailer->send($message);
-    // redirect to ad details page
-    header("Location:/details/".$newAd->id);
+    // ADD CONFIRMATION MESSAGE
+    // redirect to index page
+    header("Location:/");
 });
 
-// validate ad route
+// validate Ad route
 $router->map('GET','/validate/[i:id]',function($id){
-    //check if Ad is validated
+    // check if Ad is validated
     if (! AdManager::isValidated($id)){
         AdManager::validate($id);
-        //send delete mail
+        // send delete mail
         $ad = AdManager::get($id);
         $message = new \Swift_Message();
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
         $message->setTo([$ad->user_email]);
-        //set body template
+        // set body template
         $twig = loadTwig();
         $template = $twig->load('mail/delete.mjml.twig');
         $mjml = $template->render([ "ad"=>$ad, "SERVER_URI"=>SERVER_URI ]);
         $html = mjmlRender($mjml);
         $message->setBody($html, 'text/html');
-        //set connection parameters
+        // set connection parameters
         $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
         $transport->setUsername(apache_getenv("GMAIL_USER"));
         $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
         $mailer = new \Swift_Mailer($transport);
         $mailer->send($message);
+        // redirect to details page
+        header("Location:/details/".$ad->id);
     }
+    // ADD ALREADY VALIDATED MESSAGE
     // redirect to index page
     header("Location:/");
 });
 
-// delete ad route
+// delete Ad route
 $router->map('GET','/delete/[i:id]',function($id){
     AdManager::delete($id);
+    // ADD DELETE CONFIRMATION MESSAGE
     // redirect to index page
     header("Location:/");
 });
