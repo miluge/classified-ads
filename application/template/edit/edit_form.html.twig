@@ -4,7 +4,7 @@
 
 <header class="flex items-center justify-around px-4 py-3 bg-gray-900">
     <div>
-        <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ REQUEST_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
+        <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
     </div>
     <div>
       <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
@@ -69,9 +69,9 @@
 {% block javascript %}
 
 <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
-<script type="text/javascript" src="{{ REQUEST_URI }}/js/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="{{ SERVER_URI }}/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script type="text/javascript" src="{{ REQUEST_URI }}/js/form-validation.js"></script>
+<script type="text/javascript" src="{{ SERVER_URI }}/js/form-validation.js"></script>
 
 {% endblock javascript %}
