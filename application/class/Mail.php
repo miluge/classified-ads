@@ -21,7 +21,7 @@ abstract class Mail
         $crypt = new Crypt();
         $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
         // set body template
-        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> urlencode($cryptedMail) ]);
+        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters
@@ -46,7 +46,7 @@ abstract class Mail
         $crypt = new Crypt();
         $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
         // set body template
-        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> urlencode($cryptedMail) ]);
+        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters

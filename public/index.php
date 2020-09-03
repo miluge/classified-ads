@@ -45,10 +45,10 @@ $router->map('GET','/add/error/[a:errorType]/[:errorMessage]',function($errorTyp
 });
 
 // edit Ad page route
-$router->map('GET','/edit/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+$router->map('GET','/edit/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
     // check if User own Ad
     $crypt = new Crypt();
-    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+    if ($crypt->checkOwner($id, $cryptedMail)){
         // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
         $ad = AdManager::get($id);
         $categories = CategoryManager::getAll();
@@ -96,10 +96,10 @@ $router->map('GET','/details/[i:id]/error/[a:errorType]/[:errorMessage]',functio
 });
 
 // delete Ad page route
-$router->map('GET','/delete/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+$router->map('GET','/delete/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
     // check if User own Ad
     $crypt = new Crypt();
-    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+    if ($crypt->checkOwner($id, $cryptedMail)){
         // echo delete page passing Ad, SERVER_URI and cryptedMail
         $ad = AdManager::get($id);
         echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=>$cryptedMail ]);
@@ -150,10 +150,10 @@ $router->map('POST','/addform',function(){
 });
 
 // edit Ad form handling route
-$router->map('POST','/editform/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+$router->map('POST','/editform/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
     // check if User own Ad
     $crypt = new Crypt();
-    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+    if ($crypt->checkOwner($id, $cryptedMail)){
         // initialize Ad
         $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
         // handle picture file if posted
@@ -192,10 +192,10 @@ $router->map('POST','/editform/[i:id]/mail/[:cryptedMail]',function($id, $crypte
 });
 
 // validate Ad route
-$router->map('GET','/validate/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+$router->map('GET','/validate/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
     // check if User own Ad
     $crypt = new Crypt();
-    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+    if ($crypt->checkOwner($id, $cryptedMail)){
         // check if Ad is validated
         if (! AdManager::isValidated($id)){
             $ad = AdManager::validate($id);
@@ -215,10 +215,10 @@ $router->map('GET','/validate/[i:id]/mail/[:cryptedMail]',function($id, $crypted
 });
 
 // confirm delete Ad route
-$router->map('GET','/confirmDelete/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+$router->map('GET','/confirmDelete/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
     // check if User own Ad
     $crypt = new Crypt();
-    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+    if ($crypt->checkOwner($id, $cryptedMail)){
         AdManager::delete($id);
         // ADD DELETE CONFIRMATION MESSAGE
         // redirect to index page
