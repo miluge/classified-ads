@@ -23,21 +23,21 @@ class File
     public function check(){
         $response = "";
         if (empty($this->name)){// check file name
-            $response = "no_file_name_provided_!";
+            $response = "no file name provided !";
         }else{// check file extension
             $this->extension = strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
             if (!in_array($this->extension, ["png", "jpg", "jpeg"])){
-                $response = "allowed_file_extension_png,_jpg,_jpeg_!";
+                $response = "allowed file extension png, jpg, jpeg !";
             }else{// check error status
                 switch($this->error){
                     case 0:
                         $response = true;
                         break;
                     case 1: case 2:
-                        $response = "file_is_to_large_!";
+                        $response = "file is to large !";
                         break;
                     default:
-                        $response = "problem_in_file_upload_!";
+                        $response = "problem in file upload !";
                         break;
                 }
             }
