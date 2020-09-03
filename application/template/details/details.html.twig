@@ -1,6 +1,6 @@
 {% extends "details/base.html.twig" %}
 
-{% block title %}{{ ad.title }}{% endblock title %}
+{% block title %} DROOPist | {{ ad.title }} {% endblock title %}
 
 {% block header %}
 
@@ -31,12 +31,16 @@
       </div>
       <div class="pt-8 pb-8">
         <h1 class="text-2xl font-bold text-gray-700">{{ ad.title}}</h1>
+<<<<<<< HEAD
+        <p class="text-sm text-gray-600">Created the {{ ad.validationDate|date("m/d/Y") }} by {{ ad.user_firstName }} {{ ad.user_lastName|first }}</p>
+=======
         <p class="text-sm text-gray-600">Posted the {{ ad.validationDate|date("Y/m/d") }} by {{ ad.user_firstName }} {{ ad.user_lastName }}</p>
+>>>>>>> 21dc2c6f4d7cd55b206eee68f40c94b0465142f7
         <p class="my-4">{{ ad.description }}</p>
-        <div class="mt-4">
+        <div class="mt-4  mb-8">
           <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4" data-category-id="{{ ad.category_id }}">{{ ad.category_name }}</p>
         </div>
-        <div class="flex justify-around mt-8">
+        <div class="flex justify-around">
           <div>
             <a href="mailto:{{ ad.user_email }}"><i class="far fa-paper-plane fa-2x"></i></a>
           </div>
