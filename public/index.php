@@ -37,7 +37,7 @@ $router->map('GET','/add',function(){
 });
 
 // add Ad error page route
-$router->map('GET','/add/error/[a:errorType]/[a:errorMessage]',function($errorType, $errorMessage){
+$router->map('GET','/add/error/[a:errorType]/[:errorMessage]',function($errorType, $errorMessage){
     // echo add page passing all Category, SERVER_URI and error type=>message
     $categories = CategoryManager::getAll();
     echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
@@ -52,7 +52,7 @@ $router->map('GET','/edit/[i:id]',function($id){
 });
 
 // edit Ad error page route
-$router->map('GET','/edit/[i:id]/error/[a:errorType]/[a:errorMessage]',function($id, $errorType, $errorMessage){
+$router->map('GET','/edit/[i:id]/error/[a:errorType]/[:errorMessage]',function($id, $errorType, $errorMessage){
     // echo edit page passing all Category SERVER_URI and error type=>message
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
@@ -73,7 +73,7 @@ $router->map('GET','/details/[i:id]',function($id){
 });
 
 // Ad details error page route
-$router->map('GET','/details/[i:id]/error/[a:errorType]/[a:errorMessage]',function($id, $errorType, $errorMessage){
+$router->map('GET','/details/[i:id]/error/[a:errorType]/[:errorMessage]',function($id, $errorType, $errorMessage){
     // allow details error view only for validated Ad
     if (AdManager::isValidated($id)){
         // unvalidate Ad
