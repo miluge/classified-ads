@@ -12,10 +12,11 @@ use \Ads\Ad as Ad;
 use \Ads\User as User;
 use \Ads\File as File;
 use \Ads\Mail as Mail;
+use \Ads\Crypt as Crypt;
+use \Ads\Twig as Twig;
 use \Ads\Manager\AdManager as AdManager;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
-use \Ads\Twig as Twig;
 
 // ALTOROUTER
 $router = new AltoRouter();
@@ -40,15 +41,23 @@ $router->map('GET','/add',function(){
 $router->map('GET','/add/error/[a:errorType]/[:errorMessage]',function($errorType, $errorMessage){
     // echo add page passing all Category, SERVER_URI and error type=>message
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
+    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
 });
 
 // edit Ad page route
-$router->map('GET','/edit/[i:id]',function($id){
-    // echo edit page passing Ad matching $id, all Category and SERVER_URI
-    $ad = AdManager::get($id);
-    $categories = CategoryManager::getAll();
-    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+$router->map('GET','/edit/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+    // check if User own Ad
+    $crypt = new Crypt();
+    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+        // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
+        $ad = AdManager::get($id);
+        $categories = CategoryManager::getAll();
+        echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ,"cryptedMail"=>$cryptedMail ]);
+    } else {
+        // ADD MESSAGE 
+        // redirect to index page if User don't own Ad
+        header("Location:/");
+    }
 });
 
 // edit Ad error page route
@@ -56,7 +65,7 @@ $router->map('GET','/edit/[i:id]/error/[a:errorType]/[:errorMessage]',function($
     // echo edit page passing all Category SERVER_URI and error type=>message
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
+    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
 });
 
 // Ad details page route
@@ -67,7 +76,7 @@ $router->map('GET','/details/[i:id]',function($id){
         $ad = AdManager::get($id);
         echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
     }else{
-        //redirect to index page if Ad is not validated
+        // redirect to index page if Ad is not validated
         header("Location:/");
     }
 });
@@ -79,7 +88,7 @@ $router->map('GET','/details/[i:id]/error/[a:errorType]/[:errorMessage]',functio
         // unvalidate Ad
         $ad = AdManager::unValidate($id);
         // echo details page of Ad passing Ad matching $id, SERVER_URI and error type=>message
-        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
+        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
     }else{
         //redirect to index page if Ad is not validated
         header("Location:/");
@@ -87,10 +96,18 @@ $router->map('GET','/details/[i:id]/error/[a:errorType]/[:errorMessage]',functio
 });
 
 // delete Ad page route
-$router->map('GET','/delete/[i:id]',function($id){
-    // echo delete page passing Ad and SERVER_URI
-    $ad = AdManager::get($id);
-    echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI ]);
+$router->map('GET','/delete/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+    // check if User own Ad
+    $crypt = new Crypt();
+    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+        // echo delete page passing Ad, SERVER_URI and cryptedMail
+        $ad = AdManager::get($id);
+        echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=>$cryptedMail ]);
+    } else {
+        // ADD MESSAGE 
+        // redirect to index page if User don't own Ad
+        header("Location:/");
+    }
 });
 
 // add Ad form handling route
@@ -116,7 +133,7 @@ $router->map('POST','/addform',function(){
             // remove Ad
             AdManager::delete($ad->id);
             // redirect to add page with picture error message
-            header("Location:/add/error/picture/".url_encode($fileCheck));
+            header("Location:/add/error/picture/".urlencode($fileCheck));
         }
     }
     // send validation mail
@@ -125,7 +142,7 @@ $router->map('POST','/addform',function(){
         // remove Ad
         AdManager::delete($ad->id);
         // redirect to add page with email error message
-        header("Location:/add/error/email/".url_encode("email could not be sent to".$email));
+        header("Location:/add/error/email/".urlencode("email could not be sent to".$email));
     }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
@@ -133,60 +150,84 @@ $router->map('POST','/addform',function(){
 });
 
 // edit Ad form handling route
-$router->map('POST','/editform/[i:id]',function($id){
-    // initialize Ad
-    $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    // handle picture file if posted
-    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
-        $file = new File($_FILES["picture"]);
-        $fileCheck = $file->check();
-        if ($fileCheck===true){
-            // update Ad picture with id in picture name
-            $picture = $ad->id."-".$file->name;
-            $ad->picture = $picture;
-            // upload file
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
-        }else{
-            // redirect to edit page with picture error message
-            header("Location:/edit/".$ad->id."/error/picture/".url_encode($fileCheck));
+$router->map('POST','/editform/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+    // check if User own Ad
+    $crypt = new Crypt();
+    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+        // initialize Ad
+        $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
+        // handle picture file if posted
+        if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
+            $file = new File($_FILES["picture"]);
+            $fileCheck = $file->check();
+            if ($fileCheck===true){
+                // update Ad picture with id in picture name
+                $picture = $ad->id."-".$file->name;
+                $ad->picture = $picture;
+                // upload file
+                move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
+            }else{
+                // redirect to edit page with picture error message
+                header("Location:/edit/".$ad->id."/error/picture/".urlencode($fileCheck));
+            }
         }
+        // update Ad
+        $ad = AdManager::update($ad);
+        // update User
+        $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+        UserManager::insert($user);
+        // send validation mail
+        if (Mail::sendValidate($ad, SERVER_URI)===0){
+            // redirect to edit page with email error message
+            header("Location:/edit/".$ad->id."/error/email/".urlencode("email could not be sent to".$ad->user_email));
+        }
+        // ADD CONFIRMATION MESSAGE
+        // redirect to index page
+        header("Location:/");
+    } else {
+        // ADD MESSAGE 
+        // redirect to index page if User don't own Ad
+        header("Location:/");
     }
-    // update Ad
-    $ad = AdManager::update($ad);
-    // update User
-    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
-    UserManager::insert($user);
-    // send validation mail
-    if (Mail::sendValidate($ad, SERVER_URI)===0){
-        // redirect to edit page with email error message
-        header("Location:/edit/".$ad->id."/error/email/".url_encode("email could not be sent to".$ad->user_email));
-    }
-    // ADD CONFIRMATION MESSAGE
-    // redirect to index page
-    header("Location:/");
 });
 
 // validate Ad route
-$router->map('GET','/validate/[i:id]',function($id){
-    // check if Ad is validated
-    if (! AdManager::isValidated($id)){
-        $ad = AdManager::validate($id);
-        // send delete mail
-        if (Mail::sendDelete($ad, SERVER_URI)===0){
-            // redirect to details page with email error message
-            header("Location:/details/".$ad->id."/error/email/".url_encode("email could not be sent to".$ad->user_email));
+$router->map('GET','/validate/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+    // check if User own Ad
+    $crypt = new Crypt();
+    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+        // check if Ad is validated
+        if (! AdManager::isValidated($id)){
+            $ad = AdManager::validate($id);
+            // send delete mail
+            if (Mail::sendDelete($ad, SERVER_URI)===0){
+                // redirect to details page with email error message
+                header("Location:/details/".$ad->id."/error/email/".urlencode("email could not be sent to".$ad->user_email));
+            }
         }
+        // redirect to Ad details page
+        header("Location:/details/".$ad->id);
+    } else {
+        // ADD MESSAGE 
+        // redirect to index page if User don't own Ad
+        header("Location:/");
     }
-    // redirect to Ad details page
-    header("Location:/details/".$ad->id);
 });
 
 // confirm delete Ad route
-$router->map('GET','/confirmDelete/[i:id]',function($id){
-    AdManager::delete($id);
-    // ADD DELETE CONFIRMATION MESSAGE
-    // redirect to index page
+$router->map('GET','/confirmDelete/[i:id]/mail/[:cryptedMail]',function($id, $cryptedMail){
+    // check if User own Ad
+    $crypt = new Crypt();
+    if ($crypt->checkOwner($id, urldecode($cryptedMail))){
+        AdManager::delete($id);
+        // ADD DELETE CONFIRMATION MESSAGE
+        // redirect to index page
     header("Location:/");
+    } else {
+        // ADD MESSAGE 
+        // redirect to index page if User don't own Ad
+        header("Location:/");
+    }
 });
 
 // match url

@@ -3,6 +3,7 @@ namespace Ads;
 use \Ads\Ad as Ad;
 use \Ads\Twig as Twig;
 use \Ads\MJML as MJML;
+use \Ads\Crypt as Crypt;
 
 abstract class Mail
 {
@@ -16,8 +17,11 @@ abstract class Mail
         $message->setSubject('Please review your ad '.$ad->title.'!');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
+        // crypt user_email
+        $crypt = new Crypt();
+        $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
         // set body template
-        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri]);
+        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> urlencode($cryptedMail) ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters
@@ -38,8 +42,11 @@ abstract class Mail
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
+        // crypt user_email
+        $crypt = new Crypt();
+        $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
         // set body template
-        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri]);
+        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> urlencode($cryptedMail) ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters

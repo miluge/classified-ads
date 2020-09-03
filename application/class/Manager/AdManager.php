@@ -60,7 +60,7 @@ class AdManager extends Database
     public static function get(int $id){
         try{
             $pdo = self::connect();
-            $select = "SELECT ad.id, user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id WHERE ad.id = :id";
+            $select = "SELECT ad.id, ad.user_email AS user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id WHERE ad.id = :id";
             $request = $pdo -> prepare($select);
             $request -> bindValue(':id', $id);
             $request -> execute();
