@@ -1,15 +1,14 @@
 {% extends 'add/add.html.twig' %}
 
+{% block title %}
+   DROOPist | Add a new listing
+{% endblock title %}
+
 {% block header %}
 
 <header class="flex items-center justify-around px-4 py-3 bg-gray-900">
     <div>
         <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
-    </div>
-    <div>
-      <button type="button" class=" bg-blue-500 ml-4 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible">
-          SUBMIT AD
-      </button>
     </div>
 </header>
 
