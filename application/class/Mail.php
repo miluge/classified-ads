@@ -8,9 +8,10 @@ abstract class Mail
 {
     /**
      * @param Ad $ad Ad object to fill mail
+     * @param string $server_uri base path to load Twig render
      * @return integer number of successfull delivery
      */
-    public static function sendValidate($ad, $server_uri){
+    public static function sendValidate(Ad $ad, string $server_uri){
         $message = new \Swift_Message();
         $message->setSubject('Please review your ad '.$ad->title.'!');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
@@ -29,13 +30,14 @@ abstract class Mail
 
     /**
      * @param Ad $ad Ad object to fill mail
+     * @param string $server_uri base path to load Twig render
      * @return integer number of successfull delivery
      */
-    public static function sendDelete($ad, $server_uri){
+    public static function sendDelete(Ad $ad, string $server_uri){
         $message = new \Swift_Message();
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
-        $message->setTo([$ad->user_email]);
+        $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // set body template
         $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri]);
         $html = MJML::getRender($mjml);

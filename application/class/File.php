@@ -3,15 +3,15 @@ namespace Ads;
 
 class File
 {
-    public $name;
-    public $tmpName;
-    public $extension;
-    public $error;
+    public string $name;
+    public string $tmpName;
+    public ?string $extension = null;
+    public int $error;
 
     /**
      * @param array $file array of $_FILES["file"]
      */
-    public function __construct($file) {
+    public function __construct(array $file) {
         $this->name = basename($file["name"]);
         $this->tmpName = $file["tmp_name"];
         $this->error = $file["error"];

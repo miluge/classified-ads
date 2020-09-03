@@ -9,7 +9,7 @@ class CategoryManager extends Database
      * @param integer $id id of category to fetch in database
      * @return Category|array fetched Category instance on success | ["error" => message] on fail
      */
-    public static function get($id){
+    public static function get(int $id){
         try{
             $pdo = self::connect();
             $select = "SELECT id, name, color, image FROM category WHERE id = :id";
