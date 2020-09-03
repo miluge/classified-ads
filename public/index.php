@@ -40,7 +40,7 @@ $router->map('GET','/add',function(){
 $router->map('GET','/add/error/[a:errorType]/[a:errorMessage]',function($errorType, $errorMessage){
     // echo add page passing all Category, SERVER_URI and error type=>message
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
+    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
 });
 
 // edit Ad page route
@@ -56,7 +56,7 @@ $router->map('GET','/edit/[i:id]/error/[a:errorType]/[a:errorMessage]',function(
     // echo edit page passing all Category SERVER_URI and error type=>message
     $ad = AdManager::get($id);
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
+    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
 });
 
 // Ad details page route
@@ -79,7 +79,7 @@ $router->map('GET','/details/[i:id]/error/[a:errorType]/[a:errorMessage]',functi
         // unvalidate Ad
         $ad = AdManager::unValidate($id);
         // echo details page of Ad passing Ad matching $id, SERVER_URI and error type=>message
-        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>$errorMessage] ]);
+        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>url_decode($errorMessage)] ]);
     }else{
         //redirect to index page if Ad is not validated
         header("Location:/");
@@ -116,7 +116,7 @@ $router->map('POST','/addform',function(){
             // remove Ad
             AdManager::delete($ad->id);
             // redirect to add page with picture error message
-            header("Location:/add/error/picture/".$fileCheck);
+            header("Location:/add/error/picture/".url_encode($fileCheck));
         }
     }
     // send validation mail
@@ -125,7 +125,7 @@ $router->map('POST','/addform',function(){
         // remove Ad
         AdManager::delete($ad->id);
         // redirect to add page with email error message
-        header("Location:/add/error/email/email_could_not_be_sent_to".$email);
+        header("Location:/add/error/email/".url_encode("email could not be sent to".$email));
     }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
@@ -148,7 +148,7 @@ $router->map('POST','/editform/[i:id]',function($id){
             move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
         }else{
             // redirect to edit page with picture error message
-            header("Location:/edit/".$ad->id."/error/picture/".$fileCheck);
+            header("Location:/edit/".$ad->id."/error/picture/".url_encode($fileCheck));
         }
     }
     // update Ad
@@ -159,7 +159,7 @@ $router->map('POST','/editform/[i:id]',function($id){
     // send validation mail
     if (Mail::sendValidate($ad, SERVER_URI)===0){
         // redirect to edit page with email error message
-        header("Location:/edit/".$ad->id."/error/email/email_could_not_be_sent_to".$ad->user_email);
+        header("Location:/edit/".$ad->id."/error/email/".url_encode("email could not be sent to".$ad->user_email));
     }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
@@ -174,7 +174,7 @@ $router->map('GET','/validate/[i:id]',function($id){
         // send delete mail
         if (Mail::sendDelete($ad, SERVER_URI)===0){
             // redirect to details page with email error message
-            header("Location:/details/".$ad->id."/error/email/email_could_not_be_sent_to".$ad->user_email);
+            header("Location:/details/".$ad->id."/error/email/".url_encode("email could not be sent to".$ad->user_email));
         }
     }
     // redirect to Ad details page
