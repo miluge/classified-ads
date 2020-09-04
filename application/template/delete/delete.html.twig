@@ -31,7 +31,7 @@
       </div>
       <div class="pt-8 pb-8">
         <h1 class="text-2xl font-bold text-gray-700">{{ ad.title}}</h1>
-        <p class="text-sm text-gray-600">Posted the {{ ad.validationDate|date("Y/m/d") }} by {{ ad.user_firstName }} {{ ad.user_lastName }}</p>
+        <p class="text-sm text-gray-600">Posted the {{ ad.validationDate|date("d/m/Y") }} by {{ ad.user_firstName }} {{ ad.user_lastName }}</p>
         <p class="my-4">{{ ad.description }}</p>
         <div class="mt-4">
           <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-black p-4" data-category-id="{{ ad.category_id }}">{{ ad.category_name }}</p>
