@@ -26,9 +26,6 @@
       <img class="rounded-t-lg" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}">
     </div>
     <div class="bg-white rounded-b-lg px-8">
-      <div class="relative bg-white">
-            <img class="bg-white right-0 w-16 h-16 rounded-full mr-4 shadow-lg absolute -mt-8" src="{{ SERVER_URI }}/assets/pictures/pngwing.com.png" alt="User Icon">
-      </div>
       <div class="pt-8 pb-8">
         <h1 class="text-2xl font-bold text-gray-700">{{ ad.title}}</h1>
         <p class="text-sm text-gray-600">Created the {{ ad.validationDate|date("d/m/Y") }} by {{ ad.user_firstName }} {{ ad.user_lastName|first }}</p>
