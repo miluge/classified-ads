@@ -115,14 +115,11 @@ $router->map('POST','/addform',function(){
     // insert User
     $user = new User([ "email"=>$_POST["email"] , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
     UserManager::insert($user);
-    var_dump($user);
     // insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
     $ad = AdManager::insert($ad);
-    var_dump($ad);
     // handle picture file if posted
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
-        echo "file";
         $file = new File($_FILES["picture"]);
         $fileCheck = $file->check();
         if ($fileCheck===true){
