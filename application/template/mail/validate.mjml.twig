@@ -1,14 +1,19 @@
 {% extends "mail/base.mjml.twig" %}
 
 {% block validate %}
-    
+<mj-section background-color="#edf2f7;" vertical-align="top" padding-bottom="0px" padding-top="0">
+  <mj-column vertical-align="top" width="100%">
+    <mj-text align="left" font-size="45px" font-weight="bold" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px" padding-bottom="30px" padding-top="50px">Welcome {{ ad.user_firstName }} {{ ad.user_lastName }}</mj-text>
+  </mj-column>
+</mj-section>
+
 <mj-section background-color="#edf2f7;" padding-bottom="20px" padding-top="20px">
   <mj-column vertical-align="middle" width="100%">
-    <mj-text align="left" font-size="22px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span>Dear {{ ad.user_firstName }} {{ ad.user_lastName }}</span></mj-text>
-    <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">We&apos;re really excited you&apos;ve decided to give us a try. In case you have any questions, feel free to reach out to us.</mj-text>
+    <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">We&apos;re really excited you&apos;ve decided to give us a try. Your ad needs validation to be posted on our website. Please review informations below before validating.</mj-text>
     <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Title :</span> {{ ad.title}} </mj-text>
     <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Description :</span> {{ ad.description}} </mj-text>
-    <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Creation date :</span> {{ ad.creationDate }} </mj-text>
+    <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Category :</span> {{ ad.category_name }} </mj-text>
+    <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Phone :</span> {{ ad.user_phone}} </mj-text>
     <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To modify your ad before validation 👇</mj-text>
     <mj-button href="{{ SERVER_URI }}/edit/{{ ad.id }}/mail/{{ cryptedMail }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Modify</mj-button>
     <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To validate your ad click 👇</mj-text>
