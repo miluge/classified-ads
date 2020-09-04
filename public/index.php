@@ -147,7 +147,7 @@ $router->map('POST','/addform',function(){
     }
     // ADD CONFIRMATION MESSAGE
     // redirect to index page
-    // header("Location:/");
+    header("Location:/");
 });
 
 // edit Ad form handling route
