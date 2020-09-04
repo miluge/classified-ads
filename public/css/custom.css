@@ -29,8 +29,10 @@ p[data-category-id="6"] {
 
 p[data-category-id="7"] {
     background-color: #F6AD55;
+    background-size: auto;
 }
 
 p[data-category-id="8"] {
     background-color: #CBD5E0;
+    padding: 2rem;
 }

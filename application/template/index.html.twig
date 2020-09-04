@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Twig Test{% endblock title %}
+{% block title %}DROOPist{% endblock title %}
 
 {% block header %}
 
 <header class="flex h-32 items-center justify-around px-4 py-3 bg-gray-900">
   <div>
-      <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
+      <a href="{{ SERVER_URI }}"><img class="h-48" src="{{ SERVER_URI }}/assets/img/logo_transparent.png" alt="Workcation"></a>
   </div>
   <div>
     <button type="button" class=" bg-blue-500 ml-4 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible">
@@ -38,7 +38,7 @@
 {% block category %}
 
 <div class="bg-white h-64 flex items-center justify-around sm:overflow-hidden overflow-x-auto">
-  <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5">
+  <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5 md:w-3/4 lg:w-3/5">
     {% for category in categories %}
     <div class="flex">
       <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/{{ category.image}})" data-category-id="{{ category.id }}">
@@ -52,23 +52,23 @@
 {% endblock category %}
 
 {% block cards %}
-<div class="my-12 mx-auto px-4  sm:w-3/5">
+<div class="pl-2 md:-pl-8  lg:pl-12 py-12 mx-auto sm:w-3/5 md:w-3/4 lg:w-3/5">
   <div class="container flex flex-wrap -mx-1 lg:-mx-4 some-element justify-center">
     {% for ad in ads %}
       <!-- Column -->
-      <div class="my-1 px-1 w-full  md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3" id="{{ ad.title }}">
+      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}">
 
           <!-- Article -->
-          
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white element-item" data-category-id="{{ ad.category_id }}">
+          <a href="{{ SERVER_URI }}/details/{{ ad.id }}">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white " data-category-id="{{ ad.category_id }}">
 
-              <a href="#">
+              
                   <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
-              </a>
+              
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                  <h1 class="text-lg">
-                      <a class="no-underline hover:underline text-black" href="#">
+                  <h1 class="text-2xl font-bold text-gray-700">
+                      <a class="no-underline hover:underline text-black" href="{{ SERVER_URI }}/details/{{ ad.id }}">
                         {{ ad.title }}
                       </a>
                   </h1>
@@ -83,13 +83,13 @@
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
                       <i class="far fa-user fa-2x"></i>
                       <p class="ml-2 text-lg mt-2">
-                          {{ ad.user_firstName }} {{ ad.user_lastName}}
+                          {{ ad.user_firstName }} {{ ad.user_lastName|first}}
                       </p>
                   </a>
               </footer>
 
           </div>
-         
+          </a>
           <!-- END Article -->
 
       </div>
@@ -97,7 +97,9 @@
       {% endfor %}  
     </div>
 </div>
-
+<div class="my-12 mx-auto px-4 sm:w-3/5 flex justify-center -mt-6">
+  <button id="scroll" class=" bg-blue-500 hover:bg-blue-400 -mr-4 md:ml-0 md:-mr-8 sm:-ml-6 xl:ml-0 xl:-mr-8 text-white font-bold py-2 px-16 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible"><i class="fas fa-arrow-up"></i></button>
+</div>
 {% endblock cards %}
 
 

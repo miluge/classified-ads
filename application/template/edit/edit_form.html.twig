@@ -1,10 +1,14 @@
 {% extends 'edit/edit.html.twig' %}
 
+{% block title %}
+   DROOPist | Edit {{ ad.title }}
+{% endblock title %}
+
 {% block header %}
 
 <header class="flex items-center justify-around px-4 py-3 bg-gray-900">
     <div>
-        <a href="{{ SERVER_URI }}"><img class="h-8" src="{{ SERVER_URI }}/assets/img/logo-inverted.svg" alt="Workcation"></a>
+        <a href="{{ SERVER_URI }}"><img class="h-48" src="{{ SERVER_URI }}/assets/img/logo_transparent.png" alt="Workcation"></a>
     </div>
     <div>
       <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
