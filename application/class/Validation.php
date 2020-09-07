@@ -47,11 +47,11 @@ abstract class Validation extends v
     }
 
     /**
-     * @param integer $id Ad id to validate
+     * @param integer|string $id Ad id to validate
      * validate if $id is an int value and exists as id in ad database
      * @return boolean Ad id is valid or not
      */
-    public static function ad(int $id): boolean{
+    public static function ad($id): boolean{
         if (v::intVal()->validate($id)){
             $id = intval($id);
             return boolval(AdManager::get($id));
@@ -59,11 +59,11 @@ abstract class Validation extends v
     }
 
     /**
-     * @param integer $id category_id to validate
+     * @param integer|string $id category_id to validate
      * validate if $id is an int value and exists as id in category database
      * @return boolean category_id is valid or not
      */
-    public static function category(int $id): boolean{
+    public static function category($id): boolean{
         if (v::intVal()->validate($id)){
             $id = intval($id);
             return boolval(CategoryManager::get($id));

@@ -6,10 +6,10 @@ use \Ads\Category as Category;
 class CategoryManager extends Database
 {
     /**
-     * @param integer $id id of category to fetch in database
+     * @param integer|string $id id of category to fetch in database
      * @return Category|boolean fetched Category instance on success | false on fail
      */
-    public static function get(int $id){
+    public static function get($id){
         try{
             $pdo = self::connect();
             $select = "SELECT id, name, color, image FROM category WHERE id = :id";

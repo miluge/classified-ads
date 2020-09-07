@@ -37,10 +37,10 @@ class AdManager extends Database
     }
 
     /**
-     * @param integer $id id of Ad to check validation
+     * @param integer|string $id id of Ad to check validation
      * @return boolean|array true if validated, false if not | ["error" => message] on fail
      */
-    public static function isValidated(int $id){
+    public static function isValidated($id){
         try{
             $pdo = self::connect();
             $select = "SELECT validationDate FROM ad WHERE id=:id"; 
@@ -54,10 +54,10 @@ class AdManager extends Database
     }
 
     /**
-     * @param integer $id id of ad to select in database
+     * @param integer|string $id id of ad to select in database
      * @return Ad|boolean selected Ad instance on success | false on fail
      */
-    public static function get(int $id){
+    public static function get($id){
         try{
             $pdo = self::connect();
             $select = "SELECT ad.id, ad.user_email AS user_email, user.lastName AS user_lastName, user.firstName AS user_firstName, user.phone AS user_phone, category_id, category.name AS category_name, title, description, creationDate, validationDate, picture FROM ad INNER JOIN user ON user.email=ad.user_email INNER JOIN category ON category.id=ad.category_id WHERE ad.id = :id";
@@ -96,12 +96,12 @@ class AdManager extends Database
     }
 
     /**
-     * @param id $id id of ad to delete in database
+     * @param integer|string $id id of ad to delete in database
      * delete corresponding uploaded file
      * if user have NO OTHER ADS, delete user from user table
      * @return array ["error" => false] on success | ["error" => message] on fail
      */
-    public static function delete(int $id){
+    public static function delete($id){
         try{
             $pdo = self::connect();
             $ad = self::get($id);
@@ -175,10 +175,10 @@ class AdManager extends Database
     }
 
     /**
-     * @param integer $id of ad to validate in database
+     * @param integer|string $id of ad to validate in database
      * @return Ad|array validated Ad object on success | ["error" => message] on fail
      */
-    public static function validate(int $id){
+    public static function validate($id){
         try{
             $pdo = self::connect();
             $update = "UPDATE ad SET validationDate=NOW() WHERE id=:id";
@@ -195,10 +195,10 @@ class AdManager extends Database
     }
 
     /**
-     * @param integer $id of ad to unvalidate in database
+     * @param integer|string $id of ad to unvalidate in database
      * @return Ad|array unValidated Ad object on success | ["error" => message] on fail
      */
-    public static function unValidate(int $id){
+    public static function unValidate($id){
         try{
             $pdo = self::connect();
             $update = "UPDATE ad SET validationDate=NULL WHERE id=:id";
