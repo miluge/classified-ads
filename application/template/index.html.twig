@@ -22,7 +22,7 @@
 
 <div class="bg-gray-200 h-64 flex items-center justify-center">
     <div class="w-9/12 sm:w-3/5 h-24 pl-4 pr-4 bg-white border rounded-lg flex justify-between items-center relative">
-      <input type="search" name="search" id="search" placeholder="Search"
+      <input type="search" name="search" id="search" placeholder="Not working yet :)"
              class="appearance-none w-full outline-none text-2xl  focus:outline-none active:outline-none" onkeyup="mySearch()"/>
       <button type="submit" class="-ml-8 sm:ml-1 outline-none focus:outline-none active:outline-none">
         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -41,9 +41,9 @@
   <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5 md:w-3/4 lg:w-3/5">
     {% for category in categories %}
     <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/{{ category.image}})" data-category-id="{{ category.id }}">
+      <button  class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/{{ category.image}})" data-category-id="{{ category.id }}">
         <span class="pt-24 mx-auto  hover:font-bold">{{ category.name }}</span>
-      </a>
+      </button>
     </div>            
     {% endfor %}
   </div>
@@ -51,16 +51,20 @@
 
 {% endblock category %}
 
+{% block confirm %}
+  
+{% endblock confirm %}
+
 {% block cards %}
 <div class="pl-2 md:-pl-8  lg:pl-12 py-12 mx-auto sm:w-3/5 md:w-3/4 lg:w-3/5">
   <div class="container flex flex-wrap -mx-1 lg:-mx-4 some-element justify-center">
     {% for ad in ads %}
       <!-- Column -->
-      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}">
+      <div class="{{ ad.category_name }} my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}" data-category-id="{{ ad.category_id }}">
 
           <!-- Article -->
           <a href="{{ SERVER_URI }}/details/{{ ad.id }}">
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white " data-category-id="{{ ad.category_id }}">
+          <div class="overflow-hidden rounded-lg shadow-lg bg-white">
 
               
                   <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
@@ -100,9 +104,32 @@
 <div class="my-12 mx-auto px-4 sm:w-3/5 flex justify-center -mt-6">
   <button id="scroll" class=" bg-blue-500 hover:bg-blue-400 -mr-4 md:ml-0 md:-mr-8 sm:-ml-6 xl:ml-0 xl:-mr-8 text-white font-bold py-2 px-16 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible"><i class="fas fa-arrow-up"></i></button>
 </div>
+
 {% endblock cards %}
 
+{% block validation %}
+{% if messageType  == 'general' %}
+<div class="fixed pin z-50 overflow-auto bg-smoke-light flex">
+  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
+    <div class="items-center justify-center">
+      <p class="text-2xl">{{ message }}<i class="far fa-check-circle fa-2x"></i></p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock validation %}
 
+{% block error %}
+  {% if  messageType  == 'error' %}
+<div class="flex">
+  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
+    <div class="items-center justify-center flex">
+      <p class="text-2xl">{{ message }}<i class="far fa-times-circle"></i></p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock error %}
 
 
 {% block footer %}

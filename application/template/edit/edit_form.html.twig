@@ -27,15 +27,24 @@
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
                 <input name="firstName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="{{ ad.user_firstName }}" required>
+                {% if messageType == "firstName" %}
+                {{ message }}
+                {% endif %}
             </div>
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="lastName">Last Name</label>
                 <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="{{ ad.user_lastName }}" required>
+                {% if messageType == "lastName" %}
+                {{ message }}
+                {% endif %}
             </div>
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="phone">Phone</label>
             <input  name="phone" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="{{ ad.user_phone}}" required>
+            {% if messageType == "phone" %}
+            {{ message }}
+            {% endif %}
         </div>
         <div class=" min-w-fullinline-block relative px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="category">Category</label>
@@ -53,14 +62,23 @@
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="title">Title</label>
             <input name="title" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="{{ ad.title }}" required>
+            {% if messageType == "title" %}
+            {{ message }}
+            {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="description">Description</label>
             <textarea name="description" class="form-textarea bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" required>{{ ad.description }}</textarea>
+            {% if messageType == "description" %}
+            {{ message }}
+            {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
             <input name="picture" class="form-input cursor-pointer bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="file" @change="fileName" value="{{ ad.picture }}">
+            {% if messageType == "picture" %}
+            {{ message }}
+            {% endif %}
         </div>
         <div class="px-4 py-4">
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full" data-sitekey="6LfLrsIZAAAAAFAudA1Ub_FMyqqunz2pVzXQYV-r" data-callback='onSubmit' data-action='submit'>Submit</button>
