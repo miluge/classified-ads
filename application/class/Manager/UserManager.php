@@ -22,7 +22,7 @@ class UserManager extends Database
                 throw new \InvalidArgumentException("User not found !");
             }
         } catch (\Exception $e) {
-            return(false);
+            return false;
         }
     }
 
@@ -43,15 +43,15 @@ class UserManager extends Database
                 throw new \LengthException("No user found !");
             }
         } catch (\Exception $e) {
-            return(false);
+            return false;
         }
     }
 
     /**
      * @param User $user User instance to insert in database
      * check if user already exists:
-     * insert if not
-     * update if so
+     * insert if it doesn't
+     * update if it does
      * @return boolean true on success | false on fail
      */
     public static function insert(User $user){
@@ -84,27 +84,22 @@ class UserManager extends Database
                 }
             }
         } catch (\Exception $e) {
-            return(false);
+            return false;
         }
     }
 
     /**
      * @param string $email email of user to delete in database
-     * @return boolean true on success | false on fail
+     * @throws PDOException if connection fails
+     * @throws InvalidArgumentException if $email doesn't correspond to a User
      */
     public static function delete(string $email){
-        try{
-            $pdo = self::connect();
-            $delete = "DELETE FROM user WHERE email = :email";
-            $request = $pdo -> prepare($delete);
-            $request -> bindValue(':email', $email);
-            if ($request->execute()){
-                return true;
-            }else {
-                throw new \InvalidArgumentException("User not found !");
-            }
-        } catch (\Exception $e) {
-            return(false);
+        $pdo = self::connect();
+        $delete = "DELETE FROM user WHERE email = :email";
+        $request = $pdo -> prepare($delete);
+        $request -> bindValue(':email', $email);
+        if (!$request->execute()){
+            throw new \InvalidArgumentException("User not found !");
         }
     }
 }
