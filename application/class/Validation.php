@@ -3,15 +3,12 @@ namespace Ads;
 
 use \Ads\Crypt as Crypt;
 use \Respect\Validation\Validator as v;
+use \Ads\Mail as Mail;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\AdManager as AdManager;
 
 abstract class Validation
 {
-    
-    const SECRET_KEY = 'Ld:LUSweidn,UsAjOOkjpSkjiPmmEWKJ';
-    const SIGN_KEY = 'By Ads lkjayfjkeqr9c87mza,na,ndde';
-
     /**
      * @param string $text value to validate
      * text is valid if it contains non blank
@@ -78,7 +75,7 @@ abstract class Validation
     public static function checkMail(string $mail, string $cryptedMail){
         try{
             $crypt = new Crypt();
-            if ($crypt->decrypt($cryptedMail, v::SECRET_KEY, v::SIGN_KEY) === $mail){
+            if ($crypt->decrypt($cryptedMail, Mail::SECRET_KEY, Mail::SIGN_KEY) === $mail){
                 return true;
             }
         } catch (\Exception $e){
