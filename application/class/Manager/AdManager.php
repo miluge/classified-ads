@@ -55,7 +55,7 @@ class AdManager extends Database
 
     /**
      * @param integer $id id of ad to select in database
-     * @return Ad|array selected Ad instance on success | ["error" => message] on fail
+     * @return Ad|boolean selected Ad instance on success | false on fail
      */
     public static function get(int $id){
         try{
@@ -70,7 +70,7 @@ class AdManager extends Database
                 throw new \InvalidArgumentException("Ad not found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 

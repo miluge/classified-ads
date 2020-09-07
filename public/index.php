@@ -14,6 +14,7 @@ use \Ads\File as File;
 use \Ads\Mail as Mail;
 use \Ads\Crypt as Crypt;
 use \Ads\Twig as Twig;
+use \Ads\Validation as Validation;
 use \Ads\Manager\AdManager as AdManager;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
@@ -30,83 +31,70 @@ $router->map('GET','/',function(){
     echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// add Ad page route
-$router->map('GET','/add',function(){
-    // echo add page passing all Category and SERVER_URI
+// index page route with message
+$router->map('GET','/message/[:message]',function($message){
+    // echo index page passing all validated Ad, all Category and SERVER_URI
+    $ads = AdManager::getAllValidated();
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
 });
 
-// add Ad error page route
-$router->map('GET','/add/error/[a:errorType]/[:errorMessage]',function($errorType, $errorMessage){
-    // echo add page passing all Category, SERVER_URI and error type=>message
+// add Ad page route
+$router->map('GET','/add/[:messageType]/[:message]',function($messageType, $message){
+    // echo add page passing all Category and SERVER_URI
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
+    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "messageType"=>urldecode($messageType) , "message"=>urldecode($message) ]);
 });
 
 // edit Ad page route
-$router->map('GET','/edit/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
-    // check if User own Ad
-    $crypt = new Crypt();
-    if ($crypt->checkOwner($id, $cryptedMail)){
-        // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
+$router->map('GET','/edit/[i:id]/[:messageType]/[:message]/[**:cryptedMail]',function($id, $messageType, $message, $cryptedMail){
+    // check Ad $id
+    if (Validation::ad($id)){
         $ad = AdManager::get($id);
-        $categories = CategoryManager::getAll();
-        echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ,"cryptedMail"=>$cryptedMail ]);
-    } else {
-        // ADD MESSAGE 
-        // redirect to index page if User don't own Ad
-        header("Location:/");
+        // check cryptedMail
+        if (Validation::checkMail($ad->user_mail, $cryptedMail)){
+            // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
+            $categories = CategoryManager::getAll();
+            echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "cryptedMail"=>$cryptedMail , "messageType"=>urldecode($messageType) , "message"=>urldecode($message) ]);
+        } else {
+            // ADD MESSAGE 
+            // redirect to index page if User don't own Ad
+            header("Location:/");
+        }
     }
-});
-
-// edit Ad error page route
-$router->map('GET','/edit/[i:id]/error/[a:errorType]/[:errorMessage]',function($id, $errorType, $errorMessage){
-    // echo edit page passing all Category SERVER_URI and error type=>message
-    $ad = AdManager::get($id);
-    $categories = CategoryManager::getAll();
-    echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
 });
 
 // Ad details page route
-$router->map('GET','/details/[i:id]',function($id){
-    // allow details view only for validated Ad
-    if (AdManager::isValidated($id)){
-        // echo details page of Ad passing Ad matching $id and SERVER_URI
-        $ad = AdManager::get($id);
-        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
-    }else{
-        // redirect to index page if Ad is not validated
-        header("Location:/");
+$router->map('GET','/details/[i:id]/[:message]',function($id, $message){
+    // check Ad $id
+    if (Validation::ad($id)){
+        // allow details view only for validated Ad
+        if (AdManager::isValidated($id)){
+            // echo details page of Ad passing Ad matching $id and SERVER_URI
+            $ad = AdManager::get($id);
+            echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
+        }else{
+            // redirect to index page if Ad is not validated
+            header("Location:/");
+        }
     }
-});
-
-// Ad details error page route
-$router->map('GET','/details/[i:id]/error/[a:errorType]/[:errorMessage]',function($id, $errorType, $errorMessage){
-    // allow details error view only for validated Ad
-    if (AdManager::isValidated($id)){
-        // unvalidate Ad
-        $ad = AdManager::unValidate($id);
-        // echo details page of Ad passing Ad matching $id, SERVER_URI and error type=>message
-        echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI, "error"=>[$errorType=>urldecode($errorMessage)] ]);
-    }else{
-        //redirect to index page if Ad is not validated
-        header("Location:/");
-    }
+    // UNVALIDATE AD DANS CERTAINS CAS
 });
 
 // delete Ad page route
-$router->map('GET','/delete/[i:id]/mail/[**:cryptedMail]',function($id, $cryptedMail){
-    // check if User own Ad
-    $crypt = new Crypt();
-    if ($crypt->checkOwner($id, $cryptedMail)){
-        // echo delete page passing Ad, SERVER_URI and cryptedMail
+$router->map('GET','/delete/[i:id]/[:message]/[**:cryptedMail]',function($id, $message, $cryptedMail){
+    // check Ad $id
+    if (Validation::ad($id)){
         $ad = AdManager::get($id);
-        echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=>$cryptedMail ]);
-    } else {
-        // ADD MESSAGE 
-        // redirect to index page if User don't own Ad
-        header("Location:/");
+        // check cryptedMail
+        if (Validation::checkMail($ad->user_mail, $cryptedMail)){
+            // echo delete page passing Ad, SERVER_URI and cryptedMail
+            echo Twig::getRender('delete/delete.html.twig', [ "ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=>$cryptedMail , "message"=>urldecode($message) ]);
+        } else {
+            // ADD MESSAGE 
+            // redirect to index page if User don't own Ad
+            header("Location:/");
+        }
     }
 });
 

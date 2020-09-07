@@ -7,7 +7,7 @@ class CategoryManager extends Database
 {
     /**
      * @param integer $id id of category to fetch in database
-     * @return Category|array fetched Category instance on success | ["error" => message] on fail
+     * @return Category|boolean fetched Category instance on success | false on fail
      */
     public static function get(int $id){
         try{
@@ -22,7 +22,7 @@ class CategoryManager extends Database
                 throw new \InvalidArgumentException("Category not found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 

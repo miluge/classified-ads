@@ -9,10 +9,7 @@ final class Crypt
 		CIPHER_METHOD = 'aes-256-ctr',
 		CRYPT_KEY_LENGTH = 32,
 		HASH_ALGORITHM = 'sha256',
-        HASH_LENGTH = 64,
-        SECRET_KEY = 'Ld:LUSweidn,UsAjOOkjpSkjiPmmEWKJ',
-        SIGN_KEY = 'By Ads lkjayfjkeqr9c87mza,na,ndde';
-
+        HASH_LENGTH = 64;
 
 	public function __construct()
 	{
@@ -24,22 +21,6 @@ final class Crypt
 			throw new CryptException('Missing OpenSSL encryption method ' . self::CIPHER_METHOD . '.');
 		}
 	}
-
-    /**
-	 * @param  integer
-	 * @param  string
-	 * @return boolean
-	 */
-    public function checkOwner($id, $cryptedMail){
-        try{  
-            $ad = AdManager::get($id);
-            if ($this->decrypt($cryptedMail, self::SECRET_KEY, self::SIGN_KEY) === $ad->user_email){
-                return true;
-            }
-        } catch (\Exception $e){
-            return false;
-        }
-    }
 
 	/**
 	 * @param  string

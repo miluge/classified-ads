@@ -41,7 +41,7 @@
   <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5 md:w-3/4 lg:w-3/5">
     {% for category in categories %}
     <div class="flex">
-      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url({{ SERVER_URI }}/assets/img/{{ category.image}})" data-category-id="{{ category.id }}">
+      <a href="#" class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url('{{ SERVER_URI }}/assets/img/{{ category.image}}')" data-category-id="{{ category.id }}">
         <span class="pt-24 mx-auto  hover:font-bold">{{ category.name }}</span>
       </a>
     </div>            
@@ -81,7 +81,7 @@
               </div>
               <footer class="flex items-center justify-between leading-none p-2 md:p-4">
                   <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
-                      <i class="far fa-user fa-2x"></i>
+                      <em class="far fa-user fa-2x"></em>
                       <p class="ml-2 text-lg mt-2">
                           {{ ad.user_firstName }} {{ ad.user_lastName|first}}
                       </p>
@@ -98,7 +98,7 @@
     </div>
 </div>
 <div class="my-12 mx-auto px-4 sm:w-3/5 flex justify-center -mt-6">
-  <button id="scroll" class=" bg-blue-500 hover:bg-blue-400 -mr-4 md:ml-0 md:-mr-8 sm:-ml-6 xl:ml-0 xl:-mr-8 text-white font-bold py-2 px-16 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible"><i class="fas fa-arrow-up"></i></button>
+  <button id="scroll" class=" bg-blue-500 hover:bg-blue-400 -mr-4 md:ml-0 md:-mr-8 sm:-ml-6 xl:ml-0 xl:-mr-8 text-white font-bold py-2 px-16 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible"><em class="fas fa-arrow-up"></em></button>
 </div>
 {% endblock cards %}
 
