@@ -229,36 +229,31 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
 // validate Ad route
 $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (Validation::ad($id)){
-        $ad = AdManager::get($id);
-        // check cryptedMail
-        if (Validation::checkMail($ad->user_mail, $cryptedMail)){
-            if (! AdManager::isValidated($id)){
-                // send delete mail
-                if (Mail::sendDelete($ad, SERVER_URI)!==0){
-                    if (AdManager::validate($ad->id)){
-                        // redirect to details page with confirmation message
-                        header("Location:/details/".$ad->id."/".urlencode("Your ad ".$ad->title." has been validated !"));
-                    } else {
-                        // redirect to index page with error message
-                        header("Location:/message/".urlencode("Your ad ".$ad->title." has not been validated !"));
-                    }
-                } else {
-                    // redirect to index page with error message
-                    header("Location:/message/".urlencode("Email could not be sent to".$ad->user_email));
-                }
-            } else {
-                // redirect to details page if Ad is already validated
-                header("Location:/details/".$ad->id."/".urlencode("Your ad is already validated !"));
-            }
-        } else {
-            // redirect to index page if User don't own Ad
-            header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
-        }
-    } else {
+    if (!Validation::ad($id)){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
     }
+    $ad = AdManager::get($id);
+    // check cryptedMail
+    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+        // redirect to index page if User don't own Ad
+        header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
+    }
+    if (AdManager::isValidated($id)){
+        // redirect to details page if Ad is already validated
+        header("Location:/details/".$ad->id."/".urlencode("Your ad is already validated !"));
+    }
+    // send delete mail
+    if (Mail::sendDelete($ad, SERVER_URI)===0){
+        // redirect to index page with error message
+        header("Location:/message/".urlencode("Email could not be sent to".$ad->user_email));
+    }
+    if (!AdManager::validate($ad->id)){
+        // redirect to index page with error message
+        header("Location:/message/".urlencode("Your ad ".$ad->title." has not been validated !"));
+    }
+    // redirect to details page with confirmation message
+    header("Location:/details/".$ad->id."/".urlencode("Your ad ".$ad->title." has been validated !"));                
 });
 
 // Ad details page route
