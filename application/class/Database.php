@@ -9,7 +9,7 @@ abstract class Database
     const NAME = "classified-ads";
 
     /**
-     * @return PDO|array PDO instance on success | ["error" => message] on fail
+     * @return PDO PDO instance of database
      */
     public static function connect(){
         return new \PDO('mysql:host=' . self::HOST . ';dbname=' . self::NAME . ';charset=utf8', self::USER, self::PASSWORD,[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC]);
