@@ -167,7 +167,7 @@ $router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -192,7 +192,7 @@ $router->map('GET','/edit/message/[:messageType]/[i:id]/[**:cryptedMail]',functi
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -216,7 +216,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -277,7 +277,7 @@ $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMai
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -311,7 +311,7 @@ $router->map('GET','/delete/[i:id]/[**:cryptedMail]',function($id, $cryptedMail)
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -332,7 +332,7 @@ $router->map('GET','/confirmDelete/[i:id]/[**:cryptedMail]',function($id, $crypt
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
