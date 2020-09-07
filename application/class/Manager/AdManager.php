@@ -8,20 +8,20 @@ use \Ads\Manager\UserManager as UserManager;
 class AdManager extends Database
 {
     /**
-     * @return integer|array last inserted id on success | ["error" => message] on fail
+     * @return integer|boolean last inserted id on success | false on fail
      */
     public static function getLastId(){
         try{
             $pdo = self::connect();
             return $pdo->lastInsertId();
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
     /**
      * @param string $email user_email to ckeck in database
-     * @return boolean|array true if exists, false if not | ["error" => message] on fail
+     * @return boolean|string true if exists, false if not| "error" on fail
      */
     public static function user_emailExists(string $email){
         try{
@@ -32,13 +32,13 @@ class AdManager extends Database
             $request -> execute();
             return boolval($request->fetch());
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return("error");
         }
     }
 
     /**
      * @param integer|string $id id of Ad to check validation
-     * @return boolean|array true if validated, false if not | ["error" => message] on fail
+     * @return boolean|string true if validated, false if not | "error" on fail
      */
     public static function isValidated($id){
         try{
@@ -49,7 +49,7 @@ class AdManager extends Database
             $request -> execute();
             return boolval($request->fetch()["validationDate"]);
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return("error");
         }
     }
 
@@ -75,7 +75,7 @@ class AdManager extends Database
     }
 
     /**
-     * @return Ad[] array of all selected Ad instances on success | ["error" => message] on fail
+     * @return Ad[]|boolean array of all selected Ad instances on success | false on fail
      */
     public static function getAllValidated(){
         try{
@@ -91,7 +91,7 @@ class AdManager extends Database
                 throw new \LengthException("No ads found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
@@ -99,7 +99,7 @@ class AdManager extends Database
      * @param integer|string $id id of ad to delete in database
      * delete corresponding uploaded file
      * if user have NO OTHER ADS, delete user from user table
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @return boolean true on success | false on fail
      */
     public static function delete($id){
         try{
@@ -110,25 +110,25 @@ class AdManager extends Database
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
                 //delete user if they have no other ad
-                if (! self::user_emailExists($ad->user_email)){
+                if (self::user_emailExists($ad->user_email)===false){
                     UserManager::delete($ad->user_email);
                 }
                 //delete picture
                 if ($ad->picture!=="default.png" && file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
                     unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture);
                 }
-                return ["error" => false];
+                return true;
             } else {
                 throw new \InvalidArgumentException("Ad not found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
     /**
      * @param Ad $ad Ad instance to insert in database
-     * @return Ad|array new Ad on success | ["error" => message] on fail
+     * @return Ad|boolean new Ad on success | false on fail
      */
     public static function insert(Ad $ad){
         try{
@@ -146,13 +146,13 @@ class AdManager extends Database
                 throw new \PDOException("Ad not inserted !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
     /**
      * @param Ad $ad Ad instance to update in database
-     * @return Ad|array updated Ad on success | ["error" => message] on fail
+     * @return Ad|boolean updated Ad on success | false on fail
      */
     public static function update(Ad $ad){
         try{
@@ -170,13 +170,13 @@ class AdManager extends Database
                 throw new \PDOException("Ad not updated !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
     /**
      * @param integer|string $id of ad to validate in database
-     * @return Ad|array validated Ad object on success | ["error" => message] on fail
+     * @return Ad|boolean validated Ad object on success | false on fail
      */
     public static function validate($id){
         try{
@@ -190,13 +190,13 @@ class AdManager extends Database
                 throw new \PDOException("Ad not validated !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 
     /**
      * @param integer|string $id of ad to unvalidate in database
-     * @return Ad|array unValidated Ad object on success | ["error" => message] on fail
+     * @return Ad|boolean unValidated Ad object on success | false on fail
      */
     public static function unValidate($id){
         try{
@@ -210,7 +210,7 @@ class AdManager extends Database
                 throw new \PDOException("Ad not unValidated !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 }

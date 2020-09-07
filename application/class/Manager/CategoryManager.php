@@ -27,7 +27,7 @@ class CategoryManager extends Database
     }
 
     /**
-     * @return Category[] all Category instances on success | ["error" => message] on fail
+     * @return Category[]|boolean all Category instances on success | false on fail
      */
     public static function getAll(){
         try{
@@ -43,7 +43,7 @@ class CategoryManager extends Database
                 throw new \LengthException("No category found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return(false);
         }
     }
 }
