@@ -110,7 +110,7 @@ $router->map('GET','/add/[:messageType]',function($messageType){
 // add form handling route
 $router->map('POST','/addform',function(){
     // check User data
-    if ($data = Validate::userData($_POST) !== true){
+    if ($data = Validation::userData($_POST) !== true){
         header("Location: /add/".$data);
     }
     // insert User
@@ -119,7 +119,7 @@ $router->map('POST','/addform',function(){
         header("Location: /message/".urlencode("User couldn't be added !"));
     }
     // check Ad data
-    if ($data = Validate::adData($_POST) !== true){
+    if ($data = Validation::adData($_POST) !== true){
         AdManager::deleteUserIfUseless($_POST["email"]);
         header("Location: /add/".$data);
     }
@@ -139,7 +139,7 @@ $router->map('POST','/addform',function(){
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
-        if (!$ad = AdManager::update($ad) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
+        if (!($ad = AdManager::update($ad)) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
             AdManager::delete($ad->id);
             header("Location: /add/picture");
         }
@@ -221,7 +221,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
     // check Ad data
-    if ($data = Validate::adData($_POST) !== true){
+    if ($data = Validation::adData($_POST) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
     }
     // update $ad object
@@ -243,7 +243,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
     }
     // check User data
     $_POST["email"] = $ad->user_email;
-    if ($data = Validate::userData($_POST) !== true){
+    if ($data = Validation::userData($_POST) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
     }
     // update User

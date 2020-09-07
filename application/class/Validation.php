@@ -6,7 +6,7 @@ use \Respect\Validation\Validator as v;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\AdManager as AdManager;
 
-abstract class Validation extends v
+abstract class Validation
 {
     
     const SECRET_KEY = 'Ld:LUSweidn,UsAjOOkjpSkjiPmmEWKJ';
@@ -18,7 +18,7 @@ abstract class Validation extends v
      * @return boolean text is valid or not
      */
     public static function text(string $text){
-        return self::stringVal()->notEmpty()->validate($text);
+        return v::stringVal()->notEmpty()->validate($text);
     }
 
     /**
@@ -27,7 +27,7 @@ abstract class Validation extends v
      * @return boolean name is valid or not
      */
     public static function name(string $name){
-        return self::alpha('-',' ')->containsAny(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])->validate($name);
+        return v::alpha('-',' ')->containsAny(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])->validate($name);
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class Validation extends v
      * @return boolean email is valid or not
      */
     public static function email(string $email){
-        return self::email()->validate($email);
+        return v::email()->validate($email);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class Validation extends v
      * @return boolean phone is valid or not
      */
     public static function phone(string $phone){
-        return self::phone()->validate($phone);
+        return v::phone()->validate($phone);
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class Validation extends v
     public static function checkMail(string $mail, string $cryptedMail){
         try{
             $crypt = new Crypt();
-            if ($crypt->decrypt($cryptedMail, self::SECRET_KEY, self::SIGN_KEY) === $mail){
+            if ($crypt->decrypt($cryptedMail, v::SECRET_KEY, v::SIGN_KEY) === $mail){
                 return true;
             }
         } catch (\Exception $e){
@@ -93,16 +93,16 @@ abstract class Validation extends v
 	 */
     public static function userData(array $post){
         $response = true;
-        if (!isset($post["email"]) || !Validate::email($post["email"])){
+        if (!isset($post["email"]) || !Validation::email($post["email"])){
             $response = "email";
         }
-        if (!isset($post["lastName"]) || !Validate::name($post["lastName"])) {
+        if (!isset($post["lastName"]) || !Validation::name($post["lastName"])) {
             $response = "lastName";
         }
-        if (!isset($post["firstName"]) || !Validate::name($post["firstName"])) {
+        if (!isset($post["firstName"]) || !Validation::name($post["firstName"])) {
             $response = "firstName";
         }
-        if (!isset($post["phone"]) || !Validate::phone($post["phone"])) {
+        if (!isset($post["phone"]) || !Validation::phone($post["phone"])) {
             $response = "phone";
         }
         return $response;
@@ -115,13 +115,13 @@ abstract class Validation extends v
 	 */
     public static function adData(array $post){
         $response = true;
-        if (!isset($post["category_id"]) || !Validate::category($post["category_id"])){
+        if (!isset($post["category_id"]) || !Validation::category($post["category_id"])){
             $response = "category";
         }
-        if (!isset($post["title"]) || !Validate::text($post["title"])) {
+        if (!isset($post["title"]) || !Validation::text($post["title"])) {
             $response = "title";
         }
-        if (!isset($post["description"]) || !Validate::text($post["description"])) {
+        if (!isset($post["description"]) || !Validation::text($post["description"])) {
             $response = "description";
         }
         return $response;
