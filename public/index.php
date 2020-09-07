@@ -27,7 +27,7 @@ $router->map('GET','/',function(){
     // echo index page passing all validated Ad, all Category and SERVER_URI
     $ads = AdManager::getAllValidated();
     $categories = CategoryManager::getAll();
-    echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI]);
 });
 
 // add Ad page route

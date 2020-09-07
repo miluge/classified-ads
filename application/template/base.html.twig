@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="{{ SERVER_URI }}/css/custom.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
     <link rel="icon" type="image/png" href="{{ SERVER_URI }}/assets/img/favicon.png"/>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.min.js" defer></script>
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body class="bg-gray-200 h-full">
+    <div>
     {% block header %}{% endblock header %}
     
     {% block hero %}{% endblock hero %}
@@ -20,12 +22,13 @@
 
     {% block cards %}{% endblock cards %}
 
-    {% block details %}
-        
-    {% endblock details %}
+    {% block details %}{% endblock details %}
+
+    {% block error %}{% endblock error %}
 
     {% block footer %}{% endblock footer %}
 
     {% block javascript %}{% endblock javascript %}
+    </div>
 </body>
 </html>

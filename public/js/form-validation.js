@@ -39,10 +39,10 @@ $(function() {
             },
       // Specify validation error messages
       messages: {
-        firstName: "Please enter your firstname",
+        firstName: "Please enter your lastname",
         lastName: "Please enter your lastname",
         phone: {
-          required: "Please provide a phone",
+          required: "Please provide a phone number",
           minlength: "Your phone must be at least 10 characters long"
         },
         email: "Please enter a valid email address",
