@@ -40,7 +40,7 @@ $router->map('GET','/message/[:message]',function($message){
 });
 
 // add Ad page route
-$router->map('GET','/add/[:messageType]/[:message]',function($messageType, $message){
+$router->map('GET','/add/[:messageType]',function($messageType, $message){
     // echo add page passing all Category and SERVER_URI
     $categories = CategoryManager::getAll();
     echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "messageType"=>urldecode($messageType) , "message"=>urldecode($message) ]);
@@ -48,42 +48,69 @@ $router->map('GET','/add/[:messageType]/[:message]',function($messageType, $mess
 
 // add Ad form handling route
 $router->map('POST','/addform',function(){
+    // check User data
+    if (!isset($_POST["email"]) || !Validate::email($_POST["email"])){
+        header("Location: /add/emailError");
+    } elseif (!isset($_POST["lastName"]) || !Validate::name($_POST["lastName"])) {
+        header("Location: /add/lastNameError");
+    } elseif (!isset($_POST["firstName"]) || !Validate::name($_POST["firstName"])) {
+        header("Location: /add/firstNameError");
+    } elseif (!isset($_POST["phone"]) || !Validate::phone($_POST["phone"])) {
+        header("Location: /add/phoneError");
+    }
     // insert User
     $user = new User([ "email"=>$_POST["email"] , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
-    UserManager::insert($user);
+    if (!UserManager::insert($user)){
+        header("Location: /message/".urlencode("User couldn't be added !"));
+    }
+    // check Ad data
+    if (!isset($_POST["category_id"]) || !Validate::category($_POST["category_id"])){
+        if (AdManager::user_emailExists($_POST["email"])===false){
+            UserManager::delete($_POST["email"]);
+        }
+        header("Location: /add/categoryError");
+    } elseif (!isset($_POST["title"]) || !Validate::text($_POST["title"])) {
+        if (AdManager::user_emailExists($_POST["email"])===false){
+            UserManager::delete($_POST["email"]);
+        }
+        header("Location: /add/titleError");
+    } elseif (!isset($_POST["description"]) || !Validate::text($_POST["description"])) {
+        if (AdManager::user_emailExists($_POST["email"])===false){
+            UserManager::delete($_POST["email"]);
+        }
+        header("Location: /add/descriptionError");
+    }
     // insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-    $ad = AdManager::insert($ad);
+    if (!$ad = AdManager::insert($ad)){
+        if (AdManager::user_emailExists($_POST["email"])===false){
+            UserManager::delete($_POST["email"]);
+        }
+        header("Location: /message/".urlencode("Ad couldn't be added !"));
+    }
     // handle picture file if posted
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $file = new File($_FILES["picture"]);
-        $fileCheck = $file->check();
-        if ($fileCheck===true){
-            // update new Ad picture with id in picture name
-            $picture = $ad->id."-".$file->name;
-            $ad->picture = $picture;
-            $ad = AdManager::update($ad);
-            // upload file
-            move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
-        }else{
-            // remove Ad
+        if (!$file->check()){
             AdManager::delete($ad->id);
-            // redirect to add page with picture error message
-            header("Location:/add/error/picture/".urlencode($fileCheck));
+            header("Location: /add/pictureError");
+        }
+        // update new Ad picture with id in picture name
+        $picture = $ad->id."-".$file->name;
+        $ad->picture = $picture;
+        if (!$ad = AdManager::update($ad) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
+            AdManager::delete($ad->id);
+            header("Location: /add/pictureError");
         }
     }
     // send validation mail
     if (Mail::sendValidate($ad, SERVER_URI)===0){
-        echo 'mail';
-        $email = $ad->user_email;
-        // remove Ad
         AdManager::delete($ad->id);
         // redirect to add page with email error message
-        header("Location:/add/error/email/".urlencode("email could not be sent to ".$email));
+        header("Location:/add/emailError");
     }
-    // ADD CONFIRMATION MESSAGE
-    // redirect to index page
-    header("Location:/");
+    // redirect to index page with confirmation message
+    header("Location:/message/".urlencode("Your ad has been submitted, please check your email to validate it !"));
 });
 
 // edit Ad page route
