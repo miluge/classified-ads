@@ -52,3 +52,9 @@ function showCat(catType) {
         catType == "all" || catType == "Other"
     );
   }
+
+// DOWNLOAD PDF 
+
+function downloadPDF() {
+    
+}
