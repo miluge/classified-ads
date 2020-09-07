@@ -111,7 +111,7 @@ $router->map('GET','/add/[:messageType]',function($messageType){
 $router->map('POST','/addform',function(){
     // check User data
     if ($data = Validate::userData($_POST) !== true){
-        header("Location: /add/".$data."Error");
+        header("Location: /add/".$data);
     }
     // insert User
     $user = new User([ "email"=>$_POST["email"] , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
@@ -121,7 +121,7 @@ $router->map('POST','/addform',function(){
     // check Ad data
     if ($data = Validate::adData($_POST) !== true){
         AdManager::deleteUserIfUseless($_POST["email"]);
-        header("Location: /add/".$data."Error");
+        header("Location: /add/".$data);
     }
     // insert Ad
     $ad = new Ad([ "user_email"=>$_POST["email"] , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
@@ -134,21 +134,21 @@ $router->map('POST','/addform',function(){
         $file = new File($_FILES["picture"]);
         if (!$file->check()){
             AdManager::delete($ad->id);
-            header("Location: /add/pictureError");
+            header("Location: /add/picture");
         }
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
         if (!$ad = AdManager::update($ad) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
             AdManager::delete($ad->id);
-            header("Location: /add/pictureError");
+            header("Location: /add/picture");
         }
     }
     // send validation mail
     if (Mail::sendValidate($ad, SERVER_URI)===0){
         AdManager::delete($ad->id);
         // redirect to add page with email error message
-        header("Location:/add/emailError");
+        header("Location:/add/email");
     }
     // redirect to index page with confirmation message
     header("Location:/message/".urlencode("Your ad has been submitted, please check your email to validate it !"));
@@ -222,7 +222,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
     }
     // check Ad data
     if ($data = Validate::adData($_POST) !== true){
-        header("Location: /edit/message/".$data."Error/".$id."/".$cryptedMail);
+        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
     }
     // update $ad object
     $ad->category_id = $_POST["category_id"];
@@ -232,19 +232,19 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
     if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
         $file = new File($_FILES["picture"]);
         if (!$file->check()){
-            header("Location: /edit/message/pictureError/".$id."/".$cryptedMail);
+            header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
         if (!move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
-            header("Location: /edit/message/pictureError/".$id."/".$cryptedMail);
+            header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
     }
     // check User data
     $_POST["email"] = $ad->user_email;
     if ($data = Validate::userData($_POST) !== true){
-        header("Location: /edit/message/".$data."Error/".$id."/".$cryptedMail);
+        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
     }
     // update User
     $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
