@@ -18,29 +18,22 @@ class File
     }
 
     /**
-     * @return boolean|string true if file is ok | error message if not
+     * @return boolean true if file is ok, false if not
      */
     public function check(){
-        $response = "";
-        if (empty($this->name)){// check file name
-            $response = "no file name provided !";
-        }else{// check file extension
-            $this->extension = strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
-            if (!in_array($this->extension, ["png", "jpg", "jpeg"])){
-                $response = "allowed file extension png, jpg, jpeg !";
-            }else{// check error status
-                switch($this->error){
-                    case 0:
-                        $response = true;
-                        break;
-                    case 1: case 2:
-                        $response = "file is to large !";
-                        break;
-                    default:
-                        $response = "problem in file upload !";
-                        break;
-                }
-            }
+        $response = true;
+        // check file name
+        if (empty($this->name)){
+            $response = false;
+        }
+        // check file extension
+        $this->extension = strtolower(pathinfo($this->name, PATHINFO_EXTENSION));
+        if (!in_array($this->extension, ["png", "jpg", "jpeg"])){
+            $response = false;
+        }
+        // check error status
+        if ($this->error!==0){
+            $response = false;
         }
         return $response;
     }

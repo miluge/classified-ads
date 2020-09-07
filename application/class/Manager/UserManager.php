@@ -7,7 +7,7 @@ class UserManager extends Database
 {
     /**
      * @param string $email email of user to select in database
-     * @return User|array selected User instance on success | ["error" => message] on fail
+     * @return User|boolean selected User instance on success | false on fail
      */
     public static function get(string $email){
         try{
@@ -22,12 +22,12 @@ class UserManager extends Database
                 throw new \InvalidArgumentException("User not found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return false;
         }
     }
 
     /**
-     * @return User[] all User instances on success | ["error" => message] on fail
+     * @return User[]|boolean all User instances on success | false on fail
      */
     public static function getAll(){
         try{
@@ -43,16 +43,16 @@ class UserManager extends Database
                 throw new \LengthException("No user found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return false;
         }
     }
 
     /**
      * @param User $user User instance to insert in database
      * check if user already exists:
-     * insert if not
-     * update if so
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * insert if it doesn't
+     * update if it does
+     * @return boolean true on success | false on fail
      */
     public static function insert(User $user){
         try{
@@ -66,7 +66,7 @@ class UserManager extends Database
                 $request -> bindValue(':firstName', $user->firstName);
                 $request -> bindValue(':phone', $user->phone);
                 if ($request -> execute()){
-                    return ["error"=>false];
+                    return true;
                 }else{
                     throw new \PDOException("user not add !");
                 }
@@ -78,33 +78,28 @@ class UserManager extends Database
                 $request -> bindValue(':firstName', $user->firstName);
                 $request -> bindValue(':phone', $user->phone);
                 if ($request -> execute()){
-                    return ["error"=>false];
+                    return true;
                 }else{
                     throw new \PDOException("user not add !");
                 }
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return false;
         }
     }
 
     /**
      * @param string $email email of user to delete in database
-     * @return array ["error" => false] on success | ["error" => message] on fail
+     * @throws PDOException if connection fails
+     * @throws InvalidArgumentException if $email doesn't correspond to a User
      */
     public static function delete(string $email){
-        try{
-            $pdo = self::connect();
-            $delete = "DELETE FROM user WHERE email = :email";
-            $request = $pdo -> prepare($delete);
-            $request -> bindValue(':email', $email);
-            if ($request->execute()){
-                return ["error" => false];
-            }else {
-                throw new \InvalidArgumentException("User not found !");
-            }
-        } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+        $pdo = self::connect();
+        $delete = "DELETE FROM user WHERE email = :email";
+        $request = $pdo -> prepare($delete);
+        $request -> bindValue(':email', $email);
+        if (!$request->execute()){
+            throw new \InvalidArgumentException("User not found !");
         }
     }
 }

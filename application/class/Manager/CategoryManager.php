@@ -7,9 +7,9 @@ class CategoryManager extends Database
 {
     /**
      * @param integer $id id of category to fetch in database
-     * @return Category|array fetched Category instance on success | ["error" => message] on fail
+     * @return Category|boolean fetched Category instance on success | false on fail
      */
-    public static function get(int $id){
+    public static function get($id){
         try{
             $pdo = self::connect();
             $select = "SELECT id, name, color, image FROM category WHERE id = :id";
@@ -22,12 +22,12 @@ class CategoryManager extends Database
                 throw new \InvalidArgumentException("Category not found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return false;
         }
     }
 
     /**
-     * @return Category[] all Category instances on success | ["error" => message] on fail
+     * @return Category[]|boolean all Category instances on success | false on fail
      */
     public static function getAll(){
         try{
@@ -43,7 +43,7 @@ class CategoryManager extends Database
                 throw new \LengthException("No category found !");
             }
         } catch (\Exception $e) {
-            return(["error"=>$e->getMessage()]);
+            return false;
         }
     }
 }
