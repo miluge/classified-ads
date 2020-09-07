@@ -39,7 +39,7 @@ $router->map('GET','/message/[:message]',function($message){
     echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
 });
 
-// add Ad page route
+// add Ad page route with message
 $router->map('GET','/add/[:messageType]',function($messageType, $message){
     // echo add page passing all Category and SERVER_URI
     $categories = CategoryManager::getAll();
@@ -51,11 +51,14 @@ $router->map('POST','/addform',function(){
     // check User data
     if (!isset($_POST["email"]) || !Validate::email($_POST["email"])){
         header("Location: /add/emailError");
-    } elseif (!isset($_POST["lastName"]) || !Validate::name($_POST["lastName"])) {
+    }
+    if (!isset($_POST["lastName"]) || !Validate::name($_POST["lastName"])) {
         header("Location: /add/lastNameError");
-    } elseif (!isset($_POST["firstName"]) || !Validate::name($_POST["firstName"])) {
+    }
+    if (!isset($_POST["firstName"]) || !Validate::name($_POST["firstName"])) {
         header("Location: /add/firstNameError");
-    } elseif (!isset($_POST["phone"]) || !Validate::phone($_POST["phone"])) {
+    }
+    if (!isset($_POST["phone"]) || !Validate::phone($_POST["phone"])) {
         header("Location: /add/phoneError");
     }
     // insert User
@@ -69,12 +72,14 @@ $router->map('POST','/addform',function(){
             UserManager::delete($_POST["email"]);
         }
         header("Location: /add/categoryError");
-    } elseif (!isset($_POST["title"]) || !Validate::text($_POST["title"])) {
+    }
+    if (!isset($_POST["title"]) || !Validate::text($_POST["title"])) {
         if (AdManager::user_emailExists($_POST["email"])===false){
             UserManager::delete($_POST["email"]);
         }
         header("Location: /add/titleError");
-    } elseif (!isset($_POST["description"]) || !Validate::text($_POST["description"])) {
+    }
+    if (!isset($_POST["description"]) || !Validate::text($_POST["description"])) {
         if (AdManager::user_emailExists($_POST["email"])===false){
             UserManager::delete($_POST["email"]);
         }
@@ -114,7 +119,7 @@ $router->map('POST','/addform',function(){
 });
 
 // edit Ad page route
-$router->map('GET','/edit/[i:id]/[:messageType]/[:message]/[**:cryptedMail]',function($id, $messageType, $message, $cryptedMail){
+$router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
     if (Validation::ad($id)){
         $ad = AdManager::get($id);
@@ -122,7 +127,27 @@ $router->map('GET','/edit/[i:id]/[:messageType]/[:message]/[**:cryptedMail]',fun
         if (Validation::checkMail($ad->user_mail, $cryptedMail)){
             // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
             $categories = CategoryManager::getAll();
-            echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "cryptedMail"=>$cryptedMail , "messageType"=>urldecode($messageType) , "message"=>urldecode($message) ]);
+            echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "cryptedMail"=>$cryptedMail ]);
+        } else {
+            // redirect to index page if User don't own Ad
+            header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
+        }
+    } else {
+        // redirect to index page if Ad $id doesn't exist
+        header("Location:/message/".urlencode("Requested ad doesn't exist !"));
+    }
+});
+
+// edit Ad page route with message
+$router->map('GET','/edit/message/[:messageType]/[i:id]/[**:cryptedMail]',function($id, $messageType, $cryptedMail){
+    // check Ad $id
+    if (Validation::ad($id)){
+        $ad = AdManager::get($id);
+        // check cryptedMail
+        if (Validation::checkMail($ad->user_mail, $cryptedMail)){
+            // echo edit page passing Ad matching $id, all Category, SERVER_URI and cryptedMail
+            $categories = CategoryManager::getAll();
+            echo Twig::getRender("edit/edit_form.html.twig", [ "ad"=>$ad , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "cryptedMail"=>$cryptedMail , "messageType"=>urldecode($messageType) ]);
         } else {
             // redirect to index page if User don't own Ad
             header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
@@ -135,44 +160,70 @@ $router->map('GET','/edit/[i:id]/[:messageType]/[:message]/[**:cryptedMail]',fun
 
 // edit Ad form handling route
 $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
-    // check if User own Ad
-    $crypt = new Crypt();
-    if ($crypt->checkOwner($id, $cryptedMail)){
-        // initialize Ad
-        $ad = new Ad([ "id"=> $id , "category_id"=>$_POST["category_id"] , "title"=>$_POST["title"] , "description"=>$_POST["description"]]);
-        // handle picture file if posted
-        if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
-            $file = new File($_FILES["picture"]);
-            $fileCheck = $file->check();
-            if ($fileCheck===true){
-                // update Ad picture with id in picture name
-                $picture = $ad->id."-".$file->name;
-                $ad->picture = $picture;
-                // upload file
-                move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture);
-            }else{
-                // redirect to edit page with picture error message
-                header("Location:/edit/".$ad->id."/error/picture/".urlencode($fileCheck));
-            }
-        }
-        // update Ad
-        $ad = AdManager::update($ad);
-        // update User
-        $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
-        UserManager::insert($user);
-        // send validation mail
-        if (Mail::sendValidate($ad, SERVER_URI)===0){
-            // redirect to edit page with email error message
-            header("Location:/edit/".$ad->id."/error/email/".urlencode("email could not be sent to".$ad->user_email));
-        }
-        // ADD CONFIRMATION MESSAGE
-        // redirect to index page
-        header("Location:/");
-    } else {
-        // ADD MESSAGE 
-        // redirect to index page if User don't own Ad
-        header("Location:/");
+    // check Ad $id
+    if (!Validation::ad($id)){
+        // redirect to index page if Ad $id doesn't exist
+        header("Location:/message/".urlencode("Requested ad doesn't exist !"));
     }
+    $ad = AdManager::get($id);
+    // check cryptedMail
+    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+        // redirect to index page if User don't own Ad
+        header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
+    }
+    // check Ad data and update object
+    if (!isset($_POST["category_id"]) || !Validate::category($_POST["category_id"])){
+        header("Location: /edit/message/categoryError/".$id."/".$cryptedMail);
+    }
+    $ad->category_id = $_POST["category_id"];
+    if (!isset($_POST["title"]) || !Validate::text($_POST["title"])) {
+        header("Location: /edit/message/titleError/".$id."/".$cryptedMail);
+    }
+    $ad->title = $_POST["title"];
+    if (!isset($_POST["description"]) || !Validate::text($_POST["description"])) {
+        header("Location: /edit/message/descriptionError/".$id."/".$cryptedMail);
+    }
+    $ad->description = $_POST["description"];
+    // handle picture file if posted
+    if(isset($_FILES["picture"]) && !empty($_FILES["picture"]["name"])){
+        $file = new File($_FILES["picture"]);
+        if (!$file->check()){
+            header("Location: /edit/message/pictureError/".$id."/".$cryptedMail);
+        }
+        // update new Ad picture with id in picture name
+        $picture = $ad->id."-".$file->name;
+        $ad->picture = $picture;
+        if (!move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
+            header("Location: /edit/message/pictureError/".$id."/".$cryptedMail);
+        }
+    }
+    // check User data
+    if (!isset($_POST["email"]) || !Validate::email($_POST["email"])){
+        header("Location: /edit/message/emailError/".$id."/".$cryptedMail);
+    }
+    if (!isset($_POST["lastName"]) || !Validate::name($_POST["lastName"])) {
+        header("Location: /edit/message/lastNameError/".$id."/".$cryptedMail);
+    }
+    if (!isset($_POST["firstName"]) || !Validate::name($_POST["firstName"])) {
+        header("Location: /edit/message/firstNameError/".$id."/".$cryptedMail);
+    }
+    if (!isset($_POST["phone"]) || !Validate::phone($_POST["phone"])) {
+        header("Location: /edit/message/phoneError/".$id."/".$cryptedMail);
+    }
+    // update User
+    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+    if (!UserManager::insert($user)){
+        header("Location: /message/".urlencode("User couldn't be added !"));
+    }
+    // send validation mail
+    if (Mail::sendValidate($ad, SERVER_URI)===0){
+        // redirect to index page with error message
+        header("Location:/message/".urlencode("Email could not be sent to ".$ad->user_email));
+    }
+    // update Ad
+    $ad = AdManager::update($ad);
+    // redirect to index page with confirmation message
+    header("Location:/message/".urlencode("Your ad has been modified, please check your email to validate it !"));
 });
 
 // validate Ad route
