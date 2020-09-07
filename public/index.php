@@ -99,7 +99,7 @@ $router->map('GET','/add',function(){
     echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
 });
 
-// add page route with input message
+// add page route with message
 $router->map('GET','/add/[:messageType]',function($messageType){
     // get all Categories
     $categories = CategoryManager::getAll();
