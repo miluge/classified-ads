@@ -15,9 +15,9 @@
     <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Category :</span> {{ ad.category_name }} </mj-text>
     <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px"><span font-weight="bold">Phone :</span> {{ ad.user_phone}} </mj-text>
     <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To modify your ad before validation 👇</mj-text>
-    <mj-button href="{{ SERVER_URI }}/edit/{{ ad.id }}/mail/{{ cryptedMail }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Modify</mj-button>
+    <mj-button href="{{ SERVER_URI }}/edit/{{ ad.id }}/{{ cryptedMail }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Modify</mj-button>
     <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">To validate your ad click 👇</mj-text>
-    <mj-button href="{{ SERVER_URI }}/validate/{{ ad.id }}/mail/{{ cryptedMail }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Validate</mj-button>
+    <mj-button href="{{ SERVER_URI }}/validate/{{ ad.id }}/{{ cryptedMail }}" align="center" font-size="22px" font-weight="bold" background-color="#ffffff" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Validate</mj-button>
     <mj-text align="left" color="black" font-size="15px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">Thanks, <br /> The DROOPist Team</mj-text>
   </mj-column>
 </mj-section>

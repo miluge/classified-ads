@@ -11,7 +11,7 @@
     <mj-column vertical-align="middle" width="100%">
       <mj-text align="left" font-size="19px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">Your ad {{ ad.title }} has been validated the {{ ad.validationDate|date("d/m/Y") }}</mj-text>
       <mj-text align="center"  font-size="18px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">You can delete your ad at any time 👇</mj-text>
-      <mj-button href="{{ SERVER_URI }}/delete/{{ ad.id }}/mail/{{ cryptedMail }}" align="center" font-size="22px" color="white" font-weight="bold" background-color="red" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Delete</mj-button>
+      <mj-button href="{{ SERVER_URI }}/delete/{{ ad.id }}/{{ cryptedMail }}" align="center" font-size="22px" color="white" font-weight="bold" background-color="red" border-radius="10px" color="black" font-family="open Sans Helvetica, Arial, sans-serif">Delete</mj-button>
       <mj-text align="left" color="black" font-size="15px" font-family="open Sans Helvetica, Arial, sans-serif" padding-left="25px" padding-right="25px">Thanks, <br /> The DROOPist Team</mj-text>
     </mj-column>
   </mj-section>

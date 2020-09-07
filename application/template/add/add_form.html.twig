@@ -22,14 +22,14 @@
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="firstName">First Name</label>
                 <input name="firstName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Jane" required>
                 {% if messageType == "firstName" %}
-                    {{ message }}
+                    Invalid first name
                 {% endif %}
             </div>
             <div class="w-1/2 px-4 py-4">
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="lastName">Last Name</label>
                 <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required>
                 {% if messageType == "lastName" %}
-                {{ message }}
+                    Invalid last name
                 {% endif %}
             </div>
         </div>
@@ -37,14 +37,14 @@
             <label class="block text-gray-700 text-lg font-bold mb-2" for="email">Email</label>
             <input name="email" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required>
             {% if messageType == "email" %}
-            {{ message }}
+                Invalid email
             {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="phone">Phone</label>
             <input name="phone" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="tel" value="0381617147" required>
-            {% if messageType == "email" %}
-            {{ message }}
+            {% if messageType == "phone" %}
+                Invalid phone number
             {% endif %}
         </div>
         <div class=" min-w-fullinline-block relative px-4 py-4">
@@ -56,26 +56,29 @@
                 </option>
                 {% endfor %}
             </select>
+            {% if messageType == "category" %}
+                Invalid category
+            {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="title">Title</label>
             <input name="title" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Title...">
             {% if messageType == "title" %}
-            {{ message }}
+                Invalid title
             {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="description">Description</label>
             <textarea name="description" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text">Item description goes here...</textarea>
             {% if messageType == "description" %}
-            {{ message }}
+                Invalid description
             {% endif %}
         </div>
         <div class="px-4 py-4">
             <label class="block text-gray-700 text-lg font-bold mb-2" for="picture">Picture upload</label>
             <input type="file"  name="picture" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" @change="fileName">
             {% if messageType == "picture" %}
-            {{ message }}
+                Invalid picture
             {% endif %}
         </div>
         <div class="px-4 py-4">

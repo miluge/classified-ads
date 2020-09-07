@@ -107,8 +107,8 @@
 
 {% endblock cards %}
 
-{% block validation %}
-{% if messageType  == 'general' %}
+{% block message %}
+{% if message %}
 <div class="fixed pin z-50 overflow-auto bg-smoke-light flex">
   <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
     <div class="items-center justify-center">
@@ -117,20 +117,7 @@
   </div>
 </div>
 {% endif %}
-{% endblock validation %}
-
-{% block error %}
-  {% if  messageType  == 'error' %}
-<div class="flex">
-  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
-    <div class="items-center justify-center flex">
-      <p class="text-2xl">{{ message }}<i class="far fa-times-circle"></i></p>
-    </div>
-  </div>
-</div>
-{% endif %}
-{% endblock error %}
-
+{% endblock message %}
 
 {% block footer %}
 <footer class="h-32 bg-gray-900">
