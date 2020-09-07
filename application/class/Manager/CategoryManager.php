@@ -6,7 +6,7 @@ use \Ads\Category as Category;
 class CategoryManager extends Database
 {
     /**
-     * @param integer|string $id id of category to fetch in database
+     * @param integer $id id of category to fetch in database
      * @return Category|boolean fetched Category instance on success | false on fail
      */
     public static function get($id){
@@ -22,7 +22,7 @@ class CategoryManager extends Database
                 throw new \InvalidArgumentException("Category not found !");
             }
         } catch (\Exception $e) {
-            return(false);
+            return false;
         }
     }
 
@@ -43,7 +43,7 @@ class CategoryManager extends Database
                 throw new \LengthException("No category found !");
             }
         } catch (\Exception $e) {
-            return(false);
+            return false;
         }
     }
 }
