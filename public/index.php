@@ -47,6 +47,48 @@ $router->map('GET','/message/[:message]',function($message){
     echo Twig::getRender("index.html.twig", [ "ads"=>$ads , "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
 });
 
+// details page route
+$router->map('GET','/details/[i:id]',function($id){
+    // check Ad $id
+    if (!Validation::ad($id)){
+        // redirect to index page if Ad $id doesn't exist
+        header("Location:/message/".urlencode("Requested ad doesn't exist !"));
+    }
+    // check if Ad is validated
+    if (!AdManager::isValidated($id)){
+        // redirect to index page if Ad is not validated
+        header("Location:/message/".urlencode("This ad is not yet validated !"));
+    }
+    // get Ad
+    if (!$ad = AdManager::get($id)){
+        // redirect to index page if Ad cannot be found
+        header("Location:/message/".urlencode("Unable to find Ad !"));
+    }
+    // echo details page
+    echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI ]);
+});
+
+// details page route with message
+$router->map('GET','/details/[i:id]/[:message]',function($id, $message){
+    // check Ad $id
+    if (!Validation::ad($id)){
+        // redirect to index page if Ad $id doesn't exist
+        header("Location:/message/".urlencode("Requested ad doesn't exist !"));
+    }
+    // check if Ad is validated
+    if (!AdManager::isValidated($id)){
+        // redirect to index page if Ad is not validated
+        header("Location:/message/".urlencode("This ad is not yet validated !"));
+    }
+    // get Ad
+    if (!$ad = AdManager::get($id)){
+        // redirect to index page if Ad cannot be found
+        header("Location:/message/".urlencode("Unable to find Ad !"));
+    }
+    // echo details page
+    echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
+});
+
 // add page route
 $router->map('GET','/add',function(){
     // get all Categories
@@ -254,27 +296,6 @@ $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMai
     }
     // redirect to details page with confirmation message
     header("Location:/details/".$id."/".urlencode("Your ad ".$ad->title." has been validated !"));                
-});
-
-// details page route
-$router->map('GET','/details/[i:id]/[:message]',function($id, $message){
-    // check Ad $id
-    if (!Validation::ad($id)){
-        // redirect to index page if Ad $id doesn't exist
-        header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-    }
-    // check if Ad is validated
-    if (!AdManager::isValidated($id)){
-        // redirect to index page if Ad is not validated
-        header("Location:/message/".urlencode("This ad is not yet validated !"));
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
-    }
-    // echo details page
-    echo Twig::getRender("details/details.html.twig", [ "ad"=>$ad , "SERVER_URI"=>SERVER_URI , "message"=>urldecode($message) ]);
 });
 
 // delete page route
