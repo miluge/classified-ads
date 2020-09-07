@@ -23,3 +23,38 @@ $(document).ready(function(){
     }); 
 });
 
+
+/* Hide / Show */
+
+function showCat(catType) {
+    $('div[data-category-name="Real estate"]').toggle(
+        catType == "all" || catType == "Real estate"
+    );
+    $('div[data-category-name="Auto"]').toggle(
+        catType == "all" || catType == "Auto"
+    );
+    $('div[data-category-name="Work"]').toggle(
+        catType == "all" || catType == "Work"
+    );
+    $('div[data-category-name="Animals"]').toggle(
+        catType == "all" || catType == "Animals"
+    );
+    $('div[data-category-name="Services"]').toggle(
+        catType == "all" || catType == "Services"
+    );
+    $('div[data-category-name="Holiday"]').toggle(
+        catType == "all" || catType == "Holiday"
+    );
+    $('div[data-category-name="Business"]').toggle(
+        catType == "all" || catType == "Business"
+    );
+    $('div[data-category-name="Other"]').toggle(
+        catType == "all" || catType == "Other"
+    );
+  }
+
+// DOWNLOAD PDF 
+
+function downloadPDF() {
+    
+}

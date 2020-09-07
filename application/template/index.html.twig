@@ -41,7 +41,7 @@
   <div class="flex sm:items-center sm:justify-around w-full sm:w-3/5 md:w-3/4 lg:w-3/5">
     {% for category in categories %}
     <div class="flex">
-      <button  class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" style="background-image: url('{{ SERVER_URI }}/assets/img/{{ category.image}}')" data-category-id="{{ category.id }}">
+      <button  class="flex rounded-full h-24 w-24 font-semibold bg-{{ category.color }}-400 mx-6 bg-contain content-center" onclick="showCat('{{ category.name }}')" style="background-image: url('{{ SERVER_URI }}/assets/img/{{ category.image}}')">
         <span class="pt-24 mx-auto  hover:font-bold">{{ category.name }}</span>
       </button>
     </div>            
@@ -60,15 +60,15 @@
   <div class="container flex flex-wrap -mx-1 lg:-mx-4 some-element justify-center">
     {% for ad in ads %}
       <!-- Column -->
-      <div class="{{ ad.category_name }} my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}" data-category-id="{{ ad.category_id }}">
+      <div class="{{ ad.category_name }} my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}" data-category-name="{{ ad.category_name }}">
 
           <!-- Article -->
           <a href="{{ SERVER_URI }}/details/{{ ad.id }}">
-          <div class="overflow-hidden rounded-lg shadow-lg bg-white">
-
+            <div class="overflow-hidden rounded-lg shadow-lg bg-white">
               
-                  <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
               
+              <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
+            
 
               <header class="flex items-center justify-between leading-tight p-2 md:p-4">
                   <h1 class="text-2xl font-bold text-gray-700">
