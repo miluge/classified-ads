@@ -70,3 +70,10 @@ function mySearch() {
       }
     }
   }
+
+// Close modal
+
+function closeModal() {
+    let closeBtn = document.getElementById('message');
+    closeBtn.style.display = "none";
+}
