@@ -6,7 +6,7 @@ use \Respect\Validation\Validator as v;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\AdManager as AdManager;
 
-abstract class Validation extends v
+abstract class Validation
 {
     
     const SECRET_KEY = 'Ld:LUSweidn,UsAjOOkjpSkjiPmmEWKJ';
@@ -18,7 +18,7 @@ abstract class Validation extends v
      * @return boolean text is valid or not
      */
     public static function text(string $text){
-        return self::stringVal()->notEmpty()->validate($text);
+        return v::stringVal()->notEmpty()->validate($text);
     }
 
     /**
@@ -27,7 +27,7 @@ abstract class Validation extends v
      * @return boolean name is valid or not
      */
     public static function name(string $name){
-        return self::alpha('-',' ')->containsAny(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])->validate($name);
+        return v::alpha('-',' ')->containsAny(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])->validate($name);
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class Validation extends v
      * @return boolean email is valid or not
      */
     public static function email(string $email){
-        return self::email()->validate($email);
+        return v::email()->validate($email);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class Validation extends v
      * @return boolean phone is valid or not
      */
     public static function phone(string $phone){
-        return self::phone()->validate($phone);
+        return v::phone()->validate($phone);
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class Validation extends v
     public static function checkMail(string $mail, string $cryptedMail){
         try{
             $crypt = new Crypt();
-            if ($crypt->decrypt($cryptedMail, self::SECRET_KEY, self::SIGN_KEY) === $mail){
+            if ($crypt->decrypt($cryptedMail, v::SECRET_KEY, v::SIGN_KEY) === $mail){
                 return true;
             }
         } catch (\Exception $e){
