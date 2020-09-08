@@ -52,7 +52,7 @@ $router->map('GET','/message/[**:message]',function($message){
 // details page route
 $router->map('GET','/details/[i:id]',function($id){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
         exit;
@@ -61,12 +61,6 @@ $router->map('GET','/details/[i:id]',function($id){
     if (!AdManager::isValidated($id)){
         // redirect to index page if Ad is not validated
         header("Location:/message/".urlencode("This ad is not yet validated !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // echo details page
@@ -76,7 +70,7 @@ $router->map('GET','/details/[i:id]',function($id){
 // details page route with message
 $router->map('GET','/details/[i:id]/[**:message]',function($id, $message){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
         exit;
@@ -85,12 +79,6 @@ $router->map('GET','/details/[i:id]/[**:message]',function($id, $message){
     if (!AdManager::isValidated($id)){
         // redirect to index page if Ad is not validated
         header("Location:/message/".urlencode("This ad is not yet validated !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // echo details page
@@ -150,7 +138,7 @@ $router->map('POST','/addform',function(){
             header("Location: /add/picture");
             exit;
         }
-        // update new Ad picture with id in picture name
+        // update Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
         if (!($ad = AdManager::update($ad)) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
@@ -174,15 +162,9 @@ $router->map('POST','/addform',function(){
 // edit page route
 $router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -203,15 +185,9 @@ $router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
 // edit page route with message
 $router->map('GET','/edit/message/[:messageType]/[i:id]/[**:cryptedMail]',function($messageType, $id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -231,15 +207,9 @@ $router->map('GET','/edit/message/[:messageType]/[i:id]/[**:cryptedMail]',functi
 // edit form handling route
 $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -310,15 +280,9 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
 // validate route
 $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -351,15 +315,9 @@ $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMai
 // delete page route
 $router->map('GET','/delete/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -375,15 +333,9 @@ $router->map('GET','/delete/[i:id]/[**:cryptedMail]',function($id, $cryptedMail)
 // confirm delete Ad route
 $router->map('GET','/confirmDelete/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
     // check Ad $id
-    if (!Validation::ad($id)){
+    if ( ($ad = Validation::ad($id)) === false ){
         // redirect to index page if Ad $id doesn't exist
         header("Location:/message/".urlencode("Requested ad doesn't exist !"));
-        exit;
-    }
-    // get Ad
-    if (!$ad = AdManager::get($id)){
-        // redirect to index page if Ad cannot be found
-        header("Location:/message/".urlencode("Unable to find Ad !"));
         exit;
     }
     // check cryptedMail
@@ -392,12 +344,10 @@ $router->map('GET','/confirmDelete/[i:id]/[**:cryptedMail]',function($id, $crypt
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
         exit;
     }
-    // get Ad title
-    $title = $ad->title;
     // delete Ad
     if (AdManager::delete($id)){
         // redirect to index page with confirmation message
-        header("Location:/message/".urlencode("Your ad ".$title." has been deleted !"));
+        header("Location:/message/".urlencode("Your ad has been deleted !"));
         exit;
     } else {
         // redirect to details page with error message

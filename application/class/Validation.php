@@ -46,12 +46,12 @@ abstract class Validation
     /**
      * @param integer|string $id Ad id to validate
      * validate if $id is an int value and exists as id in ad database
-     * @return boolean Ad id is valid or not
+     * @return Ad|boolean Ad if $id match in database | false if not
      */
     public static function ad($id){
         if (v::intVal()->validate($id)){
             $id = intval($id);
-            return boolval(AdManager::get($id));
+            return AdManager::get($id);
         }
     }
 
