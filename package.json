@@ -6,6 +6,7 @@
   "dependencies": {
     "autoprefixer": "^9.8.6",
     "gulp": "^4.0.2",
+    "html2pdf.js": "^0.9.0",
     "infinite-scroll": "^3.0.6",
     "jquery-validation": "^1.19.2",
     "jspdf": "^2.1.0",
