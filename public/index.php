@@ -38,7 +38,7 @@ $router->map('GET','/',function(){
 });
 
 // index page route with message
-$router->map('GET','/message/[:message]',function($message){
+$router->map('GET','/message/[**:message]',function($message){
     // get all validated Ads
     $ads = AdManager::getAllValidated();
     // get all Categories
@@ -69,7 +69,7 @@ $router->map('GET','/details/[i:id]',function($id){
 });
 
 // details page route with message
-$router->map('GET','/details/[i:id]/[:message]',function($id, $message){
+$router->map('GET','/details/[i:id]/[**:message]',function($id, $message){
     // check Ad $id
     if (!Validation::ad($id)){
         // redirect to index page if Ad $id doesn't exist
@@ -220,6 +220,16 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
+    // check User data
+    $_POST["email"] = $ad->user_email;
+    if ($data = Validation::userData($_POST) !== true){
+        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
+    }
+    // update User
+    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+    if (!UserManager::insert($user)){
+        header("Location: /message/".urlencode("User couldn't be updated !"));
+    }
     // check Ad data
     if ($data = Validation::adData($_POST) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
@@ -241,24 +251,14 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
             header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
     }
-    // check User data
-    $_POST["email"] = $ad->user_email;
-    if ($data = Validation::userData($_POST) !== true){
-        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
-    }
-    // update User
-    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
-    if (!UserManager::insert($user)){
-        header("Location: /message/".urlencode("User couldn't be updated !"));
+    // update Ad
+    if (!($ad = AdManager::update($ad))){
+        header("Location:/message/".urlencode("Your ad cannot be modified !"));
     }
     // send validation mail
     if (Mail::sendValidate($ad, SERVER_URI)===0){
         // redirect to index page with error message
         header("Location:/message/".urlencode("Email could not be sent to ".$ad->user_email));
-    }
-    // update Ad
-    if (!AdManager::update($ad)){
-        header("Location:/message/".urlencode("Your ad cannot be modified !"));
     }
     // redirect to index page with confirmation message
     header("Location:/message/".urlencode("Your ad has been modified, please check your email to validate it !"));
