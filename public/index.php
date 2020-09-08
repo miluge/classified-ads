@@ -244,6 +244,12 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         if (!$file->check()){
             header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
+        // delete previous picture
+        try{
+            File::delete($ad->picture);
+        } catch (\Exception $e) {
+            header("Location: /edit/message/picture/".$id."/".$cryptedMail);
+        }
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
