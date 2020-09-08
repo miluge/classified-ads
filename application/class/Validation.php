@@ -84,39 +84,37 @@ abstract class Validation
     }
 
     /**
-	 * @param array $post posted datas
      * check if $post contains valid email, lastName, firstName, phone entries
 	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
-    public static function userData(array $post){
-        if ( !isset($post["email"]) || !self::email($post["email"]) ){
+    public static function userData(){
+        if ( !isset($_POST["email"]) || !self::email($_POST["email"]) ){
             return "email";
         }
-        if (!isset($post["lastName"]) || !self::name($post["lastName"])) {
+        if (!isset($_POST["lastName"]) || !self::name($_POST["lastName"])) {
             return "lastName";
         }
-        if (!isset($post["firstName"]) || !self::name($post["firstName"])) {
+        if (!isset($_POST["firstName"]) || !self::name($_POST["firstName"])) {
             return "firstName";
         }
-        if (!isset($post["phone"]) || !self::phone($post["phone"])) {
+        if (!isset($_POST["phone"]) || !self::phone($_POST["phone"])) {
             return "phone";
         }
         return true;
     }
 
     /**
-	 * @param array $post posted datas
      * check if $post contains valid category_id, title, description entries
 	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
-    public static function adData(array $post){
-        if (!isset($post["category_id"]) || !self::category($post["category_id"])){
+    public static function adData(){
+        if (!isset($_POST["category_id"]) || !self::category($_POST["category_id"])){
             return "category";
         }
-        if (!isset($post["title"]) || !self::text($post["title"])) {
+        if (!isset($_POST["title"]) || !self::text($_POST["title"])) {
             return "title";
         }
-        if (!isset($post["description"]) || !self::text($post["description"])) {
+        if (!isset($_POST["description"]) || !self::text($_POST["description"])) {
             return "description";
         }
         return true;
