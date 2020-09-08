@@ -97,12 +97,13 @@ class AdManager extends Database
         try{
             $pdo = self::connect();
             $ad = self::get($id);
+            $email = $ad->user_email;
             $delete = "DELETE FROM ad WHERE id=:id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
             if ($request -> execute()){
                 //delete user if they have no other ad
-                self::deleteUserIfUseless($ad->user_email);
+                self::deleteUserIfUseless($email);
                 //delete picture
                 return File::delete($ad->picture);
             } else {
