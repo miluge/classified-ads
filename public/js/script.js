@@ -53,8 +53,20 @@ function showCat(catType) {
     );
   }
 
-// DOWNLOAD PDF 
+// Search 
 
-function downloadPDF() {
-
-}
+function mySearch() {
+    var input, filter, a, item, i, txtValue;
+    input = document.getElementById("mySearch");
+    filter = input.value.toUpperCase();
+    a = document.getElementsByClassName("articlelink");  for (i = 0; i < a.length; i++) {
+      item = a[i].getElementsByClassName('title')[0];
+      txtValue = item.textContent || item.innerText;
+      console.log(txtValue);
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
+  }
