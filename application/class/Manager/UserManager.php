@@ -58,7 +58,7 @@ class UserManager extends Database
         try{
             $pdo = self::connect();
             $previousUser = self::get($user->email);
-            if (is_array($previousUser)) {
+            if ($previousUser === false) {
                 $insert = "INSERT INTO user (email, lastName, firstName, phone) VALUES (:email, :lastName, :firstName, :phone)";
                 $request = $pdo -> prepare($insert);
                 $request -> bindValue(':email', $user->email);
