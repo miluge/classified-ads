@@ -86,41 +86,39 @@ abstract class Validation
     /**
 	 * @param array $post posted datas
      * check if $post contains valid email, lastName, firstName, phone entries
-	 * @return boolean|string true if ok | incorrect entry name if exists
+	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
     public static function userData(array $post){
-        $response = true;
-        if (!isset($post["email"]) || !Validation::email($post["email"])){
-            $response = "email";
+        if ( !isset($post["email"]) || !self::email($post["email"]) ){
+            return "email";
         }
-        if (!isset($post["lastName"]) || !Validation::name($post["lastName"])) {
-            $response = "lastName";
+        if (!isset($post["lastName"]) || !self::name($post["lastName"])) {
+            return "lastName";
         }
-        if (!isset($post["firstName"]) || !Validation::name($post["firstName"])) {
-            $response = "firstName";
+        if (!isset($post["firstName"]) || !self::name($post["firstName"])) {
+            return "firstName";
         }
-        if (!isset($post["phone"]) || !Validation::phone($post["phone"])) {
-            $response = "phone";
+        if (!isset($post["phone"]) || !self::phone($post["phone"])) {
+            return "phone";
         }
-        return $response;
+        return true;
     }
 
     /**
 	 * @param array $post posted datas
      * check if $post contains valid category_id, title, description entries
-	 * @return boolean|string true if ok | incorrect entry name if exists
+	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
     public static function adData(array $post){
-        $response = true;
-        if (!isset($post["category_id"]) || !Validation::category($post["category_id"])){
-            $response = "category";
+        if (!isset($post["category_id"]) || !self::category($post["category_id"])){
+            return "category";
         }
-        if (!isset($post["title"]) || !Validation::text($post["title"])) {
-            $response = "title";
+        if (!isset($post["title"]) || !self::text($post["title"])) {
+            return "title";
         }
-        if (!isset($post["description"]) || !Validation::text($post["description"])) {
-            $response = "description";
+        if (!isset($post["description"]) || !self::text($post["description"])) {
+            return "description";
         }
-        return $response;
+        return true;
     }
 }
