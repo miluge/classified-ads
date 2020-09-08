@@ -18,6 +18,18 @@
 
 {% endblock header %}
 
+{% block message %}
+{% if message %}
+<div class="pin z-50 overflow-auto bg-smoke-light flex">
+  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
+    <div class="items-center justify-center">
+      <p class="text-2xl">{{ message }}<i class="far fa-check-circle fa-2x"></i></p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock message %}
+
 {% block hero %}
 
 <div class="bg-gray-200 h-64 flex items-center justify-center">
@@ -101,18 +113,6 @@
 </div>
 
 {% endblock cards %}
-
-{% block message %}
-{% if message %}
-<div class="fixed pin z-50 overflow-auto bg-smoke-light flex">
-  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
-    <div class="items-center justify-center">
-      <p class="text-2xl">{{ message }}<i class="far fa-check-circle fa-2x"></i></p>
-    </div>
-  </div>
-</div>
-{% endif %}
-{% endblock message %}
 
 {% block footer %}
 <footer class="h-32 bg-gray-900">
