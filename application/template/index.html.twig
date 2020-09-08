@@ -104,11 +104,11 @@
 
 {% block message %}
 {% if message %}
-<div id="message" class="z-50 overflow-auto bg-smoke-light flex mt-10">
-  <div class="relative p-8 bg-white w-full max-w-md m-auto flex-col flex">
-    <div class="items-center justify-center">
+<div id="message" class="rounded-lg z-50 overflow-auto bg-smoke-light flex mt-10">
+  <div class="p-8 bg-white w-full max-w-md m-auto flex-col flex">
+    <div class="flex flex-col items-center justify-center">
       <p class="text-2xl">{{ message }}</p>
-      <button id="closebtn" class=" bg-blue-500 ml-4 hover:bg-blue-400 text-white font-bold py-2 px-6 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible" onclick="closeModal()">Close</button>
+      <button id="closebtn" class="mt-6 bg-blue-500 ml-4 hover:bg-blue-400 text-white font-bold py-2 px-6 border-b-4 border-blue-700 hover:border-blue-500 rounded overflow-visible" onclick="closeModal()">Close</button>
     </div>
   </div>
 </div>
