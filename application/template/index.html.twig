@@ -63,37 +63,36 @@
       <div class="{{ ad.category_name }} my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 element-item" id="{{ ad.title }}" data-category-name="{{ ad.category_name }}">
 
           <!-- Article -->
-          <a href="{{ SERVER_URI }}/details/{{ ad.id }}">
-            <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+            <a href="{{ SERVER_URI }}/details/{{ ad.id }}">
+              <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+                
+                
+                <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" />
               
-              
-              <img alt="Placeholder" class="object-contain block h-auto w-full shadow-xs" src="{{ SERVER_URI }}/assets/pictures/{{ ad.picture }}" >
-            
 
-              <header class="flex items-center justify-between leading-tight p-2 md:p-4">
-                  <h1 class="text-2xl font-bold text-gray-700">
-                      <a class="no-underline hover:underline text-black" href="{{ SERVER_URI }}/details/{{ ad.id }}">
-                        {{ ad.title }}
-                      </a>
-                  </h1>
-                  <p class="text-grey-darker text-sm text-gray-500">
-                      {{ ad.validationDate|date("d/m/Y") }}
-                  </p>
-              </header>
-              <div class="p-4">
-                <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-white p-4" data-category-id="{{ ad.category_id }}" >{{ ad.category_name }}</p>
-              </div>
-              <footer class="flex items-center justify-between leading-none p-2 md:p-4">
-                  <a class="flex font-semibold no-underline hover:font-bold text-black" href="#">
-                      <em class="far fa-user fa-2x"></em>
-                      <p class="ml-2 text-lg mt-2">
-                          {{ ad.user_firstName }} {{ ad.user_lastName|first}}
+                <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                    <h1 class="text-2xl font-bold text-gray-700">
+                        <p class="no-underline hover:underline text-black"">
+                          {{ ad.title }}
+                        </p>
+                    </h1>
+                    <p class="text-grey-darker text-sm text-gray-500">
+                        {{ ad.validationDate|date("d/m/Y") }}
+                    </p>
+                </header>
+                <div class="p-4">
+                  <p id="tag" class="inline-block border border-blue rounded py-1 px-3 text-white p-4" data-category-id="{{ ad.category_id }}" >{{ ad.category_name }}</p>
+                </div>
+                <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+                    <p class="flex font-semibold no-underline hover:font-bold text-black">
+                        <em class="far fa-user fa-2x"></em>
+                        <p class="ml-2 text-lg mt-2">
+                            {{ ad.user_firstName }} {{ ad.user_lastName|first}}
+                        </p>
                       </p>
-                  </a>
-              </footer>
-
-          </div>
-          </a>
+                </footer>
+              </div>
+            </a>
           <!-- END Article -->
 
       </div>
