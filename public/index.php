@@ -107,7 +107,7 @@ $router->map('GET','/add/[:messageType]',function($messageType){
 // add form handling route
 $router->map('POST','/addform',function(){
     // check User data
-    if ( ($data = Validation::userData($_POST)) !== true){
+    if ( ($data = Validation::userData()) !== true){
         header("Location: /add/".$data);
         exit;
     }
@@ -118,7 +118,7 @@ $router->map('POST','/addform',function(){
         exit;
     }
     // check Ad data
-    if ( ($data = Validation::adData($_POST)) !== true){
+    if ( ($data = Validation::adData()) !== true){
         AdManager::deleteUserIfUseless($_POST["email"]);
         header("Location: /add/".$data);
         exit;
@@ -220,7 +220,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
     }
     // check User data
     $_POST["email"] = $ad->user_email;
-    if ( ($data = Validation::userData($_POST)) !== true){
+    if ( ($data = Validation::userData()) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
         exit;
     }
@@ -231,7 +231,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         exit;
     }
     // check Ad data
-    if ( ($data = Validation::adData($_POST)) !== true){
+    if ( ($data = Validation::adData()) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
         exit;
     }
