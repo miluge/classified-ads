@@ -2,6 +2,7 @@
 namespace Ads\Manager;
 use \Ads\Database as Database;
 use \Ads\Ad as Ad;
+use \Ads\File as File;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\UserManager as UserManager;
 
@@ -88,8 +89,8 @@ class AdManager extends Database
 
     /**
      * @param integer|string $id id of ad to delete in database
-     * delete corresponding uploaded file
      * if user have NO OTHER ADS, delete user from user table
+     * delete corresponding uploaded file
      * @return boolean true on success | false on fail
      */
     public static function delete($id){
@@ -103,10 +104,7 @@ class AdManager extends Database
                 //delete user if they have no other ad
                 self::deleteUserIfUseless($ad->user_email);
                 //delete picture
-                if ($ad->picture!=="default.png" && file_exists(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture)){
-                    unlink(dirname(dirname(dirname(dirname(__FILE__))))."/public/assets/pictures/".$ad->picture);
-                }
-                return true;
+                return File::delete($ad->picture);
             } else {
                 throw new \InvalidArgumentException("Ad not found !");
             }

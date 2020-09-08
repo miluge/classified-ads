@@ -38,7 +38,7 @@ $router->map('GET','/',function(){
 });
 
 // index page route with message
-$router->map('GET','/message/[:message]',function($message){
+$router->map('GET','/message/[**:message]',function($message){
     // get all validated Ads
     $ads = AdManager::getAllValidated();
     // get all Categories
@@ -69,7 +69,7 @@ $router->map('GET','/details/[i:id]',function($id){
 });
 
 // details page route with message
-$router->map('GET','/details/[i:id]/[:message]',function($id, $message){
+$router->map('GET','/details/[i:id]/[**:message]',function($id, $message){
     // check Ad $id
     if (!Validation::ad($id)){
         // redirect to index page if Ad $id doesn't exist
@@ -110,7 +110,7 @@ $router->map('GET','/add/[:messageType]',function($messageType){
 // add form handling route
 $router->map('POST','/addform',function(){
     // check User data
-    if ($data = Validate::userData($_POST) !== true){
+    if ($data = Validation::userData($_POST) !== true){
         header("Location: /add/".$data);
     }
     // insert User
@@ -119,7 +119,7 @@ $router->map('POST','/addform',function(){
         header("Location: /message/".urlencode("User couldn't be added !"));
     }
     // check Ad data
-    if ($data = Validate::adData($_POST) !== true){
+    if ($data = Validation::adData($_POST) !== true){
         AdManager::deleteUserIfUseless($_POST["email"]);
         header("Location: /add/".$data);
     }
@@ -139,7 +139,7 @@ $router->map('POST','/addform',function(){
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
-        if (!$ad = AdManager::update($ad) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
+        if (!($ad = AdManager::update($ad)) || !move_uploaded_file($file->tmpName, dirname(__FILE__)."/assets/pictures/".$picture)){
             AdManager::delete($ad->id);
             header("Location: /add/picture");
         }
@@ -167,7 +167,7 @@ $router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -192,7 +192,7 @@ $router->map('GET','/edit/message/[:messageType]/[i:id]/[**:cryptedMail]',functi
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -216,12 +216,22 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
+    // check User data
+    $_POST["email"] = $ad->user_email;
+    if ($data = Validation::userData($_POST) !== true){
+        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
+    }
+    // update User
+    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
+    if (!UserManager::insert($user)){
+        header("Location: /message/".urlencode("User couldn't be updated !"));
+    }
     // check Ad data
-    if ($data = Validate::adData($_POST) !== true){
+    if ($data = Validation::adData($_POST) !== true){
         header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
     }
     // update $ad object
@@ -234,6 +244,12 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         if (!$file->check()){
             header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
+        // delete previous picture
+        try{
+            File::delete($ad->picture);
+        } catch (\Exception $e) {
+            header("Location: /edit/message/picture/".$id."/".$cryptedMail);
+        }
         // update new Ad picture with id in picture name
         $picture = $ad->id."-".$file->name;
         $ad->picture = $picture;
@@ -241,24 +257,14 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
             header("Location: /edit/message/picture/".$id."/".$cryptedMail);
         }
     }
-    // check User data
-    $_POST["email"] = $ad->user_email;
-    if ($data = Validate::userData($_POST) !== true){
-        header("Location: /edit/message/".$data."/".$id."/".$cryptedMail);
-    }
-    // update User
-    $user = new User([ "email"=>$ad->user_email , "lastName"=>$_POST["lastName"] , "firstName"=>$_POST["firstName"] , "phone"=>$_POST["phone"] ]);
-    if (!UserManager::insert($user)){
-        header("Location: /message/".urlencode("User couldn't be updated !"));
+    // update Ad
+    if (!($ad = AdManager::update($ad))){
+        header("Location:/message/".urlencode("Your ad cannot be modified !"));
     }
     // send validation mail
     if (Mail::sendValidate($ad, SERVER_URI)===0){
         // redirect to index page with error message
         header("Location:/message/".urlencode("Email could not be sent to ".$ad->user_email));
-    }
-    // update Ad
-    if (!AdManager::update($ad)){
-        header("Location:/message/".urlencode("Your ad cannot be modified !"));
     }
     // redirect to index page with confirmation message
     header("Location:/message/".urlencode("Your ad has been modified, please check your email to validate it !"));
@@ -277,7 +283,7 @@ $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMai
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -311,7 +317,7 @@ $router->map('GET','/delete/[i:id]/[**:cryptedMail]',function($id, $cryptedMail)
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }
@@ -332,7 +338,7 @@ $router->map('GET','/confirmDelete/[i:id]/[**:cryptedMail]',function($id, $crypt
         header("Location:/message/".urlencode("Unable to find Ad !"));
     }
     // check cryptedMail
-    if (!Validation::checkMail($ad->user_mail, $cryptedMail)){
+    if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
     }

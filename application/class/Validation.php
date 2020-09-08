@@ -3,15 +3,12 @@ namespace Ads;
 
 use \Ads\Crypt as Crypt;
 use \Respect\Validation\Validator as v;
+use \Ads\Mail as Mail;
 use \Ads\Manager\CategoryManager as CategoryManager;
 use \Ads\Manager\AdManager as AdManager;
 
 abstract class Validation
 {
-    
-    const SECRET_KEY = 'Ld:LUSweidn,UsAjOOkjpSkjiPmmEWKJ';
-    const SIGN_KEY = 'By Ads lkjayfjkeqr9c87mza,na,ndde';
-
     /**
      * @param string $text value to validate
      * text is valid if it contains non blank
@@ -78,7 +75,7 @@ abstract class Validation
     public static function checkMail(string $mail, string $cryptedMail){
         try{
             $crypt = new Crypt();
-            if ($crypt->decrypt($cryptedMail, v::SECRET_KEY, v::SIGN_KEY) === $mail){
+            if ($crypt->decrypt($cryptedMail, Mail::SECRET_KEY, Mail::SIGN_KEY) === $mail){
                 return true;
             }
         } catch (\Exception $e){
@@ -93,16 +90,16 @@ abstract class Validation
 	 */
     public static function userData(array $post){
         $response = true;
-        if (!isset($post["email"]) || !Validate::email($post["email"])){
+        if (!isset($post["email"]) || !Validation::email($post["email"])){
             $response = "email";
         }
-        if (!isset($post["lastName"]) || !Validate::name($post["lastName"])) {
+        if (!isset($post["lastName"]) || !Validation::name($post["lastName"])) {
             $response = "lastName";
         }
-        if (!isset($post["firstName"]) || !Validate::name($post["firstName"])) {
+        if (!isset($post["firstName"]) || !Validation::name($post["firstName"])) {
             $response = "firstName";
         }
-        if (!isset($post["phone"]) || !Validate::phone($post["phone"])) {
+        if (!isset($post["phone"]) || !Validation::phone($post["phone"])) {
             $response = "phone";
         }
         return $response;
@@ -115,13 +112,13 @@ abstract class Validation
 	 */
     public static function adData(array $post){
         $response = true;
-        if (!isset($post["category_id"]) || !Validate::category($post["category_id"])){
+        if (!isset($post["category_id"]) || !Validation::category($post["category_id"])){
             $response = "category";
         }
-        if (!isset($post["title"]) || !Validate::text($post["title"])) {
+        if (!isset($post["title"]) || !Validation::text($post["title"])) {
             $response = "title";
         }
-        if (!isset($post["description"]) || !Validate::text($post["description"])) {
+        if (!isset($post["description"]) || !Validation::text($post["description"])) {
             $response = "description";
         }
         return $response;

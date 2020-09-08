@@ -7,6 +7,9 @@ use \Ads\Crypt as Crypt;
 
 abstract class Mail
 {
+    const SECRET_KEY = 'Lkd:uweAdus9OAKjAvhskj1mNB1MKJhs';
+    const SIGN_KEY = 'By Ads lkjajMlkTjkeq8uB7m,na,7ynd';
+
     /**
      * @param Ad $ad Ad object to fill mail
      * @param string $server_uri base path to load Twig render
@@ -19,7 +22,7 @@ abstract class Mail
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // crypt user_email
         $crypt = new Crypt();
-        $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
+        $cryptedMail = $crypt->encrypt($ad->user_email, self::SECRET_KEY, self::SIGN_KEY);
         // set body template
         $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
@@ -44,7 +47,7 @@ abstract class Mail
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // crypt user_email
         $crypt = new Crypt();
-        $cryptedMail = $crypt->encrypt($ad->user_email, Crypt::SECRET_KEY, Crypt::SIGN_KEY);
+        $cryptedMail = $crypt->encrypt($ad->user_email, self::SECRET_KEY, self::SIGN_KEY);
         // set body template
         $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
