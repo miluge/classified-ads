@@ -37,4 +37,22 @@ class File
         }
         return $response;
     }
+
+    /**
+     * @param string $name name of file to delete
+     * @throws Exception if file doesn't exist 
+     * @return boolean|void true on success
+     */
+    public static function delete($name){
+        if ($name === "default.png"){
+            return true;
+        }
+        if ( !file_exists(dirname(dirname(dirname(__FILE__)))."/public/assets/pictures/".$name) ){
+            throw new \InvalidArgumentException("File not found !");
+        }
+        if ( ! unlink(dirname(dirname(dirname(__FILE__)))."/public/assets/pictures/".$name) ){
+            throw new \RuntimeException("File cannot be deleted !");
+        }
+        return true;
+    }
 }
