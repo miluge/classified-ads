@@ -84,39 +84,36 @@ abstract class Validation
     }
 
     /**
-     * check if $post contains valid email, lastName, firstName, phone entries
+     * check if $_POST contains valid email, lastName, firstName, phone entries
 	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
     public static function userData(){
+        $response = true;
         if ( !isset($_POST["email"]) || !self::email($_POST["email"]) ){
-            return "email";
+            $response = "email";
+        } elseif (!isset($_POST["lastName"]) || !self::name($_POST["lastName"])) {
+            $response = "lastName";
+        } elseif (!isset($_POST["firstName"]) || !self::name($_POST["firstName"])) {
+            $response = "firstName";
+        } elseif (!isset($_POST["phone"]) || !self::phone($_POST["phone"])) {
+            $response = "phone";
         }
-        if (!isset($_POST["lastName"]) || !self::name($_POST["lastName"])) {
-            return "lastName";
-        }
-        if (!isset($_POST["firstName"]) || !self::name($_POST["firstName"])) {
-            return "firstName";
-        }
-        if (!isset($_POST["phone"]) || !self::phone($_POST["phone"])) {
-            return "phone";
-        }
-        return true;
+        return $response;
     }
 
     /**
-     * check if $post contains valid category_id, title, description entries
+     * check if $_POST contains valid category_id, title, description entries
 	 * @return boolean|string true if ok | incorrect entry name if it exists
 	 */
     public static function adData(){
+        $response = true;
         if (!isset($_POST["category_id"]) || !self::category($_POST["category_id"])){
-            return "category";
+            $response = "category";
+        } elseif (!isset($_POST["title"]) || !self::text($_POST["title"])) {
+            $response = "title";
+        } elseif (!isset($_POST["description"]) || !self::text($_POST["description"])) {
+            $response = "description";
         }
-        if (!isset($_POST["title"]) || !self::text($_POST["title"])) {
-            return "title";
-        }
-        if (!isset($_POST["description"]) || !self::text($_POST["description"])) {
-            return "description";
-        }
-        return true;
+        return $response;
     }
 }
