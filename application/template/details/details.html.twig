@@ -41,7 +41,7 @@
             <a href="tel:{{ ad.user_phone }}"><i class="fas fa-mobile-alt fa-2x"></i></a>
           </div>
           <div>
-            <button id="print"><i  class="far fa-save fa-2x"></i></button>
+            <button id="print" onclick="downloadPDF()"><i  class="far fa-save fa-2x"></i></button>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@
 
 {% block javascript %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js" integrity="sha512-vDKWohFHe2vkVWXHp3tKvIxxXg0pJxeid5eo+UjdjME3DBFBn2F8yWOE0XmiFcFbXxrEOR1JriWEno5Ckpn15A==" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ SERVER_URI }}/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="{{ SERVER_URI }}/js/jquery.simpleLoadMore.min.js"></script>
 <script type="text/javascript" src="{{ SERVER_URI }}/js/script.js"></script>

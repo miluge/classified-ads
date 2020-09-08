@@ -29,7 +29,7 @@
                 <label class="block text-gray-700 text-lg font-bold mb-2" for="lastName">Last Name</label>
                 <input name="lastName" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="text" value="Doe" required>
                 {% if messageType == "lastName" %}
-                <p class="text-red-600">Invalid last name</p>
+                    <p class="text-red-600">Invalid last name</p>
                 {% endif %}
             </div>
         </div>
@@ -37,7 +37,7 @@
             <label class="block text-gray-700 text-lg font-bold mb-2" for="email">Email</label>
             <input name="email" class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal" type="email" value="email@example.com" required>
             {% if messageType == "email" %}
-            <p class="text-red-600">Invalid email</p>
+                <p class="text-red-600">Invalid email</p>
             {% endif %}
         </div>
         <div class="px-4 py-4">
