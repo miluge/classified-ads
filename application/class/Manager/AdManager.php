@@ -19,7 +19,7 @@ class AdManager extends Database
             $request = $pdo -> prepare($select);
             $request -> bindValue(':user_email', $email);
             $request -> execute();
-            if ($request->fetch()){
+            if (!$request->fetch()){
                 UserManager::delete($email);
             }
             return true;
@@ -98,6 +98,7 @@ class AdManager extends Database
             $pdo = self::connect();
             $ad = self::get($id);
             $email = $ad->user_email;
+            $picture = $ad->picture;
             $delete = "DELETE FROM ad WHERE id=:id";
             $request = $pdo -> prepare($delete);
             $request -> bindValue(':id', $id);
@@ -105,7 +106,7 @@ class AdManager extends Database
                 //delete user if they have no other ad
                 self::deleteUserIfUseless($email);
                 //delete picture
-                return File::delete($ad->picture);
+                return File::delete($picture);
             } else {
                 throw new \InvalidArgumentException("Ad not found !");
             }
