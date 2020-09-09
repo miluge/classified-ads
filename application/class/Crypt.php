@@ -1,8 +1,6 @@
 <?php
 namespace Ads;
 
-use \Ads\Manager\Admanager as AdManager;
-
 final class Crypt
 {
 	const
