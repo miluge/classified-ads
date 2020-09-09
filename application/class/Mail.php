@@ -18,7 +18,7 @@ abstract class Mail
     public static function sendValidate(Ad $ad, string $server_uri){
         $message = new \Swift_Message();
         $message->setSubject('Please review your ad '.$ad->title.'!');
-        $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
+        $message->setFrom(['acsdroopist@gmail.com' => 'Droopist Team']);
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // crypt user_email
         $crypt = new Crypt();
@@ -29,8 +29,8 @@ abstract class Mail
         $message->setBody($html, 'text/html');
         // set connection parameters
         $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
-        $transport->setUsername(apache_getenv("GMAIL_USER"));
-        $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
+        $transport->setUsername("acsdroopist@gmail.com");
+        $transport->setPassword("guillaumes");
         $mailer = new \Swift_Mailer($transport);
         return $mailer->send($message);
     }
@@ -43,7 +43,7 @@ abstract class Mail
     public static function sendDelete(Ad $ad, string $server_uri){
         $message = new \Swift_Message();
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
-        $message->setFrom(['perbet.dev@gmail.com' => 'Classified Ads']);
+        $message->setFrom(['acsdroopist@gmail.com' => 'Droopist Team']);
         $message->setTo([$ad->user_email => $ad->user_firstName." ".$ad->user_lastName]);
         // crypt user_email
         $crypt = new Crypt();
@@ -54,8 +54,8 @@ abstract class Mail
         $message->setBody($html, 'text/html');
         // set connection parameters
         $transport = new \Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl');
-        $transport->setUsername(apache_getenv("GMAIL_USER"));
-        $transport->setPassword(apache_getenv("GMAIL_PASSWORD"));
+        $transport->setUsername("acsdroopist@gmail.com");
+        $transport->setPassword("guillaumes");
         $mailer = new \Swift_Mailer($transport);
         return $mailer->send($message);
     }
