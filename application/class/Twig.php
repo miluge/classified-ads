@@ -12,8 +12,7 @@ abstract class Twig
     public static function getRender(string $template, array $params){
         $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."template");
         $twig = new \Twig\Environment($loader, [
-            'cache' => false,
-            // 'cache' => dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."cache",
+            'cache' => dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."cache",
         ]);
         return $twig->render($template,$params);
     }
