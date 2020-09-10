@@ -11,6 +11,8 @@
     "autoload": {
         "psr-4": {
             "Ads\\": "application/class/"
-        }
+        },
+        
+        "files": ["application/parameters.php"]
     }
 }
