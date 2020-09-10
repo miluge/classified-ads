@@ -12,7 +12,6 @@ use \Ads\Ad as Ad;
 use \Ads\User as User;
 use \Ads\File as File;
 use \Ads\Mail as Mail;
-use \Ads\Crypt as Crypt;
 use \Ads\Twig as Twig;
 use \Ads\Validation as Validation;
 use \Ads\Manager\AdManager as AdManager;
