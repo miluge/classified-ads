@@ -74,8 +74,7 @@ abstract class Validation
 	 */
     public static function checkMail(string $mail, string $cryptedMail){
         try{
-            $crypt = new Crypt();
-            if ($crypt->decrypt($cryptedMail, Mail::SECRET_KEY, Mail::SIGN_KEY) === $mail){
+            if (Crypt::decrypt($cryptedMail) === $mail){
                 return true;
             }
         } catch (\Exception $e){
