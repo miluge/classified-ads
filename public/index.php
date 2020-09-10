@@ -147,7 +147,7 @@ $router->map('POST','/addform',function(){
         }
     }
     // send validation mail
-    if (Mail::sendValidate($ad, SERVER_URI)===0){
+    if (Mail::sendValidate($ad)===0){
         AdManager::delete($ad->id);
         // redirect to add page with email error message
         header("Location:/add/email");
@@ -266,7 +266,7 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
         exit;
     }
     // send validation mail
-    if (Mail::sendValidate($ad, SERVER_URI)===0){
+    if (Mail::sendValidate($ad)===0){
         // redirect to index page with error message
         header("Location:/message/".urlencode("Email could not be sent to ".$ad->user_email));
         exit;
@@ -296,7 +296,7 @@ $router->map('GET','/validate/[i:id]/[**:cryptedMail]',function($id, $cryptedMai
         exit;
     }
     // send delete mail
-    if (Mail::sendDelete($ad, SERVER_URI)===0){
+    if (Mail::sendDelete($ad)===0){
         // redirect to index page with error message
         header("Location:/message/".urlencode("Email could not be sent to".$ad->user_email));
         exit;

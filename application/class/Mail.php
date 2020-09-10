@@ -13,7 +13,7 @@ abstract class Mail
      * @param string $server_uri base path to load Twig render
      * @return integer number of successfull delivery
      */
-    public static function sendValidate(Ad $ad, string $server_uri){
+    public static function sendValidate(Ad $ad){
         $message = new \Swift_Message();
         $message->setSubject('Please review your ad '.$ad->title.'!');
         $message->setFrom([EMAIL => 'Droopist Team']);
@@ -21,7 +21,7 @@ abstract class Mail
         // crypt user_email
         $cryptedMail = Crypt::encrypt($ad->user_email);
         // set body template
-        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
+        $mjml = Twig::getRender('mail/validate.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters
@@ -37,7 +37,7 @@ abstract class Mail
      * @param string $server_uri base path to load Twig render
      * @return integer number of successfull delivery
      */
-    public static function sendDelete(Ad $ad, string $server_uri){
+    public static function sendDelete(Ad $ad){
         $message = new \Swift_Message();
         $message->setSubject('Your ad '.$ad->title.' has been validated !');
         $message->setFrom([EMAIL => 'Droopist Team']);
@@ -45,7 +45,7 @@ abstract class Mail
         // crypt user_email
         $cryptedMail = Crypt::encrypt($ad->user_email);
         // set body template
-        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>$server_uri, "cryptedMail"=> $cryptedMail ]);
+        $mjml = Twig::getRender('mail/delete.mjml.twig', ["ad"=>$ad, "SERVER_URI"=>SERVER_URI, "cryptedMail"=> $cryptedMail ]);
         $html = MJML::getRender($mjml);
         $message->setBody($html, 'text/html');
         // set connection parameters
