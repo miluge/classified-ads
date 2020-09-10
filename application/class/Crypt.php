@@ -16,7 +16,7 @@ abstract class Crypt
         for ($i = 0; $i<$ivlen; $i++){
             $iv .= $characters[random_int(0,51)];
         }
-        return urlencode($iv.openssl_encrypt($text,self::CIPHER,KEY,0,$iv));
+        return $iv.openssl_encrypt($text,self::CIPHER,KEY,0,$iv);
     }
 
     /**
@@ -25,7 +25,6 @@ abstract class Crypt
      */
     public static function decrypt($cipherText){
 		$ivlen = openssl_cipher_iv_length(self::CIPHER);
-        $cipherText = urldecode($cipherText);
         $iv = substr($cipherText,0,$ivlen);
         $cipherRaw = substr($cipherText,$ivlen);
         return openssl_decrypt($cipherRaw,self::CIPHER,KEY,0,$iv);
