@@ -1,8 +1,6 @@
 vendor/
 node_modules/
 application/cache/
-artefacts/arborescence.png
-artefacts/MCD.png
-artefacts/projet_petites-annonces.txt
+artefacts/
 public/assets/pictures
 application/parameters.php
