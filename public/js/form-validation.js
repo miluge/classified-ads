@@ -23,7 +23,8 @@ $(function() {
         phone: {
           required: true,
           digits: true,
-          minlength: 10
+          minlength: 8,
+          maxlength: 14
         },
         category_id: {
             required: true
@@ -43,7 +44,7 @@ $(function() {
         lastName: "Please enter your lastname",
         phone: {
           required: "Please provide a phone number",
-          minlength: "Your phone must be at least 10 characters long"
+          minlength: "Your phone must be between 8 and 14 characters long"
         },
         email: "Please enter a valid email address",
         category_id: "Please select a category",
