@@ -1,53 +1,22 @@
-# classified-ads
+# DROOPIST : classified Ads
 
-## Projet - petites annonces 		
-		
-		
-## Il doit permettre de :		
-	Poster une annonce	
-	Lister les annonces
-	Modifier une annonce
-	Supprimer une annonce
-		
-		
-		
-		
-## Cycle pour poster une annonce		
-	Sur la page listant les annonces afficher un lien permettant de publier une annonce	
-	Lorsque la personne arrive sur le formulaire permettant de poster une annonce elle devra saisir	
-		Adresse mail
-		Nom
-		Prénom
-		Téléphone
-		Catégorie de l'annonce : Immobilier, Auto-Moto, Emploi, Animaux, Services, Vacances, Affaires pro, Autres
-		Image de mise en avant de l'annonce (optionnel)
-		Texte de l'annonce
-		Captcha
-	Lorsque la personne poste son annonce, elle reçois un mail dans lequel il y a un lien demandant de confimer la publication de l'annonce.
-	Dans ce même courriel, il doit y avoir un lien permettant de modifier l'annonce.
-	Une fois confirmé alors l'annonce est publié sur la page d'annonce et l'utilisateur recoit un courriel lui permettant supprimer l'annonce. 	
-	Lorsque l'annonce est mise en ligne il ne doit plus être possible de la modifer avec le lien du premier courriel
-		
-## Cycle pour lister les annonces		
-	Au chargement de la page d'accueil on voit les dix premières annonces. Lorsque l'ascenseur est en bas de la liste, on affiche les dix annonces suivantes 	
-	Pour les annonces n'ayant pas d'image afficher une image par défaut	
-	Sous l'annonce ont propose de télécharger l'annonce en PDF	
-		
-		
-		
-		
-		
-## les plus : On ne réalise les plus que si vous avez le temps
-	infinite scroll pour l'affichage des annonces
-	faire un beau courriel avec la librairie MJML		
-	Tâche cron qui supprime les annonces qui sont en attente de publication à n+2 jours de la date de création	
-	Tâche cron qui supprime les annonces qui sont publiées à n+15 jours de la date de création. Envoyer un mail à la personne de la suppression de son annonce	
-		
-		
-## Stack		
-	Le formulaires seront validés par JS	
-	Technos : Composer, PHP POO, TWIG pour le rendu frontend, SASS(optionnel), GIT, JS, HTML, CSS, librairie PHP pour les PDF, AltoRouteur pour le routeur
-	Remarque :  On ne veut pas de pattern MVC, on reste en programmation objet POO simple
-	Remarque : Pensez à crypter les accès de validation et modification
+## Try it
+Application is available at droopist.guillaumeperbet.fr
 
-## TODO
+## Context
+Application was developped during Access Code School formation, in september 2020, by Guillaume Blondel and Guillaume Perbet
+Guillaume B was in charge of front end
+Guillaume P was in charge of back end
+
+## Application
+Application shows classified ads split in height categories
+User can filter ads by category or title, see details and post his own ad
+Application allow any user to post ads and to upload a picture
+Ads creation, modification, validation and deletion uses email notifications
+
+## Install
+Install composer and npm modules
+Configure a virtual host to point to public/ directory and allow url rewrite
+Import database from dump.sql
+Rename parameters.php.scale to parameters.php and fill it with your own constants
+Activate Twig cache in application/class/Twig.php
