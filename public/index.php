@@ -172,6 +172,11 @@ $router->map('GET','/edit/[i:id]/[**:cryptedMail]',function($id, $cryptedMail){
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
         exit;
     }
+    if (AdManager::isValidated($id)){
+        // redirect to details page if Ad is already validated
+        header("Location:/details/".$ad->id."/".urlencode("You can't update a validated ad !"));
+        exit;
+    }
      // get all Categories
      if ( ($categories = CategoryManager::getAll()) === false){
         header("Location: /message/".urlencode("Categories cannot be found !"));
@@ -215,6 +220,11 @@ $router->map('POST','/editform/[i:id]/[**:cryptedMail]',function($id, $cryptedMa
     if (!Validation::checkMail($ad->user_email, $cryptedMail)){
         // redirect to index page if User don't own Ad
         header("Location:/message/".urlencode("You're not allowed to modify this ad !"));
+        exit;
+    }
+    if (AdManager::isValidated($id)){
+        // redirect to details page if Ad is already validated
+        header("Location:/details/".$ad->id."/".urlencode("You can't update a validated ad !"));
         exit;
     }
     // check User data
