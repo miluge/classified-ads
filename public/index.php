@@ -92,7 +92,7 @@ $router->map('GET','/add',function(){
         exit;
     }
     // echo add form page
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI ]);
+    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "CAPTCHA" => CAPTCHA ]);
 });
 
 // add page route with message
@@ -100,7 +100,7 @@ $router->map('GET','/add/[:messageType]',function($messageType){
     // get all Categories
     $categories = CategoryManager::getAll();
     // echo add form page with input error message
-    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI, "messageType"=>urldecode($messageType) ]);
+    echo Twig::getRender("add/add_form.html.twig", [ "categories"=>$categories , "SERVER_URI"=>SERVER_URI , "CAPTCHA" => CAPTCHA , "messageType"=>urldecode($messageType) ]);
 });
 
 // add form handling route
