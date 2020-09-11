@@ -7,3 +7,4 @@ define("HOST","databaseHost");
 define("USER","databaseUser");
 define("PASSWORD","databasePassword");
 define("NAME","databaseTableName");
+define("CAPTCHA","captchaKey");
