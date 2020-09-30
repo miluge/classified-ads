@@ -1,6 +1,7 @@
 vendor/
 node_modules/
 application/cache/
-artefacts/
+artefacts/MLD.mwb
+artefacts/MLD.mwb.bak
 public/assets/pictures
 application/parameters.php
